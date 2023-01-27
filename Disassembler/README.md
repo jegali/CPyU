@@ -11,5 +11,5 @@ I rebuilt the interface in PyQT. For that, you have to install PyQT6 via the pip
 pip install pyqt6
 ```
 
-![PyQT_Install](/images/pyqt-installpng)
+![PyQT_Install](/images/pyqt-install.png)
 
