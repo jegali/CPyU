@@ -299,3 +299,60 @@ while True:
 input_file.close()
 output_file.close()
 ```
+
+## The output
+Finally, a sample output of the disassembler will be shown. The complete rom listing of the Apple ][ is too long to print here, but the first page of the disassemblate shall be shown.
+
+
+```bash
+D000    A9 20           LDA #$20                Immediate
+D002    8D 26 26        STA $0326               Absolute
+D005    AD 57 57        LDA $C057               Absolute
+D008    AD 53 53        LDA $C053               Absolute
+D00B    AD 50 50        LDA $C050               Absolute
+D00E    A9 00           LDA #$00                Immediate
+D010    85 1C           STA $1C                 Zero Page
+D012    AD 26 26        LDA $0326               Absolute
+D015    85 1B           STA $1B                 Zero Page
+D017    A0 00           LDY #$00                Immediate
+D019    84 1A           STY $1A                 Zero Page
+D01B    A5 1C           LDA $1C                 Zero Page
+D01D    91 1A           STA $(1A),Y             Indirect, Y Indexed
+D01F    20 A2 A2        JSR $D0A2               Absolute
+D022    C8              INY                     Implicit        1
+D023    D0 F6           BNE $F6                 Relative
+D025    E6 1B           INC $1B                 Zero Page
+D027    A5 1B           LDA $1B                 Zero Page
+D029    29 1F           AND #$1F                Immediate
+D02B    D0 EE           BNE $EE                 Relative
+D02D    60              RTS                     Implicit        1
+D02E    8D 22 22        STA $0322               Absolute
+D031    8E 20 20        STX $0320               Absolute
+D034    8C 21 21        STY $0321               Absolute
+D037    48              PHA                     Implicit        1
+D038    29 C0           AND #$C0                Immediate
+D03A    85 26           STA $26                 Zero Page
+D03C    4A              LSR                     Accumulator     1
+D03D    4A              LSR                     Accumulator     1
+D03E    05 26           ORA $26                 Zero Page
+D040    85 26           STA $26                 Zero Page
+D042    68              PLA                     Implicit        1
+D043    85 27           STA $27                 Zero Page
+D045    0A              ASL                     Accumulator     1
+D046    0A              ASL                     Accumulator     1
+D047    0A              ASL                     Accumulator     1
+D048    26 27           ROL $27                 Zero Page
+D04A    0A              ASL                     Accumulator     1
+D04B    26 27           ROL $27                 Zero Page
+D04D    0A              ASL                     Accumulator     1
+D04E    66 26           ROR $26                 Zero Page
+D050    A5 27           LDA $27                 Zero Page
+D052    29 1F           AND #$1F                Immediate
+D054    0D 26 26        ORA $0326               Absolute
+D057    85 27           STA $27                 Zero Page
+D059    8A              TXA                     Implicit        1
+D05A    C0 00           CPY #$00                Immediate
+D05C    F0 05           BEQ $05                 Relative
+D05E    A0 23           LDY #$23                Immediate
+-- Fortsetzung  --
+```
