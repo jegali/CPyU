@@ -29,4 +29,19 @@ C:\Users\jens\AppData\Local\Programs\Python\Python39\python.exe -m pip install p
 
 ![PyQT6_Tools_Install](/images/pyqt6-tools-39.png)
 
+After these preparations, I installed the QT-Designer Package. This deploys a graphical application for GUI-building. Install the package with
+
+```bash
+pip install PyQt5Designer
+```
+
+Again, if something gies wrong, try it with
+
+```bash
+C:\Users\jens\AppData\Local\Programs\Python\Python311\python.exe -m pip install PyQt5Designer
+```
+
+and remember replacing Python311 with your installed python version. The Designer app will be installed in the path set for your python installation and cal be called from Powershell via designer.
+
+
 
