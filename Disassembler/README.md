@@ -19,4 +19,4 @@ So add the path
 C:\Users\jens\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts
 ```
 
-to your system environment and path. Attention: this path may vary - depending on the installed version and the underlying operating system
+to your system environment and path. Attention: this path may vary - depending on the installed version and the underlying operating system. If PyQT6 does not work with Python 3.10 or Python 3.11, do install a Python3.9 parallel. You can simply do that by downloading the installation packages from https://python.org
