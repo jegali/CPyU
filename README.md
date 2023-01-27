@@ -10,10 +10,12 @@ The project is completely written in python.
 I decided to go with python because I wanted a platform independent language for this project. Execution speed of the interpreter should be fast enough to emulate the CPU step by step, and hopefully it is fast enough to emulate a complete computer like the Apple ][.
 
 ## Needed libraries
-The project makes use of Qt, so PyQt has to be installed.
+The project makes use of Qt, so PyQt has to be installed. I also used the pyqt-tools and the QT-Designer
 
 ```bash
 pip install pyqt6
+pip install pyqt6-tools
+pip install PyQt5Designer
 ```
 
 ## Approach
