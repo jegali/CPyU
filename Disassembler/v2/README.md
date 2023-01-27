@@ -66,4 +66,82 @@ In the case of a program written in assembler, the original code can generally n
 
 A disassemblat is thus usually clearly worse readable than the original assembler code. Also for this reason it is meaningful and usual with more complex program sections to make the Disassemblierung not in a single run fully automatic, but in repetitions with manual intermediate steps. Here from gradual experience and realization increasingly identifiers for jump marks, subroutines, variables, constants as well as comments can be refined manually and specified for optimization in subsequent runs."
 
-With this it should be clear: a table, which translates each bytecode into the corresponding mnemonic (opcode) and ideally provides additional information like address mode, description and clock cycles, is the actual main part of the disassembler.
+With this it should be clear: a table, which translates each bytecode into the corresponding mnemonic (opcode) and ideally provides additional information like address mode, description and clock cycles, is the actual main part of the disassembler. In this version of the disassembler this is solved somewhat awkwardly but understandably - in the following versions we will optimize this. The cycle-table is not yet valid and contains only 1 cycle per instruction. That would be nice, but is totally ridiculous.
+
+```bash
+mnemonics = [
+    "BRK", "ORA", "???", "???", "TSB", "ORA", "ASL", "???", "PHP", "ORA", "ASL", "???", "TSB", "ORA", "ASL", "???",
+    "BPL", "ORA", "ORA", "???", "TRB", "ORA", "ASL", "???", "CLC", "ORA", "INC", "???", "TRB", "ORA", "ASL", "???",
+    "JSR", "AND", "???", "???", "BIT", "AND", "ROL", "???", "PLP", "AND", "ROL", "???", "BIT", "AND", "ROL", "???",
+    "BMI", "AND", "AND", "???", "BIT", "AND", "ROL", "???", "SEC", "AND", "DEC", "???", "BIT", "AND", "ROL", "???",
+    "RTI", "EOR", "???", "???", "???", "EOR", "LSR", "???", "PHA", "EOR", "LSR", "???", "JMP", "EOR", "LSR", "???",
+    "BVC", "EOR", "EOR", "???", "???", "EOR", "LSR", "???", "CLI", "EOR", "PHY", "???", "???", "EOR", "LSR", "???",
+    "RTS", "ADC", "???", "???", "STZ", "ADC", "ROR", "???", "PLA", "ADC", "ROR", "???", "JMP", "ADC", "ROR", "???",
+    "BVS", "ADC", "ADC", "???", "STZ", "ADC", "ROR", "???", "SEI", "ADC", "PLY", "???", "JMP", "ADC", "ROR", "???",
+    "BRA", "STA", "???", "???", "STY", "STA", "STX", "???", "DEY", "BIT", "TXA", "???", "STY", "STA", "STX", "???",
+    "BCC", "STA", "STA", "???", "STY", "STA", "STX", "???", "TYA", "STA", "TXS", "???", "STZ", "STA", "STZ", "???",
+    "LDY", "LDA", "LDX", "???", "LDY", "LDA", "LDX", "???", "TAY", "LDA", "TAX", "???", "LDY", "LDA", "LDX", "???",
+    "BCS", "LDA", "LDA", "???", "LDY", "LDA", "LDX", "???", "CLV", "LDA", "TSX", "???", "LDY", "LDA", "LDX", "???",
+    "CPY", "CMP", "???", "???", "CPY", "CMP", "DEC", "???", "INY", "CMP", "DEX", "???", "CPY", "CMP", "DEC", "???",
+    "BNE", "CMP", "CMP", "???", "???", "CMP", "DEC", "???", "CLD", "CMP", "PHX", "???", "???", "CMP", "DEC", "???",
+    "CPX", "SBC", "???", "???", "CPX", "SBC", "INC", "???", "INX", "SBC", "NOP", "???", "CPX", "SBC", "INC", "???",
+    "BEQ", "SBC", "SBC", "???", "???", "SBC", "INC", "???", "SED", "SBC", "PLX", "???", "???", "SBC", "INC", "???"
+]
+
+adressmode = [
+    'imp', 'inx', 'imp', 'imp', 'imp', 'zpg', 'zpg', 'imp', 'imp', 'imm', 'acc', 'imp', 'imp', 'abs', 'abs', 'imp',
+    'rel', 'iny', 'imp', 'imp', 'imp', 'zpx', 'zpx', 'imp', 'imp', 'aby', 'imp', 'imp', 'imp', 'abx', 'abx', 'imp',
+    'abs', 'inx', 'imp', 'imp', 'zpg', 'zpg', 'zpg', 'imp', 'imp', 'imm', 'acc', 'imp', 'abs', 'abs', 'abs', 'imp',
+    'rel', 'iny', 'imp', 'imp', 'imp', 'zpx', 'zpx', 'imp', 'imp', 'aby', 'imp', 'imp', 'imp', 'abx', 'abx', 'imp',
+    'imp', 'inx', 'imp', 'imp', 'imp', 'zpg', 'zpg', 'imp', 'imp', 'imm', 'acc', 'imp', 'abs', 'abs', 'abs', 'imp',
+    'rel', 'iny', 'imp', 'imp', 'imp', 'zpx', 'zpx', 'imp', 'imp', 'aby', 'imp', 'imp', 'imp', 'abx', 'abx', 'imp',
+    'imp', 'inx', 'imp', 'imp', 'imp', 'zpg', 'zpg', 'imp', 'imp', 'imm', 'acc', 'imp', 'ind', 'abs', 'abs', 'imp',
+    'rel', 'iny', 'imp', 'imp', 'imp', 'zpx', 'zpx', 'imp', 'imp', 'aby', 'imp', 'imp', 'imp', 'abx', 'abx', 'imp',
+    'imp', 'inx', 'imp', 'imp', 'zpg', 'zpg', 'zpg', 'imp', 'imp', 'imp', 'imp', 'imp', 'abs', 'abs', 'abs', 'imp',
+    'rel', 'iny', 'imp', 'imp', 'zpx', 'zpx', 'zpy', 'imp', 'imp', 'aby', 'imp', 'imp', 'imp', 'abx', 'imp', 'imp',
+    'imm', 'inx', 'imm', 'imp', 'zpg', 'zpg', 'zpg', 'imp', 'imp', 'imm', 'imp', 'imp', 'abs', 'abs', 'abs', 'imp',
+    'rel', 'iny', 'imp', 'imp', 'zpx', 'zpx', 'zpy', 'imp', 'imp', 'aby', 'imp', 'imp', 'abx', 'abx', 'aby', 'imp',
+    'imm', 'inx', 'imp', 'imp', 'zpg', 'zpg', 'zpg', 'imp', 'imp', 'imm', 'imp', 'imp', 'abs', 'abs', 'abs', 'imp',
+    'rel', 'iny', 'imp', 'imp', 'imp', 'zpx', 'zpx', 'imp', 'imp', 'aby', 'imp', 'imp', 'imp', 'abx', 'abx', 'imp',
+    'imm', 'inx', 'imp', 'imp', 'zpg', 'zpg', 'zpg', 'imp', 'imp', 'imm', 'imp', 'imp', 'abs', 'abs', 'abs', 'imp',
+    'rel', 'iny', 'imp', 'imp', 'imp', 'zpx', 'zpx', 'imp', 'imp', 'aby', 'imp', 'imp', 'imp', 'abx', 'abx', 'imp' 
+]
+
+adressmode2 = [
+    'Implicit', 'X Indexed, indirect', 'Implicit', 'Implicit', 'Implicit', 'Zero Page', 'Zero Page', 'Implicit', 'Implicit', 'Immediate', 'Accumulator', 'Implicit', 'Implicit', 'Absolute', 'Absolute', 'Implicit',
+    'Relative', 'Indirect, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Zero Page, X Indexed', 'Zero Page, X Indexed', 'Implicit', 'Implicit', 'Absolute, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Absolute, X Indexed', 'Absolute, X Indexed', 'Implicit',
+    'Absolute', 'X Indexed, indirect', 'Implicit', 'Implicit', 'Zero Page', 'Zero Page', 'Zero Page', 'Implicit', 'Implicit', 'Immediate', 'Accumulator', 'Implicit', 'Absolute', 'Absolute', 'Absolute', 'Implicit',
+    'Relative', 'Indirect, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Zero Page, X Indexed', 'Zero Page, X Indexed', 'Implicit', 'Implicit', 'Absolute, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Absolute, X Indexed', 'Absolute, X Indexed', 'Implicit',
+    'Implicit', 'X Indexed, indirect', 'Implicit', 'Implicit', 'Implicit', 'Zero Page', 'Zero Page', 'Implicit', 'Implicit', 'Immediate', 'Accumulator', 'Implicit', 'Absolute', 'Absolute', 'Absolute', 'Implicit',
+    'Relative', 'Indirect, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Zero Page, X Indexed', 'Zero Page, X Indexed', 'Implicit', 'Implicit', 'Absolute, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Absolute, X Indexed', 'Absolute, X Indexed', 'Implicit',
+    'Implicit', 'X Indexed, indirect', 'Implicit', 'Implicit', 'Implicit', 'Zero Page', 'Zero Page', 'Implicit', 'Implicit', 'Immediate', 'Accumulator', 'Implicit', 'Indirect', 'Absolute', 'Absolute', 'Implicit',
+    'Relative', 'Indirect, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Zero Page, X Indexed', 'Zero Page, X Indexed', 'Implicit', 'Implicit', 'Absolute, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Absolute, X Indexed', 'Absolute, X Indexed', 'Implicit',
+    'Implicit', 'X Indexed, indirect', 'Implicit', 'Implicit', 'Zero Page', 'Zero Page', 'Zero Page', 'Implicit', 'Implicit', 'Implicit', 'Implicit', 'Implicit', 'Absolute', 'Absolute', 'Absolute', 'Implicit',
+    'Relative', 'Indirect, Y Indexed', 'Implicit', 'Implicit', 'Zero Page, X Indexed', 'Zero Page, X Indexed', 'Zero Page, Y Indexed', 'Implicit', 'Implicit', 'Absolute, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Absolute, X Indexed', 'Implicit', 'Implicit',
+    'Immediate', 'X Indexed, indirect', 'Immediate', 'Implicit', 'Zero Page', 'Zero Page', 'Zero Page', 'Implicit', 'Implicit', 'Immediate', 'Implicit', 'Implicit', 'Absolute', 'Absolute', 'Absolute', 'Implicit',
+    'Relative', 'Indirect, Y Indexed', 'Implicit', 'Implicit', 'Zero Page, X Indexed', 'Zero Page, X Indexed', 'Zero Page, Y Indexed', 'Implicit', 'Implicit', 'Absolute, Y Indexed', 'Implicit', 'Implicit', 'Absolute, X Indexed', 'Absolute, X Indexed', 'Absolute, Y Indexed', 'Implicit',
+    'Immediate', 'X Indexed, indirect', 'Implicit', 'Implicit', 'Zero Page', 'Zero Page', 'Zero Page', 'Implicit', 'Implicit', 'Immediate', 'Implicit', 'Implicit', 'Absolute', 'Absolute', 'Absolute', 'Implicit',
+    'Relative', 'Indirect, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Zero Page, X Indexed', 'Zero Page, X Indexed', 'Implicit', 'Implicit', 'Absolute, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Absolute, X Indexed', 'Absolute, X Indexed', 'Implicit',
+    'Immediate', 'X Indexed, indirect', 'Implicit', 'Implicit', 'Zero Page', 'Zero Page', 'Zero Page', 'Implicit', 'Implicit', 'Immediate', 'Implicit', 'Implicit', 'Absolute', 'Absolute', 'Absolute', 'Implicit',
+    'Relative', 'Indirect, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Zero Page, X Indexed', 'Zero Page, X Indexed', 'Implicit', 'Implicit', 'Absolute, Y Indexed', 'Implicit', 'Implicit', 'Implicit', 'Absolute, X Indexed', 'Absolute, X Indexed', 'Implicit' 
+]
+
+zyklen = [
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
+    "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1" 
+]
+```
