@@ -53,3 +53,15 @@ if cmdargs.a:
 else:
     address = 0
 ```
+
+## The translation table
+The following lines are from the page https://dewiki.de/Lexikon/Disassembler
+and shall briefly describe the functionality of a disassembler:
+
+"A disassembler is a computer program that converts the binary-coded machine language of an executable program into a more human-readable assembly language. Its functionality is opposite to that of an assembler.
+
+For each processor instruction there exists a corresponding instruction in assembly language, a mnemonic. Also the individual arguments of the processor instructions, like register numbers or memory addresses, can be transferred one to one into assembly code. So a disassembler translates the binary representations of the processor instructions back into human readable assembly language.
+
+In the case of a program written in assembler, the original code can generally not be restored afterwards in the original text, but only functionally the same. Pseudo instructions, labels and comments are chosen by the programmer and therefore have at least no direct, i.e. clearly reversible, equivalent in the machine code, which makes exact textual reconstruction impossible. With a program, which was written in a higher programming language, the compiler usually made various optimizations, which accelerate the program execution, but make the machine code more complex.
+
+A disassemblat is thus usually clearly worse readable than the original assembler code. Also for this reason it is meaningful and usual with more complex program sections to make the Disassemblierung not in a single run fully automatic, but in repetitions with manual intermediate steps. Here from gradual experience and realization increasingly identifiers for jump marks, subroutines, variables, constants as well as comments can be refined manually and specified for optimization in subsequent runs."
