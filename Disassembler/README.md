@@ -35,7 +35,7 @@ After these preparations, I installed the QT-Designer Package. This deploys a gr
 pip install PyQt5Designer
 ```
 
-Again, if something gies wrong, try it with
+Again, if something goes wrong, try it with
 
 ```bash
 C:\Users\jens\AppData\Local\Programs\Python\Python311\python.exe -m pip install PyQt5Designer
