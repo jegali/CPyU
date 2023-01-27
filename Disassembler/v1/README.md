@@ -202,10 +202,12 @@ if __name__ == '__main__':
     main()
 ```
 
-After that, the app cann be started by typing
+After that, the app can be started by typing
 
 ```bash
 python main.py
 ```
+
+This should present you with the first app impression.
 
 ![Disassembler_UI](/images/disassembler-v1.png)
