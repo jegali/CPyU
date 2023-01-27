@@ -181,22 +181,6 @@ while True:
     # und in die Datei schreiben
     output_file.write(hexcode + " ")
 
-    # Jeder 8-Bit Opcode ist untertelt in drei Sektionen: 
-    # aaabbbcc
-    # aaa: Bestimmt die Operation
-    # bbb: Bestimmt den Adressmodus
-    # cc: wählt die beiden Set von Operationen aus (01 + 10)
-
-    # cc = rom_byte & 3
-    # bbb = (rom_byte & 28) >> 2 
-    # aaa = (rom_byte & 224) >> 5
-
-    # Es gibt Operationen wie beispielswiese EA (NOP),
-    # die sich nicht durch dieses Schema abbilden lassen
-    # daher greife ich auf eine Tabelle zurück, in der alle
-    # Operationen gelistet sind
-
-
     # Die Adressmodi Implizit und Akkumulator bestehen nur 
     # aus einem Byte und haben keine Operanden oder Adressen
     if adressmode[opcode] == "imp":
