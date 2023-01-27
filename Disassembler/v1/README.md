@@ -207,3 +207,5 @@ After that, the app cann be started by typing
 ```bash
 python main.py
 ```
+
+![Disassembler_UI](/images/disassembler-v1.png)
