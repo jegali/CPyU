@@ -1,3 +1,2 @@
 # Images
-
-Here you find all images related to the emulation project
+This directory contains all images related to the emulation project.
