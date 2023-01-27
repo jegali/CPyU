@@ -52,6 +52,8 @@ this part of the project has a long history. Each subfolder in this directory re
 ### V1
 This version represents the basic framework of the application. Using QT Designer, the graphical user interface was created and converted into executable Python source code by pyuic6.
 
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/Disassembler/v1)
+
 ### V2
 
 
