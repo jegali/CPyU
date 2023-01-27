@@ -23,3 +23,6 @@ The project is divided in several subparts I wanted to development independently
 Of course I thought about the structure of the project and the functions to be implemented, but the focus here is clearly on the learning factor and not on commercial software development. Therefore, I have deliberately avoided principles like Scrum or iterative models like the waterfall model. It is clear to me that this approach potentially leads to the need to restructure or even redevelop parts of the code. In order to be able to trace the development steps and perhaps even derive a pedagogical concept for an online course from them, I have stored the individual evolutionary stages in subdirectories.
 
 ## Status
+2022-12-08: I started developing the disassemble unit
+2022-12-09: V1 - Designed the UI for the disassemble unit with QT Designer
+2022-12-10: V2 - Implemented a command line parser module for disassembling
