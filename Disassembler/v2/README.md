@@ -154,3 +154,164 @@ The main loop of the program now reads the assembler file byte by byte. During p
 - Execute
 
 In the fetch phase, the byte is read and the command behind it is read from the table. What the respective command does is the task of the decode phase. In the decode phase it is also examined which address mode the command is based on and how many bytes (operands or address) it requires for its processing. The execute phase becomes important only in the emulation and is neglected here. Instead, console output is generated in the fetch and decode phases and the output is written to a text file. This describes the basic task of the disassembler.
+
+```bash
+# Es können Dateien beliebiger Länge gelesen werden - 
+# daher eine While-Schleife
+
+while True:
+
+    # Lies ein Byte aus dem Assemblertext ein
+    bytecode = input_file.read(1)
+    if not bytecode:
+        break
+
+    # Schreibe die Adresse
+    address_str = hex(address)[2:].upper().zfill(4) + "\t"
+    output_file.write(address_str)
+    address += 1
+
+    # Decodiere den Opcode 
+    opcode = int.from_bytes(bytecode, byteorder='little', signed=False)
+    # Byte in Hex umwandeln
+    # 0x entfernen, entweder durch replace() oder [2:]
+    # in Großbuchstaben umwandeln
+    # mit führenden Nullen auffüllen, falls notwendig
+    hexcode = hex(opcode)[2:].upper().zfill(2)
+    # und in die Datei schreiben
+    output_file.write(hexcode + " ")
+
+    # Jeder 8-Bit Opcode ist untertelt in drei Sektionen: 
+    # aaabbbcc
+    # aaa: Bestimmt die Operation
+    # bbb: Bestimmt den Adressmodus
+    # cc: wählt die beiden Set von Operationen aus (01 + 10)
+
+    # cc = rom_byte & 3
+    # bbb = (rom_byte & 28) >> 2 
+    # aaa = (rom_byte & 224) >> 5
+
+    # Es gibt Operationen wie beispielswiese EA (NOP),
+    # die sich nicht durch dieses Schema abbilden lassen
+    # daher greife ich auf eine Tabelle zurück, in der alle
+    # Operationen gelistet sind
+
+
+    # Die Adressmodi Implizit und Akkumulator bestehen nur 
+    # aus einem Byte und haben keine Operanden oder Adressen
+    if adressmode[opcode] == "imp":
+        output_file.write("\t\t" + mnemonics[opcode] + "\t")
+        output_file.write("\t\t" + adressmode2[opcode] + "\t")
+        output_file.write(zyklen[opcode] + "\t")
+        output_file.write("\n")
+        continue    # nächster Befehl
+
+    if adressmode[opcode] == "acc":
+        output_file.write("\t\t" + mnemonics[opcode] + "\t")
+        output_file.write("\t\t" + adressmode2[opcode] + "\t")
+        output_file.write(zyklen[opcode] + "\t")
+        output_file.write("\n")
+        continue    # nächster Befehl
+
+
+    # nach dem Opcode den (ersten) Operanden lesen
+    bytecode = input_file.read(1)
+    if not bytecode:
+        print("FEHLER: Datei unerwarterweise zu Ende")
+        break
+
+    operand = int.from_bytes(bytecode, byteorder='little', signed=False)
+    hexcode = hex(operand)[2:].upper().zfill(2)
+    # und in die Datei schreiben
+    output_file.write(hexcode)
+    address += 1
+
+    # nun den Befehl auswerten
+    # Immediate
+    if adressmode[opcode] == "imm":
+        output_file.write("\t\t" + mnemonics[opcode] + " #$" + hexcode + "\t")
+        output_file.write("\t" + adressmode2[opcode] + "\n")
+        continue
+
+    # Relative
+    if adressmode[opcode] == "rel":
+        output_file.write("\t\t" + mnemonics[opcode] + " $" + hexcode + "  \t")
+        output_file.write("\t" + adressmode2[opcode] + "\n")
+        continue
+
+    # Zero Page
+    if adressmode[opcode] == "zpg":
+        output_file.write("\t\t" + mnemonics[opcode] + " $" + hexcode + "  \t")
+        output_file.write("\t" + adressmode2[opcode] + "\n")
+        continue
+
+    # Zero Page, X indexed
+    if adressmode[opcode] == "zpx":
+        output_file.write("\t\t" + mnemonics[opcode] + " $" + hexcode + ",X\t")
+        output_file.write("\t" + adressmode2[opcode] + "\n")
+        continue
+
+    # Zero Page, Y indexed
+    if adressmode[opcode] == "zpy":
+        output_file.write("\t\t" + mnemonics[opcode] + " $" + hexcode + ",Y\t")
+        output_file.write("\t" + adressmode2[opcode] + "\n")
+        continue
+
+    # X indexed, indirect
+    if adressmode[opcode] == "inx":
+        output_file.write("\t\t" + mnemonics[opcode] + " $(" + hexcode + ",X)\t")
+        output_file.write("\t" + adressmode2[opcode] + "\n")
+        continue
+
+    # indirect, Y indexed
+    if adressmode[opcode] == "iny":
+        output_file.write("\t\t" + mnemonics[opcode] + " $(" + hexcode + "),Y\t")
+        output_file.write("\t" + adressmode2[opcode] + "\n")
+        continue
+
+    # Nun sind noch alle Befehle übrig, die ein weiteres Byte
+    # (also ingesamt 3 Bytes) für den Befehl beanspruchen
+
+    # nach dem Opcode den (zweiten) Operanden lesen
+    bytecode = input_file.read(1)
+    if not bytecode:
+        print("FEHLER: Datei unerwarterweise zu Ende")
+        break
+
+    operand2 = int.from_bytes(bytecode, byteorder='little', signed=False)
+    hexcode2 = hex(operand2)[2:].upper().zfill(2)
+    # und in die Datei schreiben
+    output_file.write(" " + hexcode)
+    hexcode = hexcode2 + hexcode
+    address += 1
+
+    # nun den Befehl auswerten
+    # Indirect
+    if adressmode[opcode] == "ind":
+        output_file.write("\t" + mnemonics[opcode] + " $(" + hexcode + ")\t")
+        output_file.write("\t\t" + adressmode2[opcode] + "\n")
+        continue
+
+    # Absolute
+    if adressmode[opcode] == "abs":
+        output_file.write("\t" + mnemonics[opcode] + " $" + hexcode + "\t")
+        output_file.write("\t" + adressmode2[opcode] + "\n")
+        continue
+    
+    # Absolute, X indexed
+    if adressmode[opcode] == "abx":
+        output_file.write("\t" + mnemonics[opcode] + " $" + hexcode + ",X\t")
+        output_file.write("\t" + adressmode2[opcode] + "\n")
+        continue
+
+    # Absolute, Y indexed
+    if adressmode[opcode] == "aby":
+        output_file.write("\t" + mnemonics[opcode] + " $" + hexcode + ",Y\t")
+        output_file.write("\t" + adressmode2[opcode] + "\n")
+        continue    
+
+    output_file.write("\n")
+
+input_file.close()
+output_file.close()
+```
