@@ -41,7 +41,10 @@ Again, if something gies wrong, try it with
 C:\Users\jens\AppData\Local\Programs\Python\Python311\python.exe -m pip install PyQt5Designer
 ```
 
-and remember replacing Python311 with your installed python version. The Designer app will be installed in the path set for your python installation and cal be called from Powershell via designer.
+and remember replacing Python311 with your installed python version. The Designer app will be installed in the path set for your python installation and cal be called from Powershell via designer. The next screenshot shows the app.
+
+![PyQT-Designer](/images/qt-designer.png)
+
 
 
 
