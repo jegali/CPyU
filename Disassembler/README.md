@@ -19,4 +19,14 @@ So add the path
 C:\Users\jens\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts
 ```
 
-to your system environment and path. Attention: this path may vary - depending on the installed version and the underlying operating system. If PyQT6 does not work with Python 3.10 or Python 3.11, do install a Python3.9 parallel. You can simply do that by downloading the installation packages from https://python.org
+to your system environment and path. Attention: this path may vary - depending on the installed version and the underlying operating system. If PyQT6 does not work with Python 3.10 or Python 3.11, do install a Python3.9 parallel. You can simply do that by downloading the installation packages from https://python.org <br/><br/>
+
+Especially when installing the pyqt6-tools, pip will refuse to install if you are on Python 3.10 or 3.11, so you have to use the parallel installed version and enter this command:
+
+```bash
+C:\Users\jens\AppData\Local\Programs\Python\Python39\python.exe -m pip install pyqt6-tools
+```
+
+![PyQT6_Tools_Install](/images/pyqt6-tools-39.png)
+
+
