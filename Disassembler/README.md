@@ -55,6 +55,6 @@ This version represents the basic framework of the application. Using QT Designe
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/Disassembler/v1)
 
 ### V2
-Before i tackled the graphical version of the disassembler, i had already created a command line version. This can be found in this directory.
+Before I tackled the graphical version of the disassembler, I had already created a command line version. This can be found in this directory.
 
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/Disassembler/v2)
