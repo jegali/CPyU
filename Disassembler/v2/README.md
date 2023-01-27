@@ -145,3 +145,12 @@ zyklen = [
     "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1" 
 ]
 ```
+
+## The main program loop
+The main loop of the program now reads the assembler file byte by byte. During processing, the program proceeds strictly according to the von Neumann principle:
+
+- Fetch
+- Decode
+- Execute
+
+In the fetch phase, the byte is read and the command behind it is read from the table. What the respective command does is the task of the decode phase. In the decode phase it is also examined which address mode the command is based on and how many bytes (operands or address) it requires for its processing. The execute phase becomes important only in the emulation and is neglected here. Instead, console output is generated in the fetch and decode phases and the output is written to a text file. This describes the basic task of the disassembler.
