@@ -177,3 +177,13 @@ In console applications, a file can be quickly opened for reading or writing. In
             # decodieren der Datei
             self.read_file(fname[0])
 ```
+
+If the user selected a file and pressed Open, the filename is submitted in a variable called fname[0]. So, if this variable is filled with a valid value, the file can be opened, read and parsed.
+
+```bash
+    def read_file(self, file):
+        input_file = open(file, "rb")
+        # Die Datei in ein Bytearray umwandeln und abspeichern
+        self.code_array = bytearray(input_file.read())
+        self.fill_code_view(self.code_array)
+```
