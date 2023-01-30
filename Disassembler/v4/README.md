@@ -150,3 +150,13 @@ UI_DisassemblerView is the file converted by the program pyuic with the descript
         self.retranslateUi(DisassemblerWindow)
         QtCore.QMetaObject.connectSlotsByName(DisassemblerWindow)
 ```
+
+I can't explain every single line of the surface description - it certainly makes sense to consult a book for that - but the sticking points that weren't obvious to me and generated effort in researching and implementing them should be briefly addressed.
+
+### Button clicks
+```bash
+self.cmdLoadCode = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.loadCode())
+self.cmdLoadCode.setGeometry(QtCore.QRect(20, 240, 75, 24))
+self.cmdLoadCode.setObjectName("cmdLoadCode")
+```
+
