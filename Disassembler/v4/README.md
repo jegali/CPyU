@@ -36,4 +36,117 @@ if __name__ == '__main__':
 The class that encapsulates the graphical interface is named UI_DisassemblerWindow and is called from the program code of the main.py class.
 
 ## The UI class
-UI_DisassemblerView is the file converted by the program pyuic with the description of the interface. In this file I have integrated the code of the disassembler. Similar to the description of the console program, I will also go into some specifics of the source code so that it can be better understood.
+UI_DisassemblerView is the file converted by the program pyuic with the description of the interface. In this file I have integrated the code of the disassembler. Similar to the description of the console program, I will also go into some specifics of the source code so that it can be better understood. The main entry point in this class is the method setupUi.
+
+```bash
+   def setupUi(self, DisassemblerWindow):
+        DisassemblerWindow.setObjectName("DisassemblerWindow")
+        DisassemblerWindow.resize(800, 810)
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(10)
+        
+        self.centralwidget = QtWidgets.QWidget(DisassemblerWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        
+        self.plainTextEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.plainTextEdit.setGeometry(QtCore.QRect(20, 40, 361, 181))
+        self.plainTextEdit.setObjectName("txtEditCode")
+        self.plainTextEdit.setReadOnly(True)
+        self.plainTextEdit.setFont(font)
+        self.plainTextEdit.appendPlainText("paste hex source here or load hex-dump / rom-file")
+        
+        self.plainTextEdit_2 = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.plainTextEdit_2.setGeometry(QtCore.QRect(410, 40, 361, 181))
+        self.plainTextEdit_2.setObjectName("txtEditSymbol")
+        
+        self.cmdLoadCode = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.loadCode())
+        self.cmdLoadCode.setGeometry(QtCore.QRect(20, 240, 75, 24))
+        self.cmdLoadCode.setObjectName("cmdLoadCode")
+        
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(410, 240, 121, 24))
+        self.pushButton_2.setObjectName("cmdLoadTable")
+        
+        self.txtStartAddress = QtWidgets.QLineEdit(self.centralwidget)
+        self.txtStartAddress.setGeometry(QtCore.QRect(160, 290, 113, 22))
+        self.txtStartAddress.setObjectName("txtStartAddress")
+        self.txtStartAddress.setText("0x" + hex(self.start_address)[2:].upper().zfill(4))
+        self.txtStartAddress.returnPressed.connect(self.reformatView)
+        self.txtStartAddress.setValidator(self.hex_validator)
+
+        self.txtFromAddress = QtWidgets.QLineEdit(self.centralwidget)
+        self.txtFromAddress.setGeometry(QtCore.QRect(160, 320, 113, 22))
+        self.txtFromAddress.setObjectName("txtFromAddress")
+        
+        self.txtEndAddress = QtWidgets.QLineEdit(self.centralwidget)
+        self.txtEndAddress.setGeometry(QtCore.QRect(160, 350, 113, 22))
+        self.txtEndAddress.setObjectName("txtEndAddress")
+        
+        self.lblStartAddress = QtWidgets.QLabel(self.centralwidget)
+        self.lblStartAddress.setGeometry(QtCore.QRect(30, 290, 120, 16))
+        self.lblStartAddress.setObjectName("lblStartAddress")
+        
+        self.lblFromAddress = QtWidgets.QLabel(self.centralwidget)
+        self.lblFromAddress.setGeometry(QtCore.QRect(30, 320, 131, 16))
+        self.lblFromAddress.setObjectName("lblFromAddress")
+        
+        self.lblEndAddress = QtWidgets.QLabel(self.centralwidget)
+        self.lblEndAddress.setGeometry(QtCore.QRect(30, 350, 49, 16))
+        self.lblEndAddress.setObjectName("lblEndAddress")
+        
+        self.chkDecodeIllegalOpcodes = QtWidgets.QCheckBox(self.centralwidget)
+        self.chkDecodeIllegalOpcodes.setGeometry(QtCore.QRect(420, 290, 180, 20))
+        self.chkDecodeIllegalOpcodes.setObjectName("chkDecodeIllegalOpcodes")
+        
+        self.chkShowCycles = QtWidgets.QCheckBox(self.centralwidget)
+        self.chkShowCycles.setGeometry(QtCore.QRect(420, 310, 180, 20))
+        self.chkShowCycles.setObjectName("chkShowCycles")
+        
+        self.cmdDisassemble = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.disassemble())
+        self.cmdDisassemble.setGeometry(QtCore.QRect(680, 380, 75, 24))
+        self.cmdDisassemble.setObjectName("cmdDisassemble")
+        
+        self.plainTextEdit_3 = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.plainTextEdit_3.setGeometry(QtCore.QRect(20, 420, 751, 361))
+        self.plainTextEdit_3.setObjectName("txtEditDisasm")
+        self.plainTextEdit_3.setReadOnly(True)
+        self.plainTextEdit_3.setFont(font)
+        
+        self.lblCodeView = QtWidgets.QLabel(self.centralwidget)
+        self.lblCodeView.setGeometry(QtCore.QRect(20, 10, 71, 16))
+        self.lblCodeView.setObjectName("lblCodeView")
+
+        self.lblDisasmView = QtWidgets.QLabel(self.centralwidget)
+        self.lblDisasmView.setGeometry(QtCore.QRect(20, 390, 100, 16))
+        self.lblDisasmView.setObjectName("lblDisasmView")
+        
+        self.lblSymbolTable = QtWidgets.QLabel(self.centralwidget)
+        self.lblSymbolTable.setGeometry(QtCore.QRect(410, 10, 131, 16))
+        self.lblSymbolTable.setObjectName("lblSymbolTable")
+        
+        self.cmdSaveToFile = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.saveDisassembled())
+        self.cmdSaveToFile.setGeometry(QtCore.QRect(590, 380, 75, 24))
+        self.cmdSaveToFile.setObjectName("cmdSaveToFile")
+        
+        self.chkShowDescription = QtWidgets.QCheckBox(self.centralwidget)
+        self.chkShowDescription.setGeometry(QtCore.QRect(420, 330, 180, 20))
+        self.chkShowDescription.setObjectName("chkShowDescription")
+
+        self.chkShowMode = QtWidgets.QCheckBox(self.centralwidget)
+        self.chkShowMode.setGeometry(QtCore.QRect(420, 350, 180, 20))
+        self.chkShowMode.setObjectName("chkShowMode")
+
+
+        DisassemblerWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(DisassemblerWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
+        self.menubar.setObjectName("menubar")
+        DisassemblerWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(DisassemblerWindow)
+        self.statusbar.setObjectName("statusbar")
+        DisassemblerWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(DisassemblerWindow)
+        QtCore.QMetaObject.connectSlotsByName(DisassemblerWindow)
+```
