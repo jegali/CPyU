@@ -163,3 +163,4 @@ self.cmdLoadCode.setGeometry(QtCore.QRect(20, 240, 75, 24))
 self.cmdLoadCode.setObjectName("cmdLoadCode")
 ```
 
+Analogous to this example, you can proceed with every button on the graphical user interface.
