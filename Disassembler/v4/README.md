@@ -154,6 +154,9 @@ UI_DisassemblerView is the file converted by the program pyuic with the descript
 I can't explain every single line of the surface description - it certainly makes sense to consult a book for that - but the sticking points that weren't obvious to me and generated effort in researching and implementing them should be briefly addressed.
 
 ### Button clicks
+What I didn't take into account when creating the interface in the designer was that clicks on buttons result in event handling. Surely it is possible to handle this via the designer, but for now this process is still manual. Fortunately, it is relatively easy to use an event handling method via the "clicked" parameter.
+In the following code snippet you can see that here when you click the button the method "loadCode" is called.
+
 ```bash
 self.cmdLoadCode = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.loadCode())
 self.cmdLoadCode.setGeometry(QtCore.QRect(20, 240, 75, 24))
