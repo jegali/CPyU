@@ -164,3 +164,16 @@ self.cmdLoadCode.setObjectName("cmdLoadCode")
 ```
 
 Analogous to this example, you can proceed with every button on the graphical user interface.
+
+
+### Using Dialogues
+In console applications, a file can be quickly opened for reading or writing. In graphical applications, you usually go through a file selection dialog. Since this is not automatically created when the interface is created, some research was necessary here as well.
+
+```bash
+    def loadCode(self):
+        # File Dialog liefert die angeklickte Datei zurück
+        fname = QFileDialog.getOpenFileName(None, "Open File", ".\\", "Rom Files (*.rom)")
+        if fname[0]:
+            # decodieren der Datei
+            self.read_file(fname[0])
+```
