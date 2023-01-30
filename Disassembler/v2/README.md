@@ -6,7 +6,7 @@ https://mirrors.apple2.org.za/ftp.apple.asimov.net/emulators/rom_images/
 
 For the later emulation it is important that it is a Rom that is 12 KB in size. This should be taken into account when downloading.
 
-## Starting he disassembler
+## Starting the disassembler
 This version of the 6502 disassembler can be started from the commandline. It has an integrated help function which you can see in the next screenshot.
 
 ![Disassembler_CMD](/images/6502-cmd-disasm.png)
@@ -310,6 +310,7 @@ Finally, a sample output of the disassembler will be shown. The complete rom lis
 
 
 ```bash
+PS C:\Users\jens\OneDrive\Desktop\CPyU\Disassembler\v2> python .\6502_disasssembler.py -i .\apple2.rom -a d000
 D000    A9 20           LDA #$20                Immediate
 D002    8D 26 26        STA $0326               Absolute
 D005    AD 57 57        LDA $C057               Absolute
