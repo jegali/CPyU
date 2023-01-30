@@ -34,3 +34,6 @@ if __name__ == '__main__':
 ```
 
 The class that encapsulates the graphical interface is named UI_DisassemblerWindow and is called from the program code of the main.py class.
+
+## The UI class
+UI_DisassemblerView is the file converted by the program pyuic with the description of the interface. In this file I have integrated the code of the disassembler. Similar to the description of the console program, I will also go into some specifics of the source code so that it can be better understood.
