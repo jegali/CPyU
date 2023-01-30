@@ -167,17 +167,10 @@ operations[0xFE] = (7, "INC", "abx", "Absolute, X Indexed", "Increment by one")
 
 First, an empty table with 256 entries is created, whose values are all set to invalid (???). Then the individual elements of the table are filled in the places for which the consecutive (bytecode) number represents a valid command.
 
-
+## The output
+The output changed a little bit, but not hat much, I decided to put the cycles and address mode in the output but I didn't feel like adding more command line parameters to optionally switch the new output modes. Instead we leave this functionality to the GUI introduced in the next version.
 
 ```bash
-PS C:\Users\jens\OneDrive\Desktop\CPyU\Disassembler\v3> python .\6502_disasssembler.py -h
-usage: 6502_disasssembler.py [-h] -i I [-o O] [-a A]
-
-options:
-  -h, --help  show this help message and exit
-  -i I        Die Eingabedatei zum Disassemblieren. apple2.rom ist default
-  -o O        stdout, falls kein Dateiname angegeben wird
-  -a A        Adresse als Hexadezimalzahl (D000 als Beispiel für Apple II)
 PS C:\Users\jens\OneDrive\Desktop\CPyU\Disassembler\v3> python .\6502_disasssembler.py -i .\apple2.rom -a d000
 D000    A9 20           LDA #$20                ;2      Immediate
 D002    8D 26 03        STA $0326               ;4      Absolute
