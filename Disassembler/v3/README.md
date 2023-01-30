@@ -185,35 +185,36 @@ D005    AD 57 C0        LDA $C057               ;4      Absolute
 D008    AD 53 C0        LDA $C053               ;4      Absolute
 D00B    AD 50 C0        LDA $C050               ;4      Absolute
 D00E    A9 00           LDA #$00                ;2      Immediate
-D010    85 1C           STA $1C         ;3      Zero Page
+D010    85 1C           STA $1C                 ;3      Zero Page
 D012    AD 26 03        LDA $0326               ;4      Absolute
-D015    85 1B           STA $1B         ;3      Zero Page
+D015    85 1B           STA $1B                 ;3      Zero Page
 D017    A0 00           LDY #$00                ;2      Immediate
-D019    84 1A           STY $1A         ;3      Zero Page
-D01B    A5 1C           LDA $1C         ;3      Zero Page
+D019    84 1A           STY $1A                 ;3      Zero Page
+D01B    A5 1C           LDA $1C                 ;3      Zero Page
 D01D    91 1A           STA $(1A),Y             ;6      Indirect, Y Indexed
 D01F    20 A2 D0        JSR $D0A2               ;6      Absolute
 D022    C8              INY                     ;2      Implicit
-D023    D0 F6           BNE $F6         ;2      Relative
-D025    E6 1B           INC $1B         ;5      Zero Page
-D027    A5 1B           LDA $1B         ;3      Zero Page
+D023    D0 F6           BNE $F6                 ;2      Relative
+D025    E6 1B           INC $1B                 ;5      Zero Page
+D027    A5 1B           LDA $1B                 ;3      Zero Page
 D029    29 1F           AND #$1F                ;2      Immediate
-D02B    D0 EE           BNE $EE         ;2      Relative
+D02B    D0 EE           BNE $EE                 ;2      Relative
 D02D    60              RTS                     ;6      Implicit
 D02E    8D 22 03        STA $0322               ;4      Absolute
 D031    8E 20 03        STX $0320               ;4      Absolute
 D034    8C 21 03        STY $0321               ;4      Absolute
 D037    48              PHA                     ;3      Implicit
 D038    29 C0           AND #$C0                ;2      Immediate
-D03A    85 26           STA $26         ;3      Zero Page
+D03A    85 26           STA $26                 ;3      Zero Page
 D03C    4A              LSR                     ;3      Accumulator
 D03D    4A              LSR                     ;3      Accumulator
-D03E    05 26           ORA $26         ;3      Zero Page
-D040    85 26           STA $26         ;3      Zero Page
+D03E    05 26           ORA $26                 ;3      Zero Page
+D040    85 26           STA $26                 ;3      Zero Page
 D042    68              PLA                     ;4      Implicit
-D043    85 27           STA $27         ;3      Zero Page
+D043    85 27           STA $27                 ;3      Zero Page
 D045    0A              ASL                     ;3      Accumulator
 D046    0A              ASL                     ;3      Accumulator
+...
 ```
 
 
