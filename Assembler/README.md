@@ -11,7 +11,7 @@ Each processor has its own architecture and its own instruction set with which i
 
 Only code written in this language can be understood and translated by the corresponding assembler. A program for processor A can therefore not be used by processor B without modifications - assembler programs are strongly platform dependent. In some cases, individual assembly languages differ only minimally."
 
-# Prerequisites
+## Prerequisites
 As inspiration I used the disassembler/assembler/emulator from Masswerk, which is available on the internet and can be found at https://www.masswerk.at/6502/assembler.html.
 
 ![Masswerk_Disassembler](/images/masswerk-assembler.png)
