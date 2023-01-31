@@ -212,3 +212,21 @@ The fill_code_view method is responsible for formatting. Here, as long as the me
 ```
 
 Very helpful here was the Python method "hex", which not only can represent values in hex mode, but also can represent spaces between hex values by hex(" "). This eliminates the need for a complicated separation of the input values. In addition, the "zfill" method can be used to insert leading zeros into the output.
+
+### Additional Options 
+As already thought in the command line version, the graphical variant of the disassembler offers the possibility to display clock cycles, address mode and description of the instruction. This was realized via checkboxes in the user interface. These checkboxes are queried and displayed in the method "writeOptions".
+
+```bash
+    def writeOptions(self, opcode):
+        options = ""
+        if self.chkShowCycles.isChecked(): 
+            options = options + (str(self.operations[opcode][0]) + "\t")
+        if self.chkShowMode.isChecked():
+            options = options + "{:<20}".format(self.operations[opcode][3]) + "\t"
+        if self.chkShowDescription.isChecked():
+            options = options + "{:<30}".format(self.operations[opcode][4])
+        if len(options) > 0:
+            options = ";" + options
+
+        return options
+```
