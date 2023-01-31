@@ -10,3 +10,11 @@ Assembler programs can use the complete instruction set of a processor, because 
 Each processor has its own architecture and its own instruction set with which it can be addressed. Therefore each processor needs its own assembler including its own assembly language.
 
 Only code written in this language can be understood and translated by the corresponding assembler. A program for processor A can therefore not be used by processor B without modifications - assembler programs are strongly platform dependent. In some cases, individual assembly languages differ only minimally."
+
+# Prerequisites
+As inspiration I used the disassembler/assembler/emulator from Masswerk, which is available on the internet and can be found at https://www.masswerk.at/6502/assembler.html.
+
+![Masswerk_Disassembler](/images/masswerk-assembler.png)
+
+I rebuilt the interface in PyQT. For that, you have to install PyQT6 via the pip command in Powershell or terminal under MacOS / Linux. Interestingly enough, the PyQT-install also installs a tool called pyuic (pyuic6 for version 6) and a version of the qt-designer. The designer is used to build the GUI and pyuic is used to transform the GUI-Metadata to python code. Pyuic is not installed on the main path under Windows, but during the install you are informed where the file is stored.
+
