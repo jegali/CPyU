@@ -20,3 +20,11 @@ I rebuilt the interface in PyQT. For that, you have to install PyQT6 via the pip
 
 For more information on istannling the python libryries and extensions have a look at the disassembler section of this project:
 https://github.com/jegali/CPyU/tree/main/Disassembler
+
+## Status
+this part of the project has a long history. Each subfolder in this directory represents its own version. The development of the assembler module is chronologically from V1, V2, ... , Vn.
+
+### V1
+This version represents the basic framework of the application. Using QT Designer, the graphical user interface was created and converted into executable Python source code by pyuic6.
+
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/Assembler/v1)
