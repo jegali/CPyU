@@ -9,3 +9,11 @@ Thus, if errors occur during the assembly process, they will occur in a particul
 ```bash
 pip install pyqt6-qscintilla
 ```
+
+After that, the component must be imported in the Queltext. For this purpose these import statements in the source code are necessary:
+
+```bash
+from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtWidgets import QFileDialog, QMessageBox
+from PyQt6.Qsci import *
+```
