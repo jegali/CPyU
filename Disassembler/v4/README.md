@@ -187,6 +187,18 @@ If the user selected a file and pressed Open, the filename is submitted in a var
         self.code_array = bytearray(input_file.read())
         self.fill_code_view(self.code_array)
 ```
+Saving a disassemblat is also done via the dialog integrated in Qt. The method "saveDisassembled" shows how the saving is done.
+
+```bash
+    def saveDisassembled(self):
+        fileName, _ = QFileDialog.getSaveFileName(None, 
+            "Save File", "", "All Files(*);;Text Files(*.txt)")
+        
+        if fileName:
+            with open(fileName, 'w') as f:
+                f.write(self.plainTextEdit_3.toPlainText())
+            self.fileName = fileName   
+```
 
 ### The Code view
 The read object or assembly file is to be displayed in the code view in the usual format of a hex viewer. This means that the memory address is displayed on the left, followed by eight bytes in hex format.
