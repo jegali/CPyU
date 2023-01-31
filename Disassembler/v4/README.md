@@ -192,3 +192,23 @@ If the user selected a file and pressed Open, the filename is submitted in a var
 The read object or assembly file is to be displayed in the code view in the usual format of a hex viewer. This means that the memory address is displayed on the left, followed by eight bytes in hex format.
 
 ![Code_View](/images/code-view.png)
+
+The fill_code_view method is responsible for formatting. Here, as long as the memory address is smaller than 65536 (#FFFF), chunks of 8 bytes length are read and displayed as hex values.
+
+```bash
+    def fill_code_view(self, code_array):
+        address = self.start_address
+        blocksize = 8
+        self.plainTextEdit.clear()
+        for chunk in range(0,len(code_array), blocksize):
+            if address < 65536:
+                address_str = hex(address)[2:].upper().zfill(4) + ": "
+                self.plainTextEdit.appendPlainText(address_str + code_array[chunk:chunk+blocksize].hex(" "))
+            address += blocksize
+        txtCursor = self.plainTextEdit.textCursor()
+        txtCursor.setPosition(0)
+        self.plainTextEdit.setTextCursor(txtCursor)
+
+```
+
+Very helpful here was the Python method "hex", which not only can represent values in hex mode, but also can represent spaces between hex values by hex(" "). This eliminates the need for a complicated separation of the input values. In addition, the "zfill" method can be used to insert leading zeros into the output.
