@@ -18,3 +18,5 @@ As inspiration I used the disassembler/assembler/emulator from Masswerk, which i
 
 I rebuilt the interface in PyQT. For that, you have to install PyQT6 via the pip command in Powershell or terminal under MacOS / Linux. Interestingly enough, the PyQT-install also installs a tool called pyuic (pyuic6 for version 6) and a version of the qt-designer. The designer is used to build the GUI and pyuic is used to transform the GUI-Metadata to python code. Pyuic is not installed on the main path under Windows, but during the install you are informed where the file is stored.
 
+For more information on istannling the python libryries and extensions have a look at the disassembler section of this project:
+https://github.com/jegali/CPyU/tree/main/Disassembler
