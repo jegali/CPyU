@@ -187,3 +187,8 @@ If the user selected a file and pressed Open, the filename is submitted in a var
         self.code_array = bytearray(input_file.read())
         self.fill_code_view(self.code_array)
 ```
+
+### The Code view
+The read object or assembly file is to be displayed in the code view in the usual format of a hex viewer. This means that the memory address is displayed on the left, followed by eight bytes in hex format.
+
+![Code_View](/images/code-view.png)
