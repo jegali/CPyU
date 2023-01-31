@@ -230,3 +230,159 @@ As already thought in the command line version, the graphical variant of the dis
 
         return options
 ```
+
+### Output to the text box
+The output to the text box is not fundamentally different from the output to the console. Only the commands for a screen output are different from dss appending strings to the display in the text box.
+
+```bash
+    def disassemble(self):
+        # nur, wenn etwas im Buffer steht, wird decodiert
+        if self.code_array:
+            # Startadresse aus dem Textfeld
+            address = int(self.txtStartAddress.text(),0)
+            self.plainTextEdit_3.clear()
+            # Schleifenzähler
+            byte_to_decode = 0
+            last_byte = len(self.code_array)
+
+            while byte_to_decode < last_byte:
+                # Zeile zusammenbauen
+                # Schreibe die Adresse
+                line_to_write = hex(address)[2:].upper().zfill(4) + "- \t"
+                
+                # Decodiere den Opcode 
+                opcode = int(self.code_array[byte_to_decode])
+                # Byte in Hex umwandeln
+                # 0x entfernen, entweder durch replace() oder [2:]
+                # in Großbuchstaben umwandeln
+                # mit führenden Nullen auffüllen, falls notwendig
+                hexcode = hex(opcode)[2:].upper().zfill(2)
+                # und in die Zeile schreiben
+                line_to_write = line_to_write + (hexcode + " ")
+                
+                address += 1
+                byte_to_decode += 1
+                
+                # Die Adressmodi Implizit und Akkumulator bestehen nur 
+                # aus einem Byte und haben keine Operanden oder Adressen
+                if self.operations[opcode][2] == "imp":
+                    line_to_write = line_to_write + ("    \t\t" + "{:<15}".format(self.operations[opcode][1]) + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue    # nächster Befehl
+
+                if self.operations[opcode][2] == "acc":
+                    line_to_write = line_to_write + ("    \t\t" + "{:<15}".format(self.operations[opcode][1]) + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue    # nächster Befehl
+                                
+                
+                # nach dem Opcode den (ersten) Operanden lesen
+                bytecode = int(self.code_array[byte_to_decode])
+                operand = bytecode
+                hexcode = hex(operand)[2:].upper().zfill(2)
+                # und in die Datei schreiben
+                line_to_write = line_to_write + (hexcode + " ")
+                address += 1
+                byte_to_decode += 1
+                
+                # nun den Befehl auswerten
+                # Immediate
+                if self.operations[opcode][2] == "imm":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " #$" + hexcode) + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue
+
+                # Relative
+                if self.operations[opcode][2] == "rel":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " $" + hexcode) + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue
+
+                # Zero Page
+                if self.operations[opcode][2] == "zpg":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " $" + hexcode) + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue
+
+                # Zero Page, X indexed
+                if self.operations[opcode][2] == "zpx":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " $" + hexcode + ",X") + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue
+
+                # Zero Page, Y indexed
+                if self.operations[opcode][2] == "zpy":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " $" + hexcode + ",Y") + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue
+
+                # X indexed, indirect
+                if self.operations[opcode][2] == "inx":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " $(" + hexcode + ",X)") + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue
+
+                # indirect, Y indexed
+                if self.operations[opcode][2] == "iny":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " $(" + hexcode + "),Y") + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue
+
+                # Nun sind noch alle Befehle übrig, die ein weiteres Byte
+                # (also ingesamt 3 Bytes) für den Befehl beanspruchen
+
+                # nach dem Opcode den (zweiten) Operanden lesen
+                bytecode = int(self.code_array[byte_to_decode])
+                operand2 = bytecode
+                hexcode2 = hex(operand2)[2:].upper().zfill(2)
+                # und in die Datei schreiben
+                hexcode = hexcode2 + hexcode
+                line_to_write = line_to_write + (hexcode2)
+                address += 1
+                byte_to_decode += 1
+
+                # nun den Befehl auswerten
+                # Indirect
+                if self.operations[opcode][2] == "ind":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " $(" + hexcode + ")") + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue
+
+                # Absolute
+                if self.operations[opcode][2] == "abs":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " $" + hexcode) + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue
+                
+                # Absolute, X indexed
+                if self.operations[opcode][2] == "abx":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " $" + hexcode + ",X") + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue
+
+                # Absolute, Y indexed
+                if self.operations[opcode][2] == "aby":
+                    line_to_write = line_to_write + ("\t\t" + "{:<15}".format(self.operations[opcode][1] + " $" + hexcode + ",Y") + "\t")
+                    line_to_write = line_to_write + self.writeOptions(opcode)
+                    self.plainTextEdit_3.appendPlainText(line_to_write)
+                    continue    
+
+
+                self.plainTextEdit_3.appendPlainText(line_to_write)
+        
+        txtCursor = self.plainTextEdit_3.textCursor()
+        txtCursor.setPosition(0)
+        self.plainTextEdit_3.setTextCursor(txtCursor)
+```
