@@ -46,6 +46,14 @@ and remember replacing Python311 with your installed python version. The Designe
 
 ![PyQT-Designer](/images/qt-designer.png)
 
+Should the designer app not start directly from the powershell prompt, it may be possible you have to include the path in the system environmnt. The path is
+
+```bash
+C:\Users\jens\AppData\Local\Programs\Python\Python310\Scripts
+```
+
+for the python 3.10 version. You may have to change the path for your version accordingly.
+
 ## Status
 this part of the project has a long history. Each subfolder in this directory represents its own version. The development of the disassembler module is chronologically from V1, V2, ... , Vn.
 
