@@ -49,3 +49,23 @@ self.sciEditSourcecode.setObjectName("sciEditSourcecode")
 As you can clearly see, the QScintilla component (top left) looks different from the PlaintText component (top right)
 
 ![Assembler_GUI](/images/assembler-v1.png)
+
+## How the assembler works
+I have decided to implement a two-pass assembler. What is the difference between an assembler and a two-pass assembler? Let http://users.cis.fiu.edu/~downeyt/cop3402/two-pass.htm explain it:
+
+"An assembler is a translator, that translates an assembler program into a conventional machine language program. Basically, the assembler goes through the program one line at a time, and generates machine code for that instruction. Then the assembler procedes to the next instruction. In this way, the entire machine code program is created. For most instructions this process works fine, for example for instructions that only reference registers, the assembler can compute the machine code easily, since the assembler knows where the registers are.
+
+Consider an assembler instruction like the following
+
+```bash 
+          JMP  LATER
+          ...
+          ...
+LATER:
+```
+
+This is known as a forward reference. If the assembler is processing the file one line at a time, then it doesn't know where LATER is when it first encounters the jump instruction. So, it doesn't know if the jump is a short jump, a near jump or a far jump. There is a large difference amongst these instructions. They are 2, 3, and 5 bytes long respectively. The assembler would have to guess how far away the instruction is in order to generate the correct instruction. If the assembler guesses wrong, then the addresses for all other labels later in the program woulds be wrong, and the code would have to be regenerated. Or, the assembler could alway choose the worst case. But this would mean generating inefficiency in the program, since all jumps would be considered far jumps and would be 5 bytes long, where actually most jumps are short jumps, which are only 2 bytes long.
+Soooooooo, what is to be done to allow the assembler to generate the correct instruction? Answer: scan the code twice. The first time, just count how long the machine code instructions will be, just to find out the addresses of all the labels. Also, create a table that has a list of all the addresses and where they will be in the program. This table is known as the symbol table. On the second scan, generate the machine code, and use the symbol table to determine how far away jump labels are, and to generate the most efficient instruction.
+
+This is known as a two-pass assembler. Each pass scans the program, the first pass generates the symbol table and the second pass generates the machine code."
+
