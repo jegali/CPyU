@@ -10,10 +10,38 @@ Thus, if errors occur during the assembly process, they will occur in a particul
 pip install pyqt6-qscintilla
 ```
 
-After that, the component must be imported in the Queltext. For this purpose these import statements in the source code are necessary:
+After that, the component must be imported in the source code. For this purpose these import statements in the source code are necessary:
 
 ```bash
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QFileDialog, QMessageBox
 from PyQt6.Qsci import *
+```
+
+After that, only the TextEdit component of Qt has to be exchanged for the one of QScintilla.
+Here is the source code of the Qt component:
+
+```bash
+self.txtEditSourceode = QtWidgets.QPlainTextEdit(self.centralwidget)
+self.txtEditSourceode.setGeometry(QtCore.QRect(20, 40, 381, 281))
+font = QtGui.QFont()
+font.setFamily("Courier New")
+font.setPointSize(11)
+self.txtEditSourceode.setFont(font)
+self.txtEditSourceode.setLineWrapMode(QtWidgets.QPlainTextEdit.LineWrapMode.NoWrap)
+self.txtEditSourceode.setReadOnly(False)
+self.txtEditSourceode.setObjectName("txtEditSourceode")
+```
+
+And here is the source code for the integration of the QScintilla component:
+
+```bash
+self.sciEditSourcecode = QsciScintilla(self.centralwidget)
+self.sciEditSourcecode.setGeometry(QtCore.QRect(20, 40, 581, 281))
+self.sciEditSourcecode.setFont(font)
+self.sciEditSourcecode.setUtf8(True)
+self.sciEditSourcecode.setMarginWidth(0, "0000")
+self.sciEditSourcecode.setCaretLineVisible(True)
+self.sciEditSourcecode.setCaretLineBackgroundColor(QtGui.QColor('lightblue'))
+self.sciEditSourcecode.setObjectName("sciEditSourcecode")
 ```
