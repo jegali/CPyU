@@ -6,3 +6,11 @@ I designed this module directly in Qt Designer without going through a console a
 The following figure shows the program window. The interface is not yet fully developed, more an accumulation of "functions" that can be called via buttons and menu items.
 
 ![CPU-v1](/images/emulator-v1.png)
+
+## Status
+This part of the application in particular is still in development. Therefore, there will always be changes before new versions are released. Each subfolder in this directory represents its own version. The development of the CPU module is chronologically from V1, V2, ... , Vn.
+
+### V1
+This version represents the basic framework of the application. Using QT Designer, the graphical user interface was created and converted into executable Python source code by pyuic6.
+
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v1)
