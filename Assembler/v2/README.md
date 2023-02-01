@@ -45,3 +45,7 @@ self.sciEditSourcecode.setCaretLineVisible(True)
 self.sciEditSourcecode.setCaretLineBackgroundColor(QtGui.QColor('lightblue'))
 self.sciEditSourcecode.setObjectName("sciEditSourcecode")
 ```
+
+As you can clearly see, the QScintilla component (top left) looks different from the PlaintText component (top right)
+
+![Assembler_GUI](/images/assembler.png)
