@@ -158,4 +158,149 @@ Now the tables with the valid lexical terms follow - thus the individual command
                     }
 ```
 
+Next, we need a mapping table of the individual valid commands to the respective address mode:
 
+```bash
+   address_mode = {
+    #   ROR A
+        'Accumulator': (1, [ ('ASL', '0A'), ('LSR', '4A'), ('ROL', '2A'), ('ROR', '6A') ] ),
+
+    #   SBC #$44
+        'Immediate':   (2, [ ('ADC', '69'), ('AND', '29'), ('LDY', 'A0'), ('LDX', 'A2'), 
+                            ('LDA', 'A9'), ('EOR', '49'), ('CPY', 'C0'), ('CPX', 'E0'), 
+                            ('CMP', 'C9'), ('ORA', '09'), ('SBC', 'E9') ] ),
+
+    #   SBC $44
+        'Zero Page':   (2, [ ('ADC', '65'), ('AND', '25'), ('ASL', '06'), ('BIT', '24'), 
+                            ('LSR', '46'), ('LDY', 'A4'), ('LDX', 'A6'), ('LDA', 'A5'), 
+                            ('INC', 'E6'), ('EOR', '45'), ('DEC', 'C6'), ('CPY', 'C4'), 
+                            ('CPX', 'E4'), ('CMP', 'C5'), ('ORA', '05'), ('ROL', '26'),
+                            ('ROR', '66'), ('SBC', 'E5'), ('STA', '85'), ('STX', '86'),
+                            ('STY', '84') ] ),
+
+    #   SBC $44,X
+        'Zero Page,X': (2, [ ('ADC', '75'), ('AND', '35'), ('ASL', '16'), ('CMP', 'D5'),
+                            ('DEC', 'D6'), ('EOR', '55'), ('INC', 'F6'), ('LDA', 'B5'),
+                            ('LDY', 'B4'), ('LSR', '56'), ('ORA', '15'), ('ROL', '36'),
+                            ('ROR', '76'), ('SBC', 'F5'), ('STA', '95'), ('STY', '94') ] ),
+
+    #   STX $44,Y
+        'Zero Page,Y': (2, [ ('LDX', 'B6'), ('STX', '96') ] ),
+
+    #   STX $4400
+        'Absolute':    (3, [ ('ADC', '6D'), ('AND', '2D'), ('ASL', '0E'), ('BIT', '2C'), 
+                            ('CMP', 'CD'), ('CPX', 'EC'), ('CPY', 'CC'), ('DEC', 'CE'),
+                            ('EOR', '4D'), ('INC', 'EE'), ('JMP', '4C'), ('JSR', '20'),
+                            ('LDA', 'AD'), ('LDX', 'AE'), ('LDY', 'AC'), ('LSR', '4E'),
+                            ('ORA', '0D'), ('ROL', '2E'), ('ROR', '6E'), ('SBC', 'ED'),
+                            ('STA', '8D'), ('STX', '8E'), ('STY', '8C') ] ),
+
+    #   STA $4400,X
+        'Absolute,X':  (3, [ ('ADC', '7D'), ('AND', '3D'), ('ASL', '1E'), ('CMP', 'DD'),
+                            ('DEC', 'DE'), ('EOR', '5D'), ('INC', 'FE'), ('LDA', 'BD'),
+                            ('LDY', 'BC'), ('LSR', '5E'), ('ORA', '1D'), ('ROL', '3E'),
+                            ('SBC', 'FD'), ('STA', '9D') ] ),
+
+    #   STA $4400,Y
+        'Absolute,Y':  (3, [ ('ADC', '79'), ('AND', '39'), ('CMP', 'D9'), ('EOR', '59'),
+                            ('LDA', 'B9'), ('LDX', 'BE'), ('ORA', '19'), ('SBC', 'F9'),
+                            ('STA', '99') ] ),
+
+    #   JMP ($5597)
+        'Indirect':    (3, [ ('JMP', '6C') ] ),
+
+    #   LDA ($44,X)
+        'Indirect,X':  (2, [ ('ADC', '61'), ('AND', '21'), ('CMP', 'C1'), ('EOR', '41'),
+                            ('LDA', 'A1'), ('ORA', '01'), ('SBC', 'E1'), ('STA', '81') ] ),
+
+    #   LDA ($44),Y
+        'Indirect,Y':  (2, [ ('ADC', '71'), ('AND', '31'), ('CMP', 'D1'), ('EOR', '51'),
+                            ('LDA', 'B1'), ('ORA', '11'), ('SBC', 'F1'), ('STA', '91') ] ),
+
+    #   BRK
+        'Implied':     (1, [ ('BRK', '00'), ('CLC', '18'), ('SEC', '38'), ('CLI', '58'),
+                            ('SEI', '78'), ('CLV', 'B8'), ('CLD', 'D8'), ('SED', 'F8'),
+                            ('TAX', 'AA'), ('TXA', '8A'), ('DEX', 'CA'), ('INX', 'E8'),
+                            ('TAY', 'A8'), ('TYA', '98'), ('DEY', '88'), ('INY', 'C8'),
+                            ('TXS', '9A'), ('TSX', 'BA'), ('PHA', '48'), ('PLA', '68'),
+                            ('PHP', '08'), ('PLP', '28'), ('NOP', 'EA'), ('RTI', '40'),
+                            ('RTS', '60') ] )
+    }
+```
+
+## File operations
+As already described in the disassembler, the graphical variant of the assembler also uses file operation to load and save files using Qt's built-in file dialogs:
+
+```bash
+   #
+    # def saveObjFile(self):
+    #
+    # Diese Methode speichert das generierte Object-Listing
+    # als .obj Datei
+    #
+    
+    def saveObjFile(self):
+        fileName, _ = QFileDialog.getSaveFileName(None, 
+            "Save File", self.used_filename, "All Files(*);;Object Code Files (*.obj)")
+
+        if fileName:
+            with open(fileName, 'w') as f:
+                f.write(self.txtEditObjectcode.toPlainText())
+
+
+
+    #
+    # def saveLstFile(self):
+    #
+    # Diese Methode speichert das generierte Assembler-Listing
+    # als .lst Datei
+    #
+    
+    def saveLstFile(self):
+        fileName, _ = QFileDialog.getSaveFileName(None, 
+            "Save File", self.used_filename, "All Files(*);;Assembler List Files (*.lst)")
+
+        if fileName:
+            with open(fileName, 'w') as f:
+                f.write(self.txtEditAssembler.toPlainText())
+
+
+
+    #
+    # def saveSourcecode(self):
+    #
+    # Diese Methode speichert den Inhalt des QScintilla-Editorfensters ab
+    # Das ist der (Assemblerquelltext)
+    #
+
+    def saveSourcecode(self):
+        fileName, _ = QFileDialog.getSaveFileName(None, 
+            "Save File", self.used_filename, "All Files(*);;Assembler Source Files (*.asm)")
+
+        if fileName:
+            with open(fileName, 'w') as f:
+                f.write(self.sciEditSourcecode.text())
+    
+
+    #
+    # def loadSourcecode(self):
+    # 
+    # Dies ist die Behandlungsroutine für den Click auf den Button "Load Sourcecode"
+    # 
+     
+    def loadSourcecode(self):
+        # File Dialog liefert die angeklickte Datei zurück
+        self.sourcecode.clear()
+        fname = QFileDialog.getOpenFileName(None, "Open File", ".\\", "Assembler Source Files (*.asm)")
+        if fname[0]:
+            used_path, used_filename = os.path.split(fname[0])
+            self.used_filename = used_filename.split('.')[0]
+            self.sciEditSourcecode.clear()
+            with open(fname[0], "r") as input_file:
+                for line in input_file:
+                    self.sourcecode.append(line.strip("\r").strip("\n"))
+                    self.sciEditSourcecode.append(line)
+            # Die Breite der Spalte für die Zeilennummerierung festlegen (plus eine Extrastelle) 
+            self.sciEditSourcecode.setMarginWidth(0, str(self.sciEditSourcecode.lines())+"0")
+
+```
