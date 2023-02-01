@@ -304,3 +304,597 @@ As already described in the disassembler, the graphical variant of the assembler
             self.sciEditSourcecode.setMarginWidth(0, str(self.sciEditSourcecode.lines())+"0")
 
 ```
+
+## Avengers... assemble!
+No copyright infringement intended. Avengers and Avengers assemble is a trademark of Marvel, the creators of the finest comic books in the universe. This two words just fit for an assembler... and now to work, Avengers. Time to see the assemble code. The code is split up in some methods. First we have the assemble method. It clears all textfields and does some error checking for the loaded file before the assembly process starts.
+
+As stated above, I decided to go with a two pass assembler. Basically, the program is run twice. Im the first pass, the file is analyzed and the symbol table is build. In the second pass, every symbol is replaced and the file is analyzed again and then finally translated. The third pass is just here to make it more beautiful.
+
+```bash
+    #
+    # def assemble(self):
+    #
+    # xxx mal drüber nachdenken:
+    # xxx brauchen wir die Liste tatsächlich, oder kann
+    # xxx der Assembler aus dem Editor gefüttert werden ?
+
+
+    def assemble(self):
+        # Wenn kein Quelltext geladen oder eingegeben wurde,
+        # eine Warnmeldung ausgeben
+        if self.sciEditSourcecode.length() == 0:
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle("Warning")
+            msgBox.setText("No sourcecode to assemble.\nPlease load or enter Code.")
+            msgBox.exec()
+        else:
+            # Die Liste mit dem zu untersuchenden Quelltext löschen
+            self.sourcecode.clear()
+            # Den Quelltext aus dem Editor in die Liste laden
+            for line in range(self.sciEditSourcecode.lines()):
+                self.sourcecode.append(self.sciEditSourcecode.text(line).strip("\r").strip("\n"))
+
+            self.reset_vars()
+
+            self.log_status("Avengers... assemble", "always")
+            self.log_status(" ", "always")
+            self.log_status("Starting Pass 1", "always")
+
+            # der Quelltext wird zweimal durchlaufen
+            # Pass 1: Finde alle Label, deren Adressen,
+            #         und baue die Symboltabelle auf
+            # Pass 2: Ersetze alle Label durch Adressen und
+            #         reloziere Jumps 
+            # Pass 3: schreibe die Objektdatei
+
+            self.pass_1()
+
+            if self.pass1_error_count > 0:
+                self.log_status(" ", "always")
+                self.log_status("Error(s) encountered", "always")
+                self.log_status("Unable to continue", "always")
+                self.log_status(" ", "always")
+            else:
+                self.log_status("Pass 1 completed successfully", "always")
+                self.log_status(" ", "always")
+                self.log_status("Starting Pass 2", "always")
+                self.log_status(" ", "always")
+                self.pass_2()
+
+            if self.pass2_error_count > 0:
+                self.log_status(" ", "always")
+                self.log_status("Error(s) encountered", "always")
+                self.log_status("Unable to continue", "always")
+                self.log_status(" ", "always")
+            else:
+                self.log_status("Pass 2 completed successfully", "always")
+                self.log_status(" ", "always")
+                self.log_status("Creating Object File", "always")
+                self.log_status(" ", "always")
+                self.pass_3()
+
+            self.show_status()
+```
+
+The methods pass_1(), pass_2() and pass_3() then do the actual work. Pass_2() is almost 80% a copy of pass_1(). Still, I took a quick and dirty approach and just wrote the method twice.
+
+```bash
+   #
+    # def pass_3(self):
+    #
+    # Diese Methode nimmt den generierten Quellcode
+    # trennt die Bytes mit einem ' ' und schreibt das
+    # Ergebnis in das Onject-Textfeld
+    #
+
+    def pass_3(self):
+        total_code = ''
+        for address in self.code_dict:
+            code = self.code_dict[address]
+            total_code = total_code + code
+        
+        blanked = ' '.join(total_code[i:i+2] for i in range(0,len(total_code),2))    
+        self.txtEditObjectcode.appendPlainText(blanked)
+
+
+
+    def pass_1(self):
+        # So lange wir keine .ORG Direktive finden, ist davon auszugehen, 
+        # dass das Programm bei $0000 beginnt
+        self.program_counter = 0
+        # Jede Zeile durchgehen
+        for line in self.sourcecode:
+            # besteht die Zeile aus Leerzeichen oder nur einem Return?
+            # dann weiter mit der nächsten Zeile
+            if len(line) == 0 or line.isspace():
+                continue
+            else:
+                # die Token kommen als Liste zurück
+                # label: lda #3   ; comment
+                # liefert [0]: label, [1] lda, [2] #3
+                token = self.tokenize(line)
+                # Wenn eine Zeile aus einem Kommentar besteht, 
+                # hat sie keine Token. Dann weiter mit der nächsten Zeile
+                if len(token) == 0:
+                    continue 
+
+            # Wir haben Token. Nun überprüfen, ob es sich um gültige
+            # Opcodes (LDA, STX, RTS, ...) oder Direktiven (.EQU, .END, .DB, ...) handelt 
+            if (token[0] not in self.validopcodes) and (token[0] not in self.validdirectives):
+                # Wenn es kein Opcode und keine Direktive ist, ist es ein Label. Punkt.
+                # Über pop(0) wird das Element aus der Liste entfernt
+                label = token.pop(0)
+                # Den Label in das Dictionary eintragen und die aktuelle
+                # Programmadresse (in hex umgewandelt) als Wert eintragen
+                # Der program_counter muss nicht hochgezählt werden, 
+                # ein Label verändert die aktuelle Adresse nicht.
+                self.label_dict[label] = self.int2hex(self.program_counter, 4)
+
+            # Wenn wir immer noch 2 Token übrig haben, überprüfen wir auf 
+            # Immediate Operanden (also alles, was mit "#" beginnt) 
+            if (len(token) == 2) and (token[1].startswith('#')):
+                # Es gibt unterschiedliche immediate operands: 
+                # #$0A, #128, #'C', #%00001111
+                # und wir brauchen alle im hex-Format
+                if token[1][1].isdigit():
+                    token[1] = '#' + '$' + self.int2hex(int(token[1][1:]), 2)
+                elif token[1][1] == "'":
+                    token[1] = '#' + '$' + self.int2hex(ord(token[1][2:3]), 2)
+                elif token[1][1] == "%":
+                    token[1] = '#' + '$' + self.int2hex(int(token[1][2:],2), 2) 
+        
+            # Das noch vorhandene Token an der ersten Stelle könnte eine Direktive sein.
+            # Das untersuchen wir als erstes
+            if token[0] == '.ORG':
+                self.program_counter = int(token[1][1:],16)
+            elif token[0] == '.DB':
+                num_data_bytes, data_bytes = self.build_data_bytes(token[1])
+                self.program_counter = self.program_counter + num_data_bytes
+            elif token[0] == '.DS':
+                self.program_counter = self.program_counter + int(token[1])
+            elif token[0] == '.EQU':
+                num_data_bytes, data_bytes = self.build_data_bytes(token[1])
+                self.label_dict[label] = data_bytes
+            elif token[0] == '.END':
+                if self.pass1_error_count == 0:
+                    print('Pass 1 Complete - No Errors Encountered')
+                else:
+                    print('Pass 1 Complete - ', self.pass1_error_count, 'Error(s) Encountered')
+                print(' ')
+                break             
+
+            # Dann gibt es noch die relativen Adressmodi...
+            elif token[0] in self.relative_address_mode_instructions and re.fullmatch('[0-9A-Z]{1,8}', token[1]) != None:
+                self.program_counter = self.program_counter + 2
+
+            # Und den ganzen Rest
+            else:
+                # Bei zwei Token haben wir einen Opcode und einen Operanden
+                if len(token) == 2:
+                    operand = token[1]
+                    if not '$' in operand:
+                        for adrmode in self.address_mode_patterns_sym.keys():
+                            z = re.fullmatch(adrmode, operand)
+                            if z != None:
+                                mode = self.address_mode_patterns_sym[adrmode]
+                            if isinstance(mode, tuple):
+                                if 'Zero Page' in mode:
+                                    label = operand
+                                elif 'Zero Page,X' in mode:
+                                    label = operand.rstrip(',X')
+                                elif 'Zero Page,Y' in mode:
+                                    label = operand.rstrip(',Y')
+                            else:
+                                if mode == 'Indirect':
+                                    label = operand.lstrip('(').rstrip(')')
+                                elif mode == 'Indirect,X':
+                                    label = operand.lstrip('(').rstrip(',X)')
+                                elif mode == 'Indirect,Y':
+                                    label = operand.lstrip('(').rstrip('),Y')
+                                elif mode == 'Immediate':   
+                                    label = operand.lstrip('#')
+                            # handle arithmetic in symbolic label
+                            z = re.search('[0-9+-]{2,4}', label)
+                            if z != None:
+                                f, t = z.span()
+                                label = label[0:f]
+                            if label in self.label_dict:
+                                operand = '$' + self.label_dict[label]
+                            else:
+                                operand = '$FFFF'
+                                self.label_dict[label] = operand
+                            if isinstance(mode, tuple):
+                                if 'Zero Page,X' in mode:
+                                    operand = operand + ',X'
+                                elif 'Zero Page,Y' in mode:
+                                    operand = operand + ',Y'
+                            else:
+                                if mode == 'Indirect':
+                                    operand = '(' + operand + ')'
+                                elif mode == 'Indirect,X':
+                                    operand = '(' + operand + ',X)'
+                                elif mode == 'Indirect,Y':
+                                    operand = '(' + operand + '),Y'
+                                elif mode == 'Immediate':   
+                                    operand = '#' + operand                            
+                            break
+                        
+                    am, nb, oc = self.determine_mode(token[0], operand)
+                    self.pass1_error_check(token, am, oc)
+
+                # Bei einem Token haben wir nur einen Opcode
+                elif len(token) == 1:
+                    am, nb, oc = self.determine_mode(token[0], '')
+                    self.pass1_error_check(token, am, oc)
+                
+                # Bei gar keinem Token haben wir ein Problem
+                # bei mehr als zwei Token auch... solche Befehle gibt es nicht
+                else:
+                    self.pass1_error_count += 1
+                    print('Error on:', token, ' - Too Many Tokens')
+                    
+                self.program_counter = self.program_counter + nb    
+
+
+
+    def pass_2(self):
+        # So lange wir keine .ORG Direktive finden, ist davon auszugehen, 
+        # dass das Programm bei $0000 beginnt
+        self.program_counter = 0
+        # Jede Zeile durchgehen
+        for line in self.sourcecode:
+            # besteht die Zeile aus Leerzeichen oder nur einem Return?
+            # dann weiter mit der nächsten Zeile
+            if len(line) == 0 or line.isspace():
+                #print(line)
+                self.txtEditAssembler.appendPlainText(line) 
+                continue
+            else:
+                # die Token kommen als Liste zurück
+                # label: lda #3   ; comment
+                # liefert [0]: label, [1] lda, [2] #3
+                token = self.tokenize(line)
+                # Wenn eine Zeile aus einem Kommentar besteht, 
+                # hat sie keine Token. Dann weiter mit der nächsten Zeile
+                if len(token) == 0:
+                    #print(line)
+                    self.txtEditAssembler.appendPlainText(line) 
+                    continue        
+            
+            # Wir haben Token. Nun überprüfen, ob es sich um gültige
+            # Opcodes (LDA, STX, RTS, ...) oder Direktiven (.EQU, .END, .DB, ...) handelt 
+            if (token[0] not in self.validopcodes) and (token[0] not in self.validdirectives):
+                # Wenn es kein Opcode und keine Direktive ist, ist es ein Label. Punkt.
+                # Über pop(0) wird das Element aus der Liste entfernt
+                label = token.pop(0)
+
+            # Wenn wir immer noch 2 Token übrig haben, überprüfen wir auf 
+            # Immediate Operanden (also alles, was mit "#" beginnt) 
+            if (len(token) == 2) and (token[1].startswith('#')):
+                # Es gibt unterschiedliche immediate operands: 
+                # #$0A, #128, #'C', #%00001111
+                # und wir brauchen alle im hex-Format
+                if token[1][1].isdigit():
+                    token[1] = '#' + '$' + self.int2hex(int(token[1][1:]), 2)
+                elif token[1][1] == "'":
+                    token[1] = '#' + '$' + self.int2hex(ord(token[1][2:3]), 2)
+                elif token[1][1] == "%":
+                    token[1] = '#' + '$' + self.int2hex(int(token[1][2:],2), 2)
+
+            # Das noch vorhandene Token an der ersten Stelle könnte eine Direktive sein.
+            # Das untersuchen wir als erstes
+
+            if token[0] == '.ORG':
+                self.program_counter = int(token[1][1:],16)
+                lineout = self.myprint(line, 'pc =', self.program_counter)
+                self.txtEditAssembler.appendPlainText(lineout)   
+            elif token[0] == '.DB':
+                num_data_bytes, data_bytes = self.build_data_bytes(token[1])
+                lineout = self.myprint(line, self.int2hex(self.program_counter, 4), ':', data_bytes)
+                self.txtEditAssembler.appendPlainText(lineout)   
+                self.code_dict[self.int2hex(self.program_counter, 4)] = data_bytes
+                self.program_counter = self.program_counter + num_data_bytes
+            elif token[0] == '.DS':
+                lineout = self.myprint(line, self.int2hex(self.program_counter, 4), ':', 'Reserved', token[1], 'Bytes')
+                self.txtEditAssembler.appendPlainText(lineout)   
+                self.program_counter = self.program_counter + int(token[1])
+            elif token[0] == '.EQU':
+                num_data_bytes, data_bytes = self.build_data_bytes(token[1])
+                lineout = self.myprint(line, label, '=', data_bytes)
+                self.txtEditAssembler.appendPlainText(lineout)   
+            elif token[0] == '.END':
+                lineout = self.myprint(line, self.int2hex(self.program_counter, 4))
+                self.txtEditAssembler.appendPlainText(lineout)   
+                print(' ')
+                if self.pass2_error_count == 0:
+                    print('Pass 2 Complete - No Errors Encountered')
+                else:
+                    print('Pass 2 Complete - ', self.pass2_error_count, 'Error(s) Encountered')
+                print(' ')
+                print('Assembly Complete')
+                break
+
+            # Dann gibt es noch die relativen Adressmodi...
+            elif token[0] in self.relative_address_mode_instructions and re.fullmatch('[0-9A-Z]{1,8}', token[1]) != None:
+                oc = self.relative_address_mode_instructions[token[0]]
+                x = int(self.label_dict[token[1]], 16) - self.program_counter
+                if x > 127 or x < -128:
+                    self.pass2_error_count += 1
+                    print('Error on:', token, ' - Relative Displacment Out of Range')
+                else:
+                    if x < 0:
+                        disp = self.cvtint2scomp(x-2)
+                    else:    
+                        disp = hex(x-2)[2:].zfill(2).upper()
+                    lineout = self.myprint(line, self.int2hex(self.program_counter, 4), ':', oc, disp)
+                    self.txtEditAssembler.appendPlainText(lineout)   
+                    self.code_dict[self.int2hex(self.program_counter, 4)] = oc + disp             
+                    self.program_counter = self.program_counter + 2
+            
+            else:
+                if len(token) == 2:
+                    oper = token[1]
+                    if not '$' in oper:
+                        for p in self.address_mode_patterns_sym.keys():
+                            z = re.fullmatch(p, oper)
+                            if z != None:
+                                mode = self.address_mode_patterns_sym[p]
+                                if isinstance(mode, tuple):
+                                    if 'Zero Page' in mode:
+                                        label = oper
+                                    elif 'Zero Page,X' in mode:
+                                        label = oper.rstrip(',X')
+                                    elif 'Zero Page,Y' in mode:
+                                        label = oper.rstrip(',Y')
+                                else:
+                                    if mode == 'Indirect':
+                                        label = oper.lstrip('(').rstrip(')')
+                                    elif mode == 'Indirect,X':
+                                        label = oper.lstrip('(').rstrip(',X)')
+                                    elif mode == 'Indirect,Y':
+                                        label = oper.lstrip('(').rstrip('),Y')
+                                    elif mode == 'Immediate':   
+                                        label = oper.lstrip('#')
+                                # handle arithmetic in symbolic label
+                                z = re.search('[0-9+-]{2,4}', label)
+                                if z != None:
+                                    f, t = z.span()
+                                    exp = label[f:t]
+                                    label = label[0:f]
+                                    lab_len = len(self.label_dict[label])
+                                    x = eval(str(int(self.label_dict[label], 16)) + exp)
+                                    if lab_len == 2 and x < 256:
+                                        oper = '$' + self.int2hex(x, 2)
+                                    elif lab_len == 4 and x < 65536:
+                                        oper = '$' + self.int2hex(x, 4)
+                                    else:
+                                        self.pass2_error_count += 1
+                                        print('Error on:', token, ' - Symbol Arithmetic Overflow')
+                                        oper = '$FF'
+                                        if lab_len == 4:
+                                            oper += 'FF'
+                                else:
+                                    oper = '$' + self.label_dict[label]
+
+                                if isinstance(mode, tuple):
+                                    if 'Zero Page,X' in mode:
+                                        oper = oper + ',X'
+                                    elif 'Zero Page,Y' in mode:
+                                        oper = oper + ',Y'
+                                else:
+                                    if mode == 'Indirect':
+                                        oper = '(' + oper + ')'
+                                    elif mode == 'Indirect,X':
+                                        oper = '(' + oper + ',X)'
+                                    elif mode == 'Indirect,Y':
+                                        oper = '(' + oper + '),Y'
+                                    elif mode == 'Immediate':   
+                                        oper = '#' + oper                            
+                                break
+                        
+                    am, nb, oc = self.determine_mode(token[0], oper)
+                elif len(token) == 1:
+                    am, nb, oc = self.determine_mode(token[0], '')
+                        
+                if am == 'Implied' or am == 'Accumulator':
+                    lineout = self.myprint(line, self.int2hex(self.program_counter, 4), ':', oc)
+                    self.txtEditAssembler.appendPlainText(lineout)   
+                    self.code_dict[self.int2hex(self.program_counter, 4)] = oc
+                elif am == 'Immediate' or am == 'Indirect,X' or am == 'Indirect,Y':
+                    lineout = self.myprint(line, self.int2hex(self.program_counter, 4), ':', oc, oper[2:4])
+                    self.txtEditAssembler.appendPlainText(lineout)   
+                    self.code_dict[self.int2hex(self.program_counter, 4)] = oc + oper[2:4]
+                elif am == 'Zero Page' or am == 'Zero Page,X' or am == 'Zero Page,Y': 
+                    lineout = self.myprint(line, self.int2hex(self.program_counter, 4), ':', oc, oper[1:3])
+                    self.txtEditAssembler.appendPlainText(lineout)   
+                    self.code_dict[self.int2hex(self.program_counter, 4)] = oc + oper[1:3]
+                elif am == 'Absolute' or am == 'Absolute,X' or am == 'Absolute,Y':
+                    lineout = self.myprint(line, self.int2hex(self.program_counter, 4), ':', oc, oper[3:5], oper[1:3])
+                    self.txtEditAssembler.appendPlainText(lineout)   
+                    self.code_dict[self.int2hex(self.program_counter, 4)] = oc + oper[3:5] + oper[1:3]
+                elif am == 'Indirect':
+                    lineout = self.myprint(line, self.int2hex(self.program_counter, 4), ':', oc, oper[4:6], oper[2:4])    
+                    self.txtEditAssembler.appendPlainText(lineout)   
+                    self.code_dict[self.int2hex(self.program_counter, 4)] = oc + oper[4:6] + oper[2:4]
+                
+                self.program_counter = self.program_counter + nb
+```
+
+## Helper functions
+Last but not least, the clss containes some helper functions. I will show them here but not explain them further:
+
+```bash
+    #
+    # def tokenize(self, line):
+    #
+    # Diese Methode zerstückelt die Codezeile in einzelne Token
+    #
+
+    def tokenize(self, line):
+        # Gibt es einen Kommentar ?
+        comment_position = line.find(';')
+        # -1 bedeutet, dass kein ";" gefunden wurde
+        if comment_position == -1:
+            # dann benötigen wir die ganze Zeile
+            comment_position = len(line)
+    
+        # die Zeile entlang der Blanks aufspalten. Da bei Mehrfachblanks '' entstehen können,
+        # werden diese durch die integrierte if-Abfrage entfernt
+        return [token for token in line[0:comment_position].upper().split(' ') if token != '']
+
+
+ 
+    #
+    # def show_status(self):
+    #
+    # This method filters the log messages according to the 
+    # set checkbox info | warn | error | all
+    #
+
+    def show_status(self):
+        self.txtEditDebug.clear()
+        search_for = "(^always:)"
+        if self.chkAll.isChecked():
+            search_for += "|(.*)"
+        else:
+            if self.chkInfo.isChecked():
+                search_for += "|(^info:)"
+            if self.chkWarning.isChecked():
+                search_for += "|(^warning:)"
+            if self.chkError.isChecked():
+                search_for += "|(^error:)"
+
+        reg = re.compile(search_for)
+        filtered_text = list(filter(reg.search, self.status_txt))
+        for line in filtered_text:
+            line = re.sub('always:', '', line)
+            self.txtEditDebug.appendPlainText(line)
+
+
+
+    #
+    # def log_status(self, line, level):
+    #
+    # This method logs the different outputs in different levels
+    #
+
+    def log_status(self, line, level):
+        self.status_txt.append(level+": " + line)
+
+
+    #
+    # def int2hex(x,y):
+    #
+    # Diese Methode wandelt einen int-Wert (x)
+    # in einen hex-Wert der Länge (y) um
+    #
+
+    def int2hex(self,x,y):
+        return hex(x)[2:].zfill(y).upper() 
+
+
+
+    def determine_mode(self, mnemonic, operand):
+        mode = 'Invalid'
+        if operand == '':
+            mode = 'Implied'
+        elif operand == 'A':
+            mode = 'Accumulator'
+        else:
+            for p in self.address_mode_patterns.keys():
+                z = re.fullmatch(p, operand)
+                if z != None:
+                    mode = self.address_mode_patterns[p]        
+                    break
+
+        if mode == 'Invalid':
+            return (mode, 9, 'XX')
+        
+        numbytes = self.address_mode[mode][0]
+        good_mnemonic = False
+        for m, opc in self.address_mode[mode][1]:
+            if m == mnemonic:
+                good_mnemonic = True
+                break
+        if good_mnemonic:
+            return (mode, numbytes, opc)
+        else:
+            return (mode, numbytes, 'XX')
+
+
+
+    def cvtint2scomp(self, x):
+        t = bin(x)[3:]
+        b = '0'*(8-len(t)) + t   #expand by propagating a '0' out to 8 bits
+        #flip the bits in b creating num1 
+        num1 = ''
+        for bit in b:
+            if bit == '0':
+                num1 = num1 + '1'
+            else:
+                num1 = num1 + '0'
+        return hex(int(num1,2) + int('0001',2))[2:].upper()
+
+
+
+    def build_data_bytes(self, operand):
+        db_str = ''
+        for db in operand.split(','):
+            if db.startswith('$'):
+                db_str = db_str + db[1:]
+            elif db[0].isdigit():
+                h = hex(int(db))[2:].upper()
+                if (len(h) % 2) != 0:
+                    db_str = db_str + '0' + h
+                else:
+                    db_str = db_str + h
+            elif db[0] == "'":
+                for c in db:
+                    if c == "'":
+                        continue
+                    else:
+                        db_str = db_str + hex(ord(c))[2:].zfill(2).upper()
+            elif db[0] == '%':                   
+                db_str = db_str + hex(int(db[1:],2))[2:].zfill(2).upper()
+        nb = len(db_str) // 2        
+        return (nb, db_str)
+
+
+
+    def myprint(self, sline, *arguments):
+        z = ''
+        for arg in arguments:
+            if isinstance(arg, str):
+                z = z + arg + ' '
+            else:
+                z = z + str(arg) + ' '
+        l = len(z)
+        if l > 25:
+            z = z[0:26]
+        else:
+            z = z + (25-l)*' '
+        print(z, sline)
+        return z + ' ' + sline
+
+
+
+    def pass1_error_check(self, t, a, o):
+        if o == 'XX':
+            self.pass1_error_count += 1
+            if a == 'Invalid':
+                print('Error:', t[1], ' - Invalid Operand')
+            else:
+                print('Error:', t[0], ' - Invalid Mnemonic for the specified Addressing Mode')
+        return
+
+
+    def reset_vars(self):
+        self.program_counter = 0
+        self.pass1_error_count = 0
+        self.pass2_error_count =0
+        self.label_dict = dict()
+        self.code_dict = OrderedDict()
+        self.txtEditDebug.clear()
+        self.txtEditAssembler.clear()
+        self.status_txt.clear()
+```
