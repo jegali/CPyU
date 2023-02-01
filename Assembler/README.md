@@ -28,3 +28,8 @@ this part of the project has a long history. Each subfolder in this directory re
 This version represents the basic framework of the application. Using QT Designer, the graphical user interface was created and converted into executable Python source code by pyuic6.
 
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/Assembler/v1)
+
+### V2
+This version concludes the basis asssembly unit. The UI was changed to include the qscintilla component, the code was rewritten two times to the actual state.
+
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/Assembler/v2)
