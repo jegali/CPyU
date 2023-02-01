@@ -125,5 +125,38 @@ class Ui_AssemblerWindow(object):
     used_filename = None
 ```
 
+```bash
+    validdirectives = {'.DB', '.DW', '.DDW', '.DQW', '.STR', 
+                       '.ORG', '.LE', '.BE', '.EQU', '.END'}
 
+    validopcodes = {'ADC', 'AND', 'ASL', 'BCC', 'BCS', 'BEQ', 'BIT', 'BMI',
+                    'BNE', 'BPL', 'BRK', 'BVC', 'BVS', 'CLC', 'CLD', 'CLI',
+                    'CLV', 'CMP', 'CPX', 'CPY', 'DEC', 'DEX', 'DEY', 'EOR',
+                    'INC', 'INX', 'INY', 'JMP', 'JSR', 'LDA', 'LDX', 'LDY',
+                    'LSR', 'NOP', 'ORA', 'PHA', 'PHP', 'PLA', 'PLP', 'ROL',
+                    'ROR', 'RTI', 'RTS', 'SBC', 'SEC', 'SED', 'SEI', 'STA', 
+                    'STX', 'STY', 'TAX', 'TAY', 'TSX', 'TXA', 'TXS', 'TYA'}
+
+    relative_address_mode_instructions = {
+                    'BPL': '10', 'BMI': '30', 'BVC': '50', 'BVS':'70', 
+                    'BCC': '90', 'BCS': 'B0', 'BNE': 'D0', 'BEQ': 'F0'
+                    }
+
+    address_mode_patterns_sym = {
+                    '\#[0-9A-Z]{1,8}': 'Immediate', '[0-9A-Z+-]{1,8}': ('Zero Page', 'Absolute'), 
+                    '[0-9A-Z]{1,8},X': ('Zero Page,X', 'Absolute,X'), '[0-9A-Z]{1,8},Y': ('Zero Page,Y', 'Absolute,Y'),  
+                    '\([0-9A-Z]{1,8}\)': 'Indirect', '\([0-9A-Z]{1,8},X\)': 'Indirect,X', '\([0-9A-Z]{1,8}\),Y': 'Indirect,Y'
+                    }
+
+    address_mode_patterns = {
+                    '\#\$[0-9A-F]{2}': 'Immediate', '\$[0-9A-F]{2}': 'Zero Page', '\$[0-9A-F]{2},X': 'Zero Page,X', 
+                    '\$[0-9A-F]{2},Y': 'Zero Page,Y', '\$[0-9A-F]{4}': 'Absolute', '\$[0-9A-F]{4},X': 'Absolute,X',
+                    '\$[0-9A-F]{4},Y': 'Absolute,Y', '\(\$[0-9A-F]{4}\)': 'Indirect', '\(\$[0-9A-F]{2},X\)': 'Indirect,X',
+                    '\(\$[0-9A-F]{2}\),Y': 'Indirect,Y'
+                    }
+```
+
+Now the tables with the valid lexical terms follow - thus the individual commands and the structure of a code line of the assembler source text.
+
+Via the regular expressions the assignment of the commands in the source code to the corresponding byte code of the machine language is done.
  
