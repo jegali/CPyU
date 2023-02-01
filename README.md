@@ -29,4 +29,6 @@ Of course I thought about the structure of the project and the functions to be i
 2022-12-11: [Disassembler V3](https://github.com/jegali/CPyU/tree/main/Disassembler/v3) - Optimizied the command line parser module for disassembling<br/>
 2022-12-12: [Disassembler V4](https://github.com/jegali/CPyU/tree/main/Disassembler/v4) - Integrated the cmd version with a GUI<br/>
 2022-12-13: I started developing the [assembly unit](https://github.com/jegali/CPyU/tree/main/Assembler)<br/>
-2022-12-14: [Assembler V1]((https://github.com/jegali/CPyU/tree/main/Assembler/v1) - Designed the UI for the disassemble unit with QT Designer<br/>
+2022-12-14: [Assembler V1](https://github.com/jegali/CPyU/tree/main/Assembler/v1) - Designed the UI for the disassemble unit with QT Designer<br/>
+2022-12-14: [Assembler V2](https://github.com/jegali/CPyU/tree/main/Assembler/v2) - Wrote the Assemble unit<br/>
+2022-12-28: Changed the Qt PlainTextEdit for the QScintilla component
