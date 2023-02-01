@@ -898,3 +898,8 @@ Last but not least, the clss containes some helper functions. I will show them h
         self.txtEditAssembler.clear()
         self.status_txt.clear()
 ```
+
+## The program in action
+Based on my experience with the interface design of the disassembler, the implementation of the assembler went faster.  Stumbling blocks were only the integration of the QScintilla plugin and the actual assembler functionality itself. But after a short refresher in my compiler construction book from my studies, the implementation of the assembler also went easily. Here is the assembler interface with a working example:
+
+![Assembler_working](/images/assembler-v2.png)
