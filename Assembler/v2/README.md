@@ -125,6 +125,8 @@ class Ui_AssemblerWindow(object):
     used_filename = None
 ```
 
+Now the tables with the valid lexical terms follow - thus the individual commands and the structure of a code line of the assembler source text. Via the regular expressions the assignment of the commands in the source code to the corresponding byte code of the machine language is done.
+ 
 ```bash
     validdirectives = {'.DB', '.DW', '.DDW', '.DQW', '.STR', 
                        '.ORG', '.LE', '.BE', '.EQU', '.END'}
@@ -156,7 +158,4 @@ class Ui_AssemblerWindow(object):
                     }
 ```
 
-Now the tables with the valid lexical terms follow - thus the individual commands and the structure of a code line of the assembler source text.
 
-Via the regular expressions the assignment of the commands in the source code to the corresponding byte code of the machine language is done.
- 
