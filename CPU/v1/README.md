@@ -15,3 +15,38 @@ This class already has been discussed. Find the details here: [Disassembler](htt
 ## Assembler Window
 This class already has been discussed. Find the details here: [Assembler](https://github.com/jegali/CPyU/tree/main/Assembler)
 
+## ROM
+The ROM class is the base class of the memory. In the end it is only a collection of memory locations from which only reading is possible. 
+
+```bash
+#
+# ROM - Read Only Memory
+#
+# This kind of memory can only be read,
+# not written
+#
+
+class ROM:
+
+    def __init__(self, start, size):
+        self.start = start
+        self.end = start + size - 1
+        self._mem = [0x00] * size
+        self.size = size
+
+    # def load(self, address, data):
+    #     for offset, datum in enumerate(data):
+    #         self._mem[address - self.start + offset] = datum
+
+    # def load_file(self, address, filename):
+    #     with open(filename, "rb") as f:
+    #         for offset, datum in enumerate(f.read()):
+    #             self._mem[address - self.start + offset] = ord(datum)
+
+    def read_byte(self, address):
+        assert self.start <= address <= self.end
+        return self._mem[address - self.start]
+
+    def dump_mem(self):
+        return self._mem[0:]
+```
