@@ -479,3 +479,48 @@ What I am not yet satisfied with is the method that reads, decodes and executes 
     def read_byte(self, address):
         return self.memory.read_byte(self.cycles, address)
 ```
+
+## Class Apple
+The Apple class holds together the CPU, memory, and other peripheral components yet to be implemented. At the moment, no use is made of peculiarities of the 6502 - this class writes only one instruction to memory and executes it. The auxiliary methods dump_xxx() read certain memory areas and can pass the information to the graphical user interface (the EmulationWindow).
+
+```bash
+from CPU import CPU
+from memory import Memory
+
+class Apple2:
+
+    def __init__(self, emulator) -> None:
+        self.emulator = emulator
+        self.memory = Memory()
+        for i in range(256):
+            self.memory.write_byte(0,i,i)
+
+        self.memory.write_byte(0, 0, 0xb9)
+        self.memory.write_byte(0, 1, 0x03)
+        self.cpu = CPU(self.memory, emulator)
+        
+        emulator.updateRegisterFlags(self.cpu)
+        emulator.updateMemoryView(self.memory)
+
+
+    def run(self):
+        self.cpu.operation_cycle()
+
+
+    def dump_ram(self):
+        memdump = self.memory.ram.dump_mem()
+        return memdump
+
+    def dump_rom(self):
+        memdump = self.memory.rom.dump_mem()
+        return memdump
+
+    def dump_zeropage(self):
+        memdump = self.memory.ram.dump_mem()
+        return memdump[0:256]
+
+    def dump_stack(self):
+        memdump = self.memory.ram.dump_mem()
+        return memdump[256:512]
+      
+``
