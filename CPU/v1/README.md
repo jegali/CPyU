@@ -16,7 +16,10 @@ This class already has been discussed. Find the details here: [Disassembler](htt
 This class already has been discussed. Find the details here: [Assembler](https://github.com/jegali/CPyU/tree/main/Assembler)
 
 ## ROM
-The ROM class is the base class of the memory. In the end it is only a collection of memory locations from which only reading is possible. 
+The ROM class is the base class of the memory. In the end it is only a collection of memory locations from which only reading is possible.
+The current state of development is that the ROM consists of an array that is set to zero on initialization. Furthermore, the complete ROM can be dumped via the dump_mem() method. Individual memory locations of the ROM can be read out via the method read_byte(). 
+
+For the further development it is still thought that for example the binary ROM file of the Apple can be loaded directly to a certain address. At the moment, however, these functions are still commented out.
 
 ```bash
 #
@@ -49,4 +52,24 @@ class ROM:
 
     def dump_mem(self):
         return self._mem[0:]
+```
+
+## RAM
+The RAM class inherits from the ROM class, which makes total sense. After all, the RAM has the same functions as the ROM, but in addition can also be written to the memory locations.
+
+```bash
+from rom import ROM
+
+
+#
+# RAM - Random Access Memory
+#
+# This is a more general memory that can be read
+# and written, so it makes sense to inherit from ROM
+#
+
+class RAM(ROM):
+
+    def write_byte(self, address, value):
+        self._mem[address] = value
 ```
