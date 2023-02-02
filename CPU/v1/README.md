@@ -55,7 +55,7 @@ class ROM:
 ```
 
 ## RAM
-The RAM class inherits from the ROM class, which makes total sense. After all, the RAM has the same functions as the ROM, but in addition can also be written to the memory locations.
+The RAM class inherits from the ROM class, which makes total sense. After all, the RAM has the same functions as the ROM, but in addition can also be written to the memory locations. For now, that's all the enhancements the RAM can do. Surely more functions will be added later.
 
 ```bash
 from rom import ROM
@@ -73,3 +73,7 @@ class RAM(ROM):
     def write_byte(self, address, value):
         self._mem[address] = value
 ```
+
+## Memory
+The entirety of the computer memory consists of one part RAM and one part ROM. The management of the two parts is done by the class Memory in our example. There is - especially in the Apple ][ - also the concept of a zero page and the stack, but these are only special address areas of the RAM and are therefore not explicitly specified as own classes. For a correct emulation of the Apple ][ methods are still provided to write to and read from the computer's bus system. However, at the moment these methods are not needed and are therefore commented out.
+
