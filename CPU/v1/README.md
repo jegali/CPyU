@@ -169,6 +169,8 @@ class CPU(object):
     RESET_VECTOR = 0xFFFC
 ```
 
+The init() method then initializes and sets the other components of the CPU, such as the individual registers. Which registers are to be implemented depends on the concrete CPU. At this point we leave the general emulation level and dedicate ourselves concretely to the states of the 6502.
+
 ```bash
     def __init__(self, memory, emulator):
 
@@ -195,7 +197,11 @@ class CPU(object):
         self.emulator = emulator
 
         self.setup_ops()
+```
 
+Besides the registers, the functions behind the opcodes/mnemonics are of course the core of the CPU and its emulation. The single functions are initialized in the method setup_ops(). For this I used the concept of lambda functions - this way the valid opcodes can be stored in a list or array and the method necessary for the processing can be stored comfortably.
+
+```bash
     
     def setup_ops(self):
         self.ops = [None] * 0x100
@@ -353,6 +359,12 @@ class CPU(object):
 
     #####
 
+```
+
+Even though the table is long and looks like a lot of work, the real work is still to come: the individual functions behind the initialization of the lambda functions still have to be implemented, of course. Here, too, I am still at the beginning and have implemented only one function so far.  The functions will be created bit by bit and then checked for their correct function via small assembler programs.
+
+```bash
+
     # LOAD / STORE
 
     def LDA(self, operand_address):
@@ -361,11 +373,21 @@ class CPU(object):
         print("Akku: " + str(self.accumulator))
     #####
 
+```
+
+Besides the CPU functions, the address modes of the CPU must also be considered. This happens in the next block. At the moment only the method for the intermediate mode of the CPU exists, the other methods will follow.
+
+```bash
     def immediate_mode(self):
         return self.get_PC()
 
     #####
 
+```
+
+Furthermore, methods are still needed to adjust the processor registers and bits:
+
+```bash
     def update_nz(self, value):
         value = value % 0x100
         self.zero_flag = [0, 1][(value == 0)]
@@ -377,6 +399,12 @@ class CPU(object):
         return self.update_nz(value)
 
     #####
+
+```
+
+What I am not yet satisfied with is the method that reads, decodes and executes the respective assembly instruction according to the von Neumann principle. At the moment it can only process a single presence. Here I still have to think about something.
+
+```bash
 
     def operation_cycle(self):
         # fetch
