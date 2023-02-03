@@ -669,9 +669,10 @@ class myTextEdit(QtWidgets.QPlainTextEdit):
         cursor.setPosition(block.position() + columnNumber)
         self.setTextCursor(cursor)
 
-´´´
+```
 
 ### Parts of the emulator window
+In the sections Disassembler and Assembler the implementation of the metacode of the user interface in Python has been discussed several times, which is why this topic will not be discussed again here. Also the assignment of lambda functions to the click event of buttons does not need to be explained again. Nevertheless, I give here the complete code of the emulator window.
 
 ```bash
 # Form implementation generated from reading ui file '.\emulator.ui'
@@ -888,7 +889,6 @@ class Ui_EmulatorWindow(object):
         self.txtStack.setObjectName("txtStack")
         self.txtStack.setFont(font)
 
-
         # Die Gruppe für das RAM
         self.grpRAM = QtWidgets.QGroupBox(self.centralwidget)
         self.grpRAM.setGeometry(QtCore.QRect(780, 530, 641, 320))
@@ -904,7 +904,6 @@ class Ui_EmulatorWindow(object):
         self.txtRAM.setObjectName("txtRAM")
         self.txtRAM.setFont(font)
 
-
         self.cmdStep = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.startApple2())
         self.cmdStep.setGeometry(QtCore.QRect(110, 30, 75, 23))
         self.cmdStep.setObjectName("cmdStep")
@@ -916,6 +915,11 @@ class Ui_EmulatorWindow(object):
         self.cmdLoadRom = QtWidgets.QPushButton(self.centralwidget, clicked = lambda: self.loadRom())
         self.cmdLoadRom.setGeometry(QtCore.QRect(110, 90, 85, 23))
         self.cmdLoadRom.setObjectName("cmdLoadRom")
+```
+
+At this point we have a new functionality. The first time I want to call a function via a menu item - so far I have always done this via buttons. However, there is relatively little new here as well, since a menu item essentially works like a button. First of all, the menu must be set up:
+
+```bash
 
         Emulator.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(Emulator)
@@ -930,6 +934,11 @@ class Ui_EmulatorWindow(object):
         self.statusbar.setObjectName("statusbar")
         Emulator.setStatusBar(self.statusbar)
         
+```
+
+Then the menu items are registered via QtActions. Via the line and the event "triggered.connect()" the function is specified which should be executed when clicking/selecting the menu button. Here these are the two functions showDisassembler and showAssembler, which open the two already described and created windows within the emulation.
+
+```bash
         self.actionDisassembler = QtGui.QAction(Emulator)
         self.actionDisassembler.setObjectName("actionDisassembler")
         self.actionDisassembler.triggered.connect(self.showDisassembler)
@@ -1023,6 +1032,11 @@ class Ui_EmulatorWindow(object):
     def closeEvent(self, event):
         exit(0)
 
+```
+
+This is where the magic happens. A big challenge for me was the fact of being able to open a new (program) window within an application.  There are whole videos from Codemy on Youtube about this topic, which were very helpful.
+
+```bash
     #
     # def showDisassembler(self):
     #
@@ -1068,7 +1082,11 @@ class Ui_EmulatorWindow(object):
     def stopApple2(self):
         self.running = False
 
+```
 
+Here come only the functions for the representation of the Hexviews. An update after each memory access does not take place yet, this definitely still has to be implemented. However, the views are loaded and displayed before the first command is executed. 
+
+```bash
     def updateRegisterFlags(self, myCPU):
         self.txtPC.setText(self.int2hex(myCPU.read_PC(),4))
         self.txtAC.setText(self.int2hex(myCPU.get_AC(),2))
@@ -1144,3 +1162,12 @@ class Ui_EmulatorWindow(object):
         return hex(x)[2:].zfill(y).upper() 
 
 ```
+
+## To do
+While creating the emulatorwindow I thought of many things that I definitely still want to implement:
+- full speed emulation: run the emulation until the program is finished.
+- full command execution: stop the emulation after each completely processed command and display the result.
+- single step emulation: stop the emulation after each clock cycle of a command and see what happened
+- graphical representation of the emulation as I know it from various CPU simulators
+- In view of the Apple ][: Another window, where the full-speed emulation can run with the help of PyGame.
+- Extension of the disassembler: So far the module disassembles the complete passed objectcode. I want a disassembly of the current memory location or any memory location, so that this information can be displayed in the emulator window. Like the next stone in the Tetris game...
