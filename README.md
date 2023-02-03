@@ -35,3 +35,4 @@ Of course I thought about the structure of the project and the functions to be i
 2022-12-29: Started creating the [Emulator View](https://github.com/jegali/CPyU/tree/main/CPU)<br/>
 2022-12-30: Created the RAM, the ROM and memory classes<br/>
 2022-12-31: Created the menu functionality and learned how to open more windows and pass data to them<br/> 
+2023-01-27: Started this repository and wrote the documentation<br/>
