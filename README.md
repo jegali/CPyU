@@ -33,3 +33,4 @@ Of course I thought about the structure of the project and the functions to be i
 2022-12-14: [Assembler V2](https://github.com/jegali/CPyU/tree/main/Assembler/v2) - Wrote the Assemble unit<br/>
 2022-12-28: Changed the Qt PlainTextEdit for the QScintilla component
 2022-12-29: Started creating the [Emulator View](https://github.com/jegali/CPyU/tree/main/CPU)
+2022-12-30: Created the RAM, the ROM and memory classes
