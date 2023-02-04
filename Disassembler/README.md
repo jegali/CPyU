@@ -76,3 +76,8 @@ I optimized the command line version of the disassembler to remove som eoverhead
 I integrated the command line version and the GUI. This can be found in this directory.
 
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/Disassembler/v4)
+
+### V5
+I changed the disassembly function from a bulk of if-clauses to lambda functions.
+
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/Disassembler/v5)
