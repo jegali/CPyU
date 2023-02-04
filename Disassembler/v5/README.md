@@ -179,3 +179,155 @@ def setupUi(self, DisassemblerWindow):
 
     self.init_operations()
 ```
+
+The disassemble() method could thus be streamlined and shortened. As before, a complete file or memory area is disassembled. This is one step closer to my goal, but the functionality to disassemble a single memory address for stepwise emulation is still missing. I will work on this in the next version. 
+
+```bash
+def disassemble(self):
+    # nur, wenn etwas im Buffer steht, wird decodiert
+    if self.code_array:
+        # Startadresse aus dem Textfeld
+        address = int(self.txtStartAddress.text(),0)
+        self.plainTextEdit_3.clear()
+        # Schleifenzähler
+        byte_to_decode = 0
+        last_byte = len(self.code_array)
+
+        while byte_to_decode < last_byte:
+            # Zeile zusammenbauen
+            # Schreibe die Adresse
+            line_to_write = hex(address)[2:].upper().zfill(4) + "- \t"
+
+            opcode = int(self.code_array[byte_to_decode])
+            operation = self.operations[opcode]
+            info = operation[5](byte_to_decode)
+            cycles = operation[6]
+
+            hexcode = ' '.join([hex(i)[2:].upper().zfill(2) for i in self.code_array[byte_to_decode:(byte_to_decode + cycles)]]) 
+            line_to_write = line_to_write + "{:<15}".format(hexcode)
+
+            command = operation[1]
+            line_to_write = line_to_write + command                
+            line_to_write = line_to_write + " " + "{:<15}".format(info["operand"])                
+            line_to_write = line_to_write + self.writeOptions(opcode)
+
+            address += operation[6]
+            byte_to_decode += operation[6]
+
+            self.plainTextEdit_3.appendPlainText(line_to_write)
+
+    txtCursor = self.plainTextEdit_3.textCursor()
+    txtCursor.setPosition(0)
+    self.plainTextEdit_3.setTextCursor(txtCursor)
+```
+
+Here are still the single methods for the address modes of the CPU. I have found that this approach will also be the viable way in the emulation.
+
+```bash
+#
+# Zwei kleine Helferlein zum Auslesen von Speicherstellen
+#
+
+def read_byte(self, pc):
+    return self.code_array[pc]
+
+def read_word(self, pc):
+    return ((self.code_array[pc+1]<<8) + (self.code_array[pc]))
+
+def signed(self, x):
+    if x > 0x7F:
+        x = x - 0x100
+    return x
+
+
+#
+# Methoden für die Adressmodi
+# byte_to_decode is the actual position to be decoded
+# so I will it name PC (=Program Counter)
+#
+
+def indirect_mode(self, pc):
+    operand = "($%04X)" % (self.read_word(pc + 1))
+    return {
+        "operand": operand,        
+    }
+
+def indirect_mode_x(self, pc):
+    operand = "($%02X,X)" % (self.read_byte(pc + 1))
+    return {
+        "operand": operand,        
+    }
+
+def indirect_mode_y(self, pc):
+    operand = "($%02X),Y" % (self.read_byte(pc + 1))
+    return {
+        "operand": operand,        
+    }
+
+def zero_page_mode(self, pc):
+    operand = "$%02X" % (self.read_byte(pc + 1))
+    return {
+        "operand": operand,        
+    }
+
+def zero_page_mode_x(self, pc):
+    operand = "$%02X,X" % (self.read_byte(pc + 1))
+    return {
+        "operand": operand,        
+    }
+
+def zero_page_mode_y(self, pc):
+    operand = "$%02X,Y" % (self.read_byte(pc + 1))
+    return {
+        "operand": operand,        
+    }
+
+def absolute_mode(self, pc):
+    operand = "$%04X" % (self.read_word(pc + 1))
+    return {
+        "operand": operand,        
+    }
+
+def absolute_mode_x(self, pc):
+    operand = "$%04X,X" % (self.read_word(pc + 1))
+    return {
+        "operand": operand,        
+    }
+
+def absolute_mode_y(self, pc):
+    operand = "$%04X,Y" % (self.read_word(pc + 1))
+    return {
+        "operand": operand,        
+    }
+
+def immediate_mode(self, pc):
+    operand = "#$%02X" % (self.read_byte(pc + 1))
+    return {
+        "operand": operand,
+    }
+
+def implicit_mode(self, pc):
+    operand = "#$%02X" % (self.read_byte(pc + 1))
+    return {
+        "operand": operand,        
+    }
+
+def accumulator_mode(self, pc):
+    operand = ""
+    return {
+        "operand": operand,        
+    }
+
+def relative_mode(self, pc):
+    operand = "$%04X" % (pc + self.signed(self.read_byte(pc + 1) + 2))
+    return {
+        "operand": operand,        
+    }
+
+def illegal_opcode(self, pc):
+    operand = ""
+    return {
+        "operand": operand,       
+    }
+
+```
