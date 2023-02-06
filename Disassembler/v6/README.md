@@ -69,6 +69,28 @@ The disassembler can be called standalone - or via the menu in the emulator wind
         ...
 ```
 
+When the disassembler is called via the emulator, the status variables just discussed must of course be set. This is done within the emulator class in the method showDisassembler()
+
+```bash
+    #
+    # def showDisassembler(self):
+    #
+    # User clicked Windows | Disassembler
+    # Program will open a disassembler view
+    # help from: https://www.youtube.com/watch?v=R5N8TA0KFxc
+    #
+
+    def showDisassembler(self):
+        self.window_dis = QtWidgets.QMainWindow()
+        self.disasm = Ui_DisassemblerWindow()
+        self.disasm.setupParent(self)
+        self.disasm.setupUi(self.window_dis)
+        if self.myApple:
+            self.disasm.transfer_memory(self.myApple.dump_mem())
+            self.disasm.fill_code_view(bytearray(self.myApple.dump_mem()))
+            self.disasm.disassemble()
+        self.window_dis.show()
+```
 
 - befehle für disassemble von/bis noch implementieren
  
