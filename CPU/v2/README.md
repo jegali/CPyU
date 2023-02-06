@@ -308,3 +308,13 @@ The command execution of a single command is handled by the exec_command() metho
             # execute
             self.ops[opcode]()
 ```
+
+This method can be called via a button on the GUI of the emulator. This allows a step-by-step emulation.
+
+## Class Apple
+There were no changes in this class. 
+
+## Emulator Window
+The emulator class has a new area in which the current instruction to be processed is displayed: 
+
+![Emulator-v2](/images/emulator-v2.png)
