@@ -37,3 +37,4 @@ Of course I thought about the structure of the project and the functions to be i
 2022-12-31: Created the menu functionality and learned how to open more windows and pass data to them<br/> 
 2023-01-27: Started this repository and wrote the documentation<br/>
 2023-02-04: [Disassembler V5](https://github.com/jegali/CPyU/tree/main/Disassembler/v5) - Changed the disassembly unit to make use of lambda functions<br/>
+2023-02-06: [Disassembler V6](https://github.com/jegali/CPyU/tree/main/Disassembler/v6) - Extended the disassembly unit to disassemble single commnds and work as a submodule of EmulatorWindow<br/>
