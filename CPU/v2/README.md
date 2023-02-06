@@ -253,3 +253,40 @@ class Memory:
         return memdump
 ```    
 
+## CPU
+Most of the changes were made to the CPU class. First, a reset() function was added to the CPU. The 6502 has the peculiarity that at startup and reset the CPU reads the content of the memory location 0xFFFC and applies this value as start address of the program. Therefore the method reset() is now called when the CPU is initialized.
+
+```bash
+    def __init__(self, memory, emulator):
+
+        self.program_counter = 0x0000
+        
+        self.accumulator = 0x00
+        self.x_index = 0x00
+        self.y_index = 0x00
+
+        ...
+        
+        self.setup_ops()
+        self.reset()
+        
+        ...
+        
+    #
+    # def reset(self):
+    #
+    # A peculiarity of the 6502 is that the address 0xfffc of the 
+    # memory is read when the CPU is switched on. The memory value 
+    # found here is interpreted as the start address of the program. 
+    #
+
+    def reset(self):
+        self.program_counter = self.read_word(self.RESET_VECTOR)
+```
+
+### Microcodes and address modes
+The actual emulation consists of the implementation of the microcodes and their effect on the processor registers, flags and the program counter. In principle there are 0xFF possible instructions and thus 255 potential methods that have to be written - in addition there are the different address modes of the respective instructions.
+
+I went to the internet for the emulation methods and use parts of the source code from https://github.com/jtauber/applepy/blob/master/cpu6502.py.
+
+I never got this project up and running, which was one of the reasons why I wanted to write my own emulator. By taking over the functions I learned a lot about the processing methods of the CPU. Together with the book of Rodnay Zaks "Programming the 6502" (you can find it at https://ia800703.us.archive.org/30/items/Programming_the_6502_OCR/Programming_the_6502_OCR.pdf) I got a deeper knowledge of the emulation of a CPU.
