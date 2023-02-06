@@ -12,8 +12,8 @@ class Apple2:
         self.memory.write_byte(0, 2, 0x09)
         self.memory.write_byte(0, 3, 0x07)
 
-        self.memory.write_byte(0,0xFFFC, 00)
-        self.memory.write_byte(0,0xFFFD, 00)
+#        self.memory.write_byte(0,0xFFFC, 00)
+#        self.memory.write_byte(0,0xFFFD, 00)
 
         self.cpu = CPU(self.memory, emulator)
         

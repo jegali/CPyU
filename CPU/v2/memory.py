@@ -42,6 +42,12 @@ class Memory:
     def read_byte(self, cycle, address):
         if address < 0xC000:
             return self.ram.read_byte(address)
+        # xxx todo
+        # bus read ist noch nicht implementiert
+        # auch der speicherbereich zwischen c000 und d000 
+        # ist noch nicht initialisiert
+        elif address < 0xD000:
+            return self.ram.read_byte(address)
         # elif address < 0xD000:
         #     return self.bus_read(cycle, address)
         else:

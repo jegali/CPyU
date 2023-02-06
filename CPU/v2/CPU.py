@@ -558,7 +558,7 @@ class CPU(object):
         return self.read_word_bug(self.read_pc_byte()) + self.y_index
 
     def relative_mode(self):
-        pc = self.get_pc()
+        pc = self.get_PC()
         return pc + 1 + self.signed(self.read_byte(pc))
  
     #####
@@ -596,8 +596,6 @@ class CPU(object):
 
 
     def exec_command(self):
-        print("Next Step: ",hex(self.read_PC())[2:].upper().zfill(4))
-        print("Opcode: ", hex(self.read_byte(self.read_PC())).upper().zfill(4))
         # read the current byte and increment pc
         opcode = self.read_pc_byte()
         func_to_call = self.ops[opcode]
@@ -696,3 +694,10 @@ class CPU(object):
         s = self.STACK_PAGE + self.stack_pointer + 1
         self.stack_pointer += 2
         return self.read_word(s)
+
+
+
+    def signed(self, x):
+        if x > 0x7F:
+            x = x - 0x100
+        return x
