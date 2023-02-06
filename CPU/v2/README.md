@@ -290,3 +290,21 @@ The actual emulation consists of the implementation of the microcodes and their 
 I went to the internet for the emulation methods and use parts of the source code from https://github.com/jtauber/applepy/blob/master/cpu6502.py.
 
 I never got this project up and running, which was one of the reasons why I wanted to write my own emulator. By taking over the functions I learned a lot about the processing methods of the CPU. Together with the book of Rodnay Zaks "Programming the 6502" (you can find it at https://ia800703.us.archive.org/30/items/Programming_the_6502_OCR/Programming_the_6502_OCR.pdf) I got a deeper knowledge of the emulation of a CPU.
+
+### Command execution
+The command execution of a single command is handled by the exec_command() method. Here the next byte is read from memory, the associated command is decoded and executed. 
+
+```bash
+   def exec_command(self):
+        # read the current byte and increment pc
+        opcode = self.read_pc_byte()
+        func_to_call = self.ops[opcode]
+        if func_to_call is None:
+            print ("UNKNOWN OPCODE")
+            print (hex(self.program_counter - 1))
+            print (hex(opcode))
+            self.BRK()
+        else:
+            # execute
+            self.ops[opcode]()
+```
