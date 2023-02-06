@@ -318,3 +318,26 @@ There were no changes in this class.
 The emulator class has a new area in which the current instruction to be processed is displayed: 
 
 ![Emulator-v2](/images/emulator-v2.png)
+
+The other changes were small but time consuming. I contemplated how to make a connection between emulator and disassembler so that already existing Disassmbler functions can be used within the emulator window. I also asked myself whether a reference to the memory area can be passed so that the copy of the memory block in the disassembler is automatically changed when there is a write command. unfortunately that was not the case...
+
+```bash
+    #
+    # def showDisassembler(self):
+    #
+    # User clicked Windows | Disassembler
+    # Program will open a disassembler view
+    # help from: https://www.youtube.com/watch?v=R5N8TA0KFxc
+    #
+
+    def showDisassembler(self):
+        self.window_dis = QtWidgets.QMainWindow()
+        self.disasm = Ui_DisassemblerWindow()
+        self.disasm.setupParent(self)
+        self.disasm.setupUi(self.window_dis)
+        if self.myApple:
+            self.disasm.transfer_memory(self.myApple.dump_mem())
+            self.disasm.fill_code_view(bytearray(self.myApple.dump_mem()))
+            self.disasm.disassemble()
+        self.window_dis.show()
+```
