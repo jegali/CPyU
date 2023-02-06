@@ -81,3 +81,8 @@ I integrated the command line version and the GUI. This can be found in this dir
 I changed the disassembly function from a bulk of if-clauses to lambda functions.
 
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/Disassembler/v5)
+
+### V6
+The disassembler now can disassemble single commands for the emulator view and works as a standalone module as well as a submodule inside the emulator window.
+
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/Disassembler/v6)
