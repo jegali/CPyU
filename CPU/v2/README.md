@@ -322,6 +322,20 @@ The emulator class has a new area in which the current instruction to be process
 The other changes were small but time consuming. I contemplated how to make a connection between emulator and disassembler so that already existing Disassmbler functions can be used within the emulator window. I also asked myself whether a reference to the memory area can be passed so that the copy of the memory block in the disassembler is automatically changed when there is a write command. unfortunately that was not the case...
 
 ```bash
+   def __init__(self) -> None:
+        self.myApple = None
+        self.disasm_preview = Ui_DisassemblerWindow()
+    
+    ...
+    
+    def setupUi(self, Emulator):
+    Emulator.setObjectName("Emulator")
+    Emulator.resize(1440, 900)
+    self.Emulator = Emulator
+    ...
+    self.myApple = Apple2(self)
+
+
     #
     # def showDisassembler(self):
     #
@@ -340,4 +354,31 @@ The other changes were small but time consuming. I contemplated how to make a co
             self.disasm.fill_code_view(bytearray(self.myApple.dump_mem()))
             self.disasm.disassemble()
         self.window_dis.show()
+        
+    ...
+
+    def startApple2(self):
+        self.running = True
+        #self.myApple = Apple2(self)
+        self.updateRegisterFlags(self.myApple.cpu)
+        self.disasm_preview.transfer_memory(self.myApple.dump_mem())
+        self.lblCmd.setText(self.disasm_preview.disassemble_command(self.myApple.read_PC(),self.myApple.dump_mem()))
+        #self.myApple.run()
+        while self.running:
+            # Die While-Schleife muss für Eventbehandlung unterbrochen werden, 
+            # sonst haben wir hier eine Endlosschleife
+            # Über ProcessEvents kann auch das Event auf den Stop-Button abgefragt werden,
+            # das die Variable running auf False setzt und damit die Schleife beendet
+            QtWidgets.QApplication.processEvents()
+        print("Done")
+
+    def stepApple2(self):
+        self.myApple.memory.write_byte(0, 2, 0xa9)
+        self.myApple.cpu.exec_command()
+        self.updateRegisterFlags(self.myApple.cpu)
+        self.lblCmd.setText(self.disasm_preview.disassemble_command(self.myApple.read_PC(),self.myApple.dump_mem()))
+
+    def stopApple2(self):
+        self.running = False
+
 ```
