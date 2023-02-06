@@ -668,8 +668,31 @@ class CPU(object):
     def read_word(self, address):
         return self.memory.read_word(self.cycles, address)
     
+    def read_pc_word(self):
+        return self.read_word(self.get_PC(2))
+
     def read_word_bug(self, address):
         return self.memory.read_word_bug(self.cycles, address)
 
     def write_byte(self, address, value):
         self.memory.write_byte(self.cycles, address, value)
+
+####
+
+    def push_byte(self, byte):
+        self.write_byte(self.STACK_PAGE + self.stack_pointer, byte)
+        self.stack_pointer = (self.stack_pointer - 1) % 0x100
+
+    def pull_byte(self):
+        self.stack_pointer = (self.stack_pointer + 1) % 0x100
+        return self.read_byte(self.STACK_PAGE + self.stack_pointer)
+
+    def push_word(self, word):
+        hi, lo = divmod(word, 0x100)
+        self.push_byte(hi)
+        self.push_byte(lo)
+
+    def pull_word(self):
+        s = self.STACK_PAGE + self.stack_pointer + 1
+        self.stack_pointer += 2
+        return self.read_word(s)

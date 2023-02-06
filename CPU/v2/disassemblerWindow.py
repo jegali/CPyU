@@ -563,6 +563,15 @@ class Ui_DisassemblerWindow(object):
     def transfer_memory(self, memory):
         self.code_array = memory
 
+
+
+    #
+    # def disassemble_command(self, pc, memory)
+    #
+    # Diese Methode decodiert den Befel an der übergebenen Adresse und gibt den String
+    # an due Emulatoreinheit zurück
+    #
+
     def disassemble_command(self, pc, memory):
         self.code_array = memory
         line_to_write = hex(pc)[2:].upper().zfill(4) + "- \t"
@@ -573,8 +582,9 @@ class Ui_DisassemblerWindow(object):
         hexcode = ' '.join([hex(i)[2:].upper().zfill(2) for i in self.code_array[pc:pc+bytecount]]) 
         line_to_write = line_to_write + "{:<11}".format(hexcode)
         command = operation[1]
-        line_to_write = line_to_write + command                
-        line_to_write = line_to_write + " " + "{:<15}".format(info["operand"])                
+        line_to_write = line_to_write + command
+        if bytecount > 1:                
+            line_to_write = line_to_write + " " + "{:<15}".format(info["operand"])                
         return line_to_write
 
 
