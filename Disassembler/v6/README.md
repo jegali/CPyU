@@ -70,13 +70,5 @@ The disassembler can be called standalone - or via the menu in the emulator wind
 ```
 
 
-- wie speicherbereich updaten, falls ein programm den speicher verändert?
-- jedes mal 64KB daten übergeben?
-
-- wie wäre es mit einem zusätzlichen Button "get apple memory" anstelle von "load code"
-- wie? die Datenübergabe herstellen?
-- Emulator kennt disassembler
-- woher kennt disassembler emulator
-
 - befehle für disassemble von/bis noch implementieren
  
