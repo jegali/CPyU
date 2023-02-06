@@ -39,3 +39,4 @@ Of course I thought about the structure of the project and the functions to be i
 2023-02-04: [Disassembler V5](https://github.com/jegali/CPyU/tree/main/Disassembler/v5) - Changed the disassembly unit to make use of lambda functions<br/>
 2023-02-05: [Disassembler V6](https://github.com/jegali/CPyU/tree/main/Disassembler/v6) - Extended the disassembly unit to disassemble single commands.<br/>
 2023-02-06: [Disassembler V6](https://github.com/jegali/CPyU/tree/main/Disassembler/v6) - disassembler works as a submodule of EmulatorWindow<br/>
+2023-02-06: Updated the RAM, the RAM and memory classes<br/>
