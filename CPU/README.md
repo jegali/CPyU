@@ -14,3 +14,8 @@ This part of the application in particular is still in development. Therefore, t
 This version represents the basic framework of the application. Using QT Designer, the graphical user interface was created and converted into executable Python source code by pyuic6.
 
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v1)
+
+### V2
+This version extends the basic classes RAM, ROM and Memory with methods for handling words, which are needed for address access. A view for the currently edited command has been added. The emulation is able to execute individual commands at the push of a button. The methods for the emulation of the address modes and the opcodes have been implemented.
+
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v2)
