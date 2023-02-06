@@ -1,7 +1,7 @@
 # Changes
 This version of the disassembler has some small innovations and improvements . As always, we will go through and discuss these changes one by one.
 
-# Mouse Cursor during diassembly
+## Mouse Cursor during diassembly
 It is now possible to start the slide assembler from the emulator window and to pass it the complete memory area of the Apple ][ on this occasion. Disassembling an entire 64KB block can take quite some time, so I decided to set the mouse cursor to Waiting at the beginning of the disassemble() method and to reset it when the method is finished. To achieve this, I made these changes:
 
 ```bash
