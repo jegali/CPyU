@@ -27,9 +27,6 @@ def main():
                     quit = True
 
 
-
-
-
 if __name__ == "__main__":
     main()
 ```
