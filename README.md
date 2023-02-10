@@ -60,5 +60,5 @@ I am very interested in seeing the last two books (Gayler & Sather) as print on 
 2023-02-06: Updated the RAM, the RAM and memory classes and implemented single step emulation [CPU v2](https://github.com/jegali/CPyU/blob/main/CPU/v2)<br/>
 2023-02-06: Switched the Emulation from step to pygame [CPU v3](https://github.com/jegali/CPyU/blob/main/CPU/v3)<br/>
 2023-02-07: Implemented the speaker [CPU v4](https://github.com/jegali/CPyU/blob/main/CPU/v4)<br/>
-2023-02-08: Implemented the bus struct [CPU v4](https://github.com/jegali/CPyU/blob/main/CPU/v4)<br/>
+2023-02-08: Implemented the bus struct and updated the memory class [CPU v4](https://github.com/jegali/CPyU/blob/main/CPU/v4)<br/>
 2023-02-09: Implemented the softswitches and changed the main emulation loop [CPU v4](https://github.com/jegali/CPyU/blob/main/CPU/v4)<br/>
