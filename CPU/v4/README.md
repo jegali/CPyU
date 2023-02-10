@@ -373,6 +373,8 @@ class SoftSwitches:
         return 0x00
 ```
 
+The Speaker class had to be adjusted slightly to allow waveform assembly based on the clock cycles consumed - but here it is, the improved Speaker class:
+     
 ```bash
 class Speaker:
 
