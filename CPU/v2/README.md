@@ -329,7 +329,7 @@ Here I compared the individual address modes of the LDA command and expanded the
         0xA1: LDA ($1010,X) #   self.LDA(self.indirect_x_mode())
         0xA5: LDA $10       #   self.LDA(self.zero_page_mode())
         0xA9: LDA #$10      #   self.LDA(self.immediate_mode())
-        0xAD: LDA #$03      #   self.LDA(self.absolute_mode())
+        0xAD: LDA #$1010    #   self.LDA(self.absolute_mode())
         0xB1: LDA ($1010),Y #   self.LDA(self.indirect_y_mode())
         0xB5: LDA $10,X     #   self.LDA(self.zero_page_x_mode())
         0xB9: LDA $1010,Y   #   self.LDA(self.absolute_y_mode())
