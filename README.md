@@ -57,5 +57,8 @@ I am very interested in seeing the last two books (Gayler & Sather) as print on 
 2023-02-04: [Disassembler V5](https://github.com/jegali/CPyU/tree/main/Disassembler/v5) - Changed the disassembly unit to make use of lambda functions<br/>
 2023-02-05: [Disassembler V6](https://github.com/jegali/CPyU/tree/main/Disassembler/v6) - Extended the disassembly unit to disassemble single commands.<br/>
 2023-02-06: [Disassembler V6](https://github.com/jegali/CPyU/tree/main/Disassembler/v6) - disassembler works as a submodule of EmulatorWindow<br/>
-2023-02-06: Updated the RAM, the RAM and memory classes<br/>
-2023-02-06: Switched the Emulation from step to pygame [Apple II](https://github.com/jegali/CPyU/blob/main/CPU/v3)
+2023-02-06: Updated the RAM, the RAM and memory classes and implemented single step emulation [CPU v2](https://github.com/jegali/CPyU/blob/main/CPU/v2)<br/>
+2023-02-06: Switched the Emulation from step to pygame [CPU v3](https://github.com/jegali/CPyU/blob/main/CPU/v3)<br/>
+2023-02-07: Implemented the speaker [CPU v4](https://github.com/jegali/CPyU/blob/main/CPU/v4)<br/>
+2023-02-08: Implemented the bus struct [CPU v4](https://github.com/jegali/CPyU/blob/main/CPU/v4)<br/>
+2023-02-09: Implemented the softswitches and changed the main emulation loop [CPU v4](https://github.com/jegali/CPyU/blob/main/CPU/v4)<br/>
