@@ -249,3 +249,5 @@ plt.show()
 ![square-wave](/images/square-wave-v2.png)  
      
 With a sample length of 47 values per complete wave and a sample frequency of 44100 samples per second, we get a frequency of 47 / 44100 = 938 Hz, which is pretty close to the 1kHz sound of the Apple ][. A disadvantage of this waveform generation is that when the plateau size is reduced, a sample is removed from both the upper and lower plateau. Perhaps it makes more sense not to use a real square curve, but only half a curve, so that the pitch and thus the frequency can be controlled more finely. For the moment, however, this class should suffice to output the boot beep of the Apple ][.
+
+## The speaker in emulation
