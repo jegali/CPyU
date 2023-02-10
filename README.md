@@ -5,7 +5,7 @@ This is an emulation project for the 6502 CPU, hopefully expanding to the emulat
 The project is completely written in python.
 
 ## Credits
-Some 6502 Code came from the ApplePy repository https://github.com/jtauber/applepy of James Tauber http://jtauber.com. The creation of the methods for the individual CPU commands is a diligence task for someone who has slain father and mother - therefore I have helped myself here with jtauber and directly removed two more bugs.  
+Some 6502 Code came from the ApplePy repository https://github.com/jtauber/applepy of James Tauber http://jtauber.com. The creation of the methods for the individual CPU commands is a diligence task for someone who has slain father and mother - therefore I have helped myself here with jtauber's code and directly removed two more bugs from it.  
 
 ## Why Python
 I decided to go with python because I wanted a platform independent language for this project. Execution speed of the interpreter should be fast enough to emulate the CPU step by step, and hopefully it is fast enough to emulate a complete computer like the Apple ][.
