@@ -294,6 +294,10 @@ I never got this project up and running, which was one of the reasons why I want
 What is very interesting about James' implementation is that he uses lambda functions. This concept is so time-saving that I rewrote my own disassembler and converted it to lambda function (I reported about it). The following is an excerpt of the CPU operations. I have - simply because it is boring to read 255 times the same - shortened the table and limited myself to the address modes and the command LDA, to which I have a very special relationship.
 
 In the past, when there were no trainers and cheat modules for games, we had to cheat ourselves. There was also only a fixed memory without paging and/or swapping, no multitasking, and so you could assume that a program was always loaded into RAM and executed at the same place. Furthermore, the 6502 CPU had only three registers - the Accumulator, the X and the Y registers on which comparative operations (CMP) could be performed. The games in our childhood often started with three lives. When all lives were used up, the game was over. What can I say? There were two efficient ways for us to cheat.
+
+- Possibility one: Find in the binary code the places where the accumulator was loaded with three: LDA #$03 (yes, most of the time it was the accumulator that initialized the lives) and set the value to #$80, start the game and have a look if it worked. 
+- Possibility tow: Find the place where a CMP #$00 followed by a BNE / BEQ was in memory (here all lives were used up and a jump to the game over routine was pending), and reqrite the jmp to game over with a jump to continue the game.
+
 ```bash
    def setup_ops(self):
         self.ops = [None] * 0x100
