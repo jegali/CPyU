@@ -23,6 +23,11 @@ pip install PyQt5Designer
 The project is divided in several subparts I wanted to development independently from another.
 Of course I thought about the structure of the project and the functions to be implemented, but the focus here is clearly on the learning factor and not on commercial software development. Therefore, I have deliberately avoided principles like Scrum or iterative models like the waterfall model. It is clear to me that this approach potentially leads to the need to restructure or even redevelop parts of the code. In order to be able to trace the development steps and perhaps even derive a pedagogical concept for an online course from them, I have stored the individual evolutionary stages in subdirectories.
 
+## Used sources
+Most of the sources are books about the Apple ][ from the 80s. Some of them I own in print, which I am very proud of, the other sources are either https://mirrors.apple2.org.za/ftp.apple.asimov.net/documentation/ or the massive archive of archive.org, where Ij found for example this Apple ][e as PDF: https://archive.org/details/Inside_the_Apple_IIe
+
+
+
 ## Status
 2022-12-08: I started developing the [disassemble unit](https://github.com/jegali/CPyU/tree/main/Disassembler)<br/>
 2022-12-09: [Disassembler V1](https://github.com/jegali/CPyU/tree/main/Disassembler/v1) - Designed the UI for the disassemble unit with QT Designer<br/>
