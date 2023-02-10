@@ -229,3 +229,19 @@ if __name__ == "__main__":
 A sample run delivers these results:
      
 ![square-wave](/images/square-wave-output.png)  
+
+We have a sample rate of 44100 inside our program and the sample length is 22080, which is roughly the half, so the sample should play 0.5 seconds. This matches with the output of 0.50068.... Taking the samples from 0 to -16384, 0, 16384 and back to zero, we catch a complete wave which has length of 47 samples. I wrote a small jupyter notebook to draw this, which delivers the nice waveform plots you saw before:
+     
+```bash
+y = np.array([0, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, 0, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 16384, 0])
+x = np.arange(1,y.size+1)
+
+print(y.size)
+
+# plotting
+plt.title("Line graph")
+plt.xlabel("X axis")
+plt.ylabel("Y axis")
+plt.plot(x[:47], y[:47], color ="green")
+plt.show()
+```
