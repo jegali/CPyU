@@ -288,3 +288,30 @@ def write_byte(self, cycle, address, value):
 But what should be the method of reading and writing the "bus"? The first idea was to write the address, the read value and the current clock cycles into global variables at every bus access, to query then in the main loop of the CPU processing whether one of the last CPU instructions has accessed the bus. The beep could be triggered this way, but it did not sound as it should have. Pitch and especially tone length were totally off. 
      
 That's when I realized that a "now there was just a command accessing the bus, just save the clock cycles" wasn't going to work. The beep routine has to assemble a waveform from the set of clock cycles that have accumulated since the last time the speaker was driven. This won't work if you only read the last clock cycle from the global variable and lose all the ones that have accumulated in the meantime since the last query. 
+     
+So I figured out how to back up all bus accesses until the main emulation loop has time to take care of it. My idea was finally to use a queue. Every time there is an access to the bus in the class memory, a structure is created and the "object" is inserted into the queue. Here is the structure, and the methods for bus access that create the struct and write it to the queue:
+     
+```bash
+import queue
+from dataclasses import dataclass
+
+@dataclass
+class Bus_IO:
+    cycle: int
+    rw: int
+    address: int
+    value: int
+
+class Memory:
+    ....
+    
+    def bus_read(self, cycle, address, value):
+        buspacket = Bus_IO(cycle, 0, address, value)
+        self.bus_queue.put(buspacket)
+          
+    def bus_write(self, cycle, address, value):
+        buspacket = Bus_IO(cycle, 1, address, value)  
+        self.bus_queue.put(buspacket)
+```
+     
+
