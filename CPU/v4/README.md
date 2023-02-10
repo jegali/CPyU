@@ -274,7 +274,6 @@ else:
   return self.rom.read_byte(address)
      
      
-     
 def write_byte(self, cycle, address, value):
    #if address < 0xC000:
    if address < 0xD000:
