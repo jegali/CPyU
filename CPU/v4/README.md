@@ -76,7 +76,7 @@ press <RETURN>. You’ll have to listen carefully, and you may have to try it se
 ```bash
      10 X = PEEK(-16336): GOTO 10
 ```
-The pitch of the tone generated depends on the rate at which the speaker is accessed. Because Integer BASIC is faster in its execution than Appleso4, the
+The pitch of the tone generated depends on the rate at which the speaker is accessed. Because Integer BASIC is faster in its execution than Applesoft, the
 tone generated will be noticeably higher in pitch in the Integer version. In assembly language, the program would look like this:
      
 ```bash     
@@ -93,4 +93,75 @@ that the easiest way to enter it is by typing in the hex code directly. To do th
 
 Then run the program by typing '300G'. Disappointed? Thee program is working. Thee problem is that the routine is actually too fast for the speaker to respond. What’s lacking here is some way of controlling the rate of execution of the loop. This is usually accomplished by putting a delay of some kind in the loop. We should also be able to specify the length of the delay, either before the program is run or, even better, during the execution of the program.
      
-     
+We can do this in any of three ways: (1) physically alter the length of the program to increase the execution time of each pass through the loop; (2) store a
+value somewhere in memory before running the program and then use that value in a delay loop; or (3) get the delay value on a continual basis from the outside world, such as from the keyboard or paddles. For the first method, you can use a new and admittedly complex command. The mnemonic for this instruction is NOP and stands for No OPeration. Whenever the 6502 microprocessor encounters this, it just continues to the next instruction without doing anything. ⇢is code is used for just what we need here – a time delay.
+It is more often used, though, as either a temporary filler when assembling a block of code (such as for later data tables) or to cancel out existing operations in a previously written section of code. Quite often, this command ($EA, or 234 in decimal) is used in this manner to patch parts of the Apple DOS to cancel out various features that you no longer want to have active (such as the NOTDIRECT command error that prevents you from doing aGOTO directly to a line that has a DOS command on it).
+In our sound routine, a NOP will take a certain amount of time even to pass over and will thus reduce the number of cycles per second of the tone frequency.
+The main problem in writing the new version will be determining the number of NOPs that will have to be inserted. The easiest way to get a large block of memory cleared to a speciFc value is to use the move routine already present in the Monitor. To clear the block, load the first memory location in the range to be cleared with the desired value. Then type in themove command, moving everything from the beginning of the range to the end up one byte. For instance, to clear the range from $300 to $3A0 and fill it with $EAs, you would, from the Monitor of course, type in:
+
+```bash     
+     300: EA
+     301<300.3A0M
+```
+
+Note that we are clearing everything from $300 to$3A0 to contain the value $EA. Now type in:
+
+```bash
+     300: AD 30 C0
+     3A0: 4C 00 03
+```
+      
+Then type in 300L, followed with L for each additional list section, to view your new program.
+                  
+```bash                  
+     *300L
+     0300- AD 30 C0 LDA $C030
+     0303- EA NOP
+     0304- EA NOP
+     0305- EA NOP
+     0306- EA NOP
+     0307- EA NOP
+     0308- EA NOP
+     0309- EA NOP
+     * * *
+     * * *
+     * * *
+     0395- EA NOP
+     0396- EA NOP
+     0397- EA NOP
+     0398- EA NOP
+     0399- EA NOP
+     039A- EA NOP
+     039B- EA NOP
+     039C- EA NOP
+     039D- EA NOP
+     039E- EA NOP
+     039F- EA NOP
+     03A0- 4C 00 03 JMP $0300
+```
+                  
+Now run this with the usual 300G. The tone produced should be a very nice, pure tone. The pitch of the tone can be controlled by moving theJMP$300 to points of varying distance from the LDA $C030. Granted, this is a very clumsy way of controlling the pitch and is rather permanent once created, but it does illustrate the basic principle.
+For a different tone, hit RESET to stop the program, then type in:
+
+```bash                  
+     350: 4C 00 03
+```
+        
+When this is run (300G), the tone will be noticeably higher. The delay time is about half of what it was, and thus the frequency is twice the original value. Try typing in the three bytes in separate runs at $320 and $310. At $310 you may not be able to hear the tone, because the pitch is now essentially in the ultrasonic range.
+
+## Sound generation in python
+As we have already learned, the basic idea of speaker toggling is based on a square wave form. So, let's learn how to create a square wave in python and what it actually looks like. 
+
+### Square Wave
+Let's see what Wikipedia knows about a square wave:
+"A square wave is a non-sinusoidal periodic waveform in which the amplitude alternates at a steady frequency between fixed minimum and maximum values, with the same duration at minimum and maximum. In an ideal square wave, the transitions between minimum and maximum are instantaneous.
+
+The square wave is a special case of a pulse wave which allows arbitrary durations at minimum and maximum amplitudes. The ratio of the high period to the total period of a pulse wave is called the duty cycle. A true square wave has a 50% duty cycle (equal high and low periods).
+
+Square waves are often encountered in electronics and signal processing, particularly digital electronics and digital signal processing. Its stochastic counterpart is a two-state trajectory.
+
+Square waves are universally encountered in digital switching circuits and are naturally generated by binary (two-level) logic devices. Square waves are typically generated by metal–oxide–semiconductor field-effect transistor (MOSFET) devices due to their rapid on–off electronic switching behavior, in contrast to bipolar junction transistors (BJTs) which slowly generate signals more closely resembling sine waves rather than square waves.[1]
+
+Square waves are used as timing references or "clock signals", because their fast transitions are suitable for triggering synchronous logic circuits at precisely determined intervals. However, as the frequency-domain graph shows, square waves contain a wide range of harmonics; these can generate electromagnetic radiation or pulses of current that interfere with other nearby circuits, causing noise or errors. To avoid this problem in very sensitive circuits such as precision analog-to-digital converters, sine waves are used instead of square waves as timing references.
+
+In musical terms, they are often described as sounding hollow, and are therefore used as the basis for wind instrument sounds created using subtractive synthesis. Additionally, the distortion effect used on electric guitars clips the outermost regions of the waveform, causing it to increasingly resemble a square wave as more distortion is applied."
