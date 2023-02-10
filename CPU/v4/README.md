@@ -355,3 +355,20 @@ This way, no one has to be triggered or the CPU has to stop working. In the main
                          update_cycle = 0
 ```
      
+The memory area from $C000-$CFFF is available for I/O and was often called "softswitches" in Apple jargon. I therefore name the class for I/O access that way as well. At the moment, there is only the processing routine for the speaker here, which is toggled on each access. Later, there will also be access to the keyboard and the display.
+     
+```bash
+class SoftSwitches:
+
+    def __init__(self, speaker):
+        self.speaker = speaker
+
+    def read_byte(self, cycle, address):
+        assert 0xC000 <= address <= 0xCFFF
+        if address == 0xC030:
+            if self.speaker:
+                self.speaker.toggle(cycle)
+        else:
+            pass  
+        return 0x00
+```
