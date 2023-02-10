@@ -314,7 +314,7 @@ class Memory:
         self.bus_queue.put(buspacket)
 ```
 
-This way, no one has to be triggered or the CPU has to stop working. In the main emulation loop it is now queried whether there was a bus access. If yes, it is processed, if no, a normal CPU instruction is executed. A healthy ratio I have found is to give 75% of the available time to the CPU and use the remaining 25% for bus accesses.
+This way, no one has to be triggered or the CPU has to stop working. In the main emulation loop it is now queried whether there was a bus access. If yes, it is processed, if no, a normal CPU instruction is executed. A healthy ratio I have found is to give 75% of the available time to the CPU and use the remaining 25% for bus accesses. So here is the updated main loop from file beloved_apple.py.
      
 ```bash
      while not quit:
