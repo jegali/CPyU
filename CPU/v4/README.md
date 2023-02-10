@@ -165,3 +165,7 @@ Square waves are universally encountered in digital switching circuits and are n
 Square waves are used as timing references or "clock signals", because their fast transitions are suitable for triggering synchronous logic circuits at precisely determined intervals. However, as the frequency-domain graph shows, square waves contain a wide range of harmonics; these can generate electromagnetic radiation or pulses of current that interfere with other nearby circuits, causing noise or errors. To avoid this problem in very sensitive circuits such as precision analog-to-digital converters, sine waves are used instead of square waves as timing references.
 
 In musical terms, they are often described as sounding hollow, and are therefore used as the basis for wind instrument sounds created using subtractive synthesis. Additionally, the distortion effect used on electric guitars clips the outermost regions of the waveform, causing it to increasingly resemble a square wave as more distortion is applied."
+                 
+This allows us to create a square wave represent like this:
+                  
+![square-wave](/images/square-wave-v1.png)                  
