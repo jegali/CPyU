@@ -284,3 +284,7 @@ def write_byte(self, cycle, address, value):
    if address >= 0xD000:
        self.rom.write_byte(address, value)
  ```
+
+But what should be the method of reading and writing the "bus"? The first idea was to write the address, the read value and the current clock cycles into global variables at every bus access, to query then in the main loop of the CPU processing whether one of the last CPU instructions has accessed the bus. The beep could be triggered this way, but it did not sound as it should have. Pitch and especially tone length were totally off. 
+     
+That's when I realized that a "now there was just a command accessing the bus, just save the clock cycles" wasn't going to work. The beep routine has to assemble a waveform from the set of clock cycles that have accumulated since the last time the speaker was driven. This won't work if you only read the last clock cycle from the global variable and lose all the ones that have accumulated in the meantime since the last query. 
