@@ -32,3 +32,6 @@ if __name__ == "__main__":
 ```
 
 This is the base emulation that gives the framework for the entire program. In the next versions we will build up this emulation piece by piece.
+
+Attention: 
+There is only one file in this directory. However, this is not the complete emulator, just the pygame class that starts the emulator. All other files from V2 are still required!
