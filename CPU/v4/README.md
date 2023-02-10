@@ -313,5 +313,45 @@ class Memory:
         buspacket = Bus_IO(cycle, 1, address, value)  
         self.bus_queue.put(buspacket)
 ```
-     
 
+This way, no one has to be triggered or the CPU has to stop working. In the main emulation loop it is now queried whether there was a bus access. If yes, it is processed, if no, a normal CPU instruction is executed. A healthy ratio I have found is to give 75% of the available time to the CPU and use the remaining 25% for bus accesses.
+     
+```bash
+     while not quit:
+          update_cycle_bus
+     
+          # 75% CPU Zeit
+          update_cycle_bus += 1
+          if update_cycle_bus < 4:
+               myApple.cpu.exec_command()
+          # 25% I/O Zeit
+          else:    
+               update_cycle_bus = 0
+               # I/O Kanäle laufen über den Speicherbereich 0xc000-0xcfff
+               # die Methode write_byte / read_byte überprüft die Adresse und erzeugt ein
+               # Datenpaket mit Adresse, Wert und aktuellem Taktzyklus und speichert das
+               # in einer queue
+               # Hier wird die queue abgearbeitet
+               if myApple.memory.bus_queue.qsize() > 0:
+                    bus_packet = myApple.memory.bus_queue.get()
+                    bus_cycle = bus_packet.cycle
+                    bus_address = bus_packet.address
+                    bus_value = bus_packet.value
+                    bus_rw = bus_packet.rw
+
+               # wurde vom bus gelesen?
+               if bus_rw == 0:
+                    softswitches.read_byte(bus_cycle, bus_address)
+               # oder geschrieben
+               elif bus_rw == 1:
+                    # hier wird das Display-Module stehen
+
+               # alle 1024 Zyklen wird das Display
+               # upgedatet und der Lautsprecher abgefragt
+               update_cycle += 1
+               if update_cycle >= 1024:
+                    if speaker:
+                         speaker.update(bus_cycle)
+                         update_cycle = 0
+```
+     
