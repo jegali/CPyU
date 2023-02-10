@@ -14,3 +14,27 @@ This information confused me more than it helped me. Something with address $C03
 
 ## Making noise and other sounds
 Ok, so now we know how the speaker is addressed. Now let's take care of generating tones or understanding the tone generation at all. Fortunately I found an article by Bob Sander-Cederlof in the Apple Assembly Line (https://textfiles.meulie.net/aal/1981/aal8102.html), which I would like to reproduce here in parts: 
+
+"The Apple's built-in speaker is one of its most delightful features. To be sure, it is very limited; but I have used it for everything from sound effects in games to music in six parts (weird-sounding guitar chords) and even speech. Too many ways to put all in one AAL article! I will describe some of the sound effects I have used, and maybe you can go on from there.
+
+The speaker hardware is very simple. A flip-flop controls the current through the speaker coil. Everytime you address $C030, the flip-flop changes state. This in turn reverses the current through the speaker coil. If the speaker cone was pulled in, it pops out; if it was out, it pulls in. If we "toggle" the state at just the right rate, we can make a square-wave sound. By changing the time between reversals dynamically, we can make very complex sounds. We have no control over the amplitude of the speaker motions, only the frequency.
+
+Simple Tone: This program generates a tone burst of 128 cycles (or 256 half-cycles, or 256 pulses), with each half-cycle being 1288 Apple clocks. Just to make it easy, let's call Apple's clock 1MHz. It is really a little faster, but that will be close enough. So the tone will be about 388 Hertz (cycles per second, if you are as old as me!).
+
+How did I figure out those numbers? To get the time for a half-cycle (which I am going to start calling a pulse), I added up the Apple 6502 cycles for each instruction in the loop. LDA SPEAKER takes 4 cycles. DEX is 2 cycles, and BNE is 3 cycles when it branches. The DEX-BNE pair will be executed 256 times for each pulse, but the last time BNE does not branch; BNE only takes 2 cycles when it does not branch. The DEY-BNE pair will branch during each pulse, so we use 5 cycles there. So the total is 4+256*5-1+5=1288 cycles. I got the frequency by the formula f=1/T; T is the time for a whole cycle, or 2576 microseconds."
+
+```bash
+     1000  *---------------------------------
+     1010  *      SIMPLE TONE
+     1020  *---------------------------------
+     1030  SPEAKER    .EQ $C030
+     1040  *---------------------------------
+     1050  TONE   LDY #0       START CYCLE COUNTER
+     1060         LDX #0       START DELAY COUNTER
+     1070  .1     LDA SPEAKER  TOGGLE SPEAKER
+     1080  .2     DEX          DELAY LOOP
+     1090         BNE .2
+     1100         DEY          QUIT AFTER 128 CYCLES
+     1110         BNE .1
+     1120         RTS
+```
