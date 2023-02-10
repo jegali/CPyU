@@ -14,7 +14,7 @@ from apple2 import Apple2
 
 myApple = Apple2(None)
 pygame.init()
-display_screen = pygame.display.set_mode((560*2, 384*2))
+display_screen = pygame.display.set_mode((560, 384))
 
 
 def main():
