@@ -31,7 +31,7 @@ Most of the sources are books about the Apple ][ from the 80s. Some of them I ow
 - The Apple II circuit description, Winston Gayler, https://archive.org/details/apple-ii-circuit-description
 - Understanding the Apple II, Jim Sather, https://archive.org/details/understanding_the_apple_ii
 
-Ich bin sehr interessiert daran, die letzten beiden Bücher als print in meinem Bücherregal zu sehen. Auch Spenden auf meinem Paypal-Konto zum Kauf dieser Bücher nehme ich gerne an.
+I am very interested in seeing the last two books (Gayler & Sather) as print on my bookshelf. I will also gladly accept donations to my paypal account to purchase these books.
 
 ## Status
 2022-12-08: I started developing the [disassemble unit](https://github.com/jegali/CPyU/tree/main/Disassembler)<br/>
