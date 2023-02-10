@@ -245,3 +245,6 @@ plt.ylabel("Y axis")
 plt.plot(x[:47], y[:47], color ="green")
 plt.show()
 ```
+
+![square-wave](/images/square-wave-v2.png)  
+     
