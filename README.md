@@ -4,6 +4,8 @@ by Jens Gaulke, 2022-2023 <br/><br/>
 This is an emulation project for the 6502 CPU, hopefully expanding to the emulation of a complete Apple ][ computer. Started 2022, updated continously
 The project is completely written in python.
 
+In order to test the emulation, and also to groove myself for further work on the Apple ][ emulator, I used the Apple ][+ ROM to test the emulation functions. The ROM is available in single pieces here: https://mirrors.apple2.org.za/Apple%20II%20Documentation%20Project/Computers/Apple%20II/Apple%20II%20plus/ROM%20Images/ 
+
 ## Credits
 Some 6502 Code came from the ApplePy repository https://github.com/jtauber/applepy of James Tauber http://jtauber.com. The creation of the methods for the individual CPU commands is a diligence task for someone who has slain father and mother - therefore I have helped myself here with jtauber's code and directly removed two more bugs from it.  
 
