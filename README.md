@@ -36,6 +36,7 @@ Most of the sources are books about the Apple ][ from the 80s. Some of them I ow
 - What's where in the Apple, Vol II, found at [amazon](https://www.amazon.de/Whats-Where-APPLE-Enhanced-Gazetteer/dp/1716405211/ref=sr_1_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=B45NUY2GW1NW&keywords=what%27s+where+in+the+apple&qid=1676018598&sprefix=what%27s+where+in+the+apple%2Caps%2C77&sr=8-1)
 - The Apple II circuit description, Winston Gayler, https://archive.org/details/apple-ii-circuit-description
 - Understanding the Apple II, Jim Sather, https://archive.org/details/understanding_the_apple_ii
+- Apple Assembly Lines: The coplete Book, https://ia600304.us.archive.org/9/items/AssemblyLinesCompleteWagner/AssemblyLinesCompleteWagner.pdf
 
 I am very interested in seeing the last two books (Gayler & Sather) as print on my bookshelf. If you want to help me, I would be very pleased. I will also gladly accept donations to my paypal account to purchase these books. Send money to jens@jensgaulke.de.
 
