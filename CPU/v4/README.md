@@ -38,3 +38,64 @@ How did I figure out those numbers? To get the time for a half-cycle (which I am
      1110         BNE .1
      1120         RTS
 ```
+
+Apple "Bell" Subroutine: Inside your monitor ROM there is a subroutine at $FBE2 which uses the speaker to make a bell-like sound. Here is a copy of that code. Notice that the pulse width is controlled by calling another monitor subroutine, WAIT.
+
+```bash
+     1000  *---------------------------------
+     1010  *      APPLE "BELL" ROUTINE
+     1020  *---------------------------------
+     1030         .OR $FBE2    IN MONITOR ROM
+     1040         .TA $800
+     1050  *---------------------------------
+     1060  WAIT       .EQ $FCA8    MONITOR DELAY ROUTINE
+     1070  SPEAKER    .EQ $C030
+     1080  *---------------------------------
+     1090  M.FBE2 LDY #192     # OF HALF-CYCLES
+     1100  BELL2  LDA #12      SET UP DELAY OF 500 MICROSECONDS
+     1110         JSR WAIT     FOR A HALF CYCLE OF 1000 HERTZ
+     1120         LDA SPEAKER  TOGGLE SPEAKER
+     1130         DEY          COUNT THE HALF CYCLE
+     1140         BNE BELL2    NOT FINISHED
+     1150         RTS
+```
+
+Another source of wisdom consulted concerning the speaker is https://ia600304.us.archive.org/9/items/AssemblyLinesCompleteWagner/AssemblyLinesCompleteWagner.pdf.
+This PDF is s made available under a Creative Commons Attribution-NonCommercial-ShareAlike 2.0 license. You
+are free to share and adapt the material in any medium or format under the following terms: (1) Attribution–You
+must give appropriate credit, provide a link to the license, and indicate if changes were made; (2) NonCommercial
+–You may not use the material for commercial purposes; (3) ShareAlike–If you remix, transform, or build upon
+the material, you must distribute your contributions under the same license as the original. For the complete
+license see http://creativecommons.org/licenses/by-nc-sa/2.0/. Interesting here is chapter 8 "sound generation":
+
+Soundgeneration in assembly language is such a large topic in itself that an
+entire book could be done on that subject alone. However, simple routines are so
+easy that they’re worth at least a brief examination here. ⇢ese routines will not
+only allow you to put the commands you’ve learned to further use, but are also
+just plain fun.
+⇢e Frst element of a sound-generating routine is the speaker itself. Recall
+that the speaker is part of the memory range from $C000 to $C0FF that is devoted
+entirely to hardware items of theApple II. In earlier programs, we looked at the
+keyboard by examining memory location$C000. ⇢e speaker can be similarly
+accessed by looking at location$C030. ⇢e exception here is that the value at
+$C000 (the keyboard) varied according to what key was pressed, whereas with
+$C030 (the speaker) there is no logical value returned.
+Every time location$C030 is accessed, the speaker will click once. ⇢is is
+easy to demonstrate. Simply enter the Monitor with aCALL-151. EnterC030 and
+press<RETURN>. You’ll have to listen carefully, and you may have to try it several
+times. Each time, the speaker will click once. You can imagine that, if we could
+repeatedly access the speaker at a fast enough rate, the series of clicks would
+become a steady tone. In BASIC this can be done, although poorly, by a simple
+loop such as this:
+10 X = PEEK(-16336): GOTO 10
+⇢e pitch of the tone generated depends on the rate at which the speaker is
+accessed. Because Integer BASIC is faster in its execution than Appleso4, the
+tone generated will be noticeably higher in pitch in the Integer version.
+In assembly language, the program would look like this:
+0300- AD 30 C0 LDA $C030
+0303- 4C 00 03 JMP $0300
+In this case I’m showing it as the Apple would directly disassemble it, as
+opposed to the usual assembly-language source listing. ⇢e program is so short
+that the easiest way to enter it is by typing in the hex code directly. To do this,
+enter the Monitor (CALL-151) and type:
+300: AD 30 C0 4C 00 03
