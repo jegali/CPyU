@@ -11,3 +11,6 @@ software loop. Using this method, you can generate tones from below to above the
 This information confused me more than it helped me. Something with address $C030, I made a note of that. So I tried Jim Sather's book and read chapter 7:
 
 "Now there is no 'Control Address Bus' command in the 6502's repertoire. The 6502 reads from or writes to the data bus every cycle. So what does the programmer do when he wants to toggle the speaker? He does a 'LDA $C030' or a 'CPX $C030' or a 'WHO GIVES A DARN $C030' and ignores the meaningless data bus. This is why you can program the speaker with a statement like 'SOUND=PEEK(-16336)'. The object is not to 'PEEK' into memory. The object is to get $C030 on the address bus, commanding the speaker to toggle"
+
+## Making noise and other sounds
+Ok, so now we know how the speaker is addressed. Now let's take care of generating tones or understanding the tone generation at all. Fortunately I found an article by Bob Sander-Cederlof in the Apple Assembly Line (https://textfiles.meulie.net/aal/1981/aal8102.html), which I would like to reproduce here in parts: 
