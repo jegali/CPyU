@@ -298,6 +298,8 @@ In the past, when there were no trainers and cheat modules for games, we had to 
 - Possibility one: Find in the binary code the places where the accumulator was loaded with three: LDA #$03 (yes, most of the time it was the accumulator that initialized the lives) and set the value to #$80, start the game and have a look if it worked. 
 - Possibility tow: Find the place where a CMP #$00 followed by a BNE / BEQ was in memory (here all lives were used up and a jump to the game over routine was pending), and reqrite the jmp to game over with a jump to continue the game.
 
+But I digress... Back to the opcodes.
+
 ```bash
    def setup_ops(self):
         self.ops = [None] * 0x100
@@ -308,152 +310,85 @@ In the past, when there were no trainers and cheat modules for games, we had to 
         self.ops[0x08] = lambda: self.PHP()
         self.ops[0x09] = lambda: self.ORA(self.immediate_mode())
         self.ops[0x0A] = lambda: self.ASL()
-        self.ops[0x0D] = lambda: self.ORA(self.absolute_mode())
-        self.ops[0x0E] = lambda: self.ASL(self.absolute_mode())
-        self.ops[0x10] = lambda: self.BPL(self.relative_mode())
-        self.ops[0x11] = lambda: self.ORA(self.indirect_y_mode())
-        self.ops[0x15] = lambda: self.ORA(self.zero_page_x_mode())
-        self.ops[0x16] = lambda: self.ASL(self.zero_page_x_mode())
-        self.ops[0x18] = lambda: self.CLC()
-        self.ops[0x19] = lambda: self.ORA(self.absolute_y_mode())
-        self.ops[0x1D] = lambda: self.ORA(self.absolute_x_mode())
-        self.ops[0x1E] = lambda: self.ASL(self.absolute_x_mode(rmw=True))
-        self.ops[0x20] = lambda: self.JSR(self.absolute_mode())
-        self.ops[0x21] = lambda: self.AND(self.indirect_x_mode())
-        self.ops[0x24] = lambda: self.BIT(self.zero_page_mode())
-        self.ops[0x25] = lambda: self.AND(self.zero_page_mode())
-        self.ops[0x26] = lambda: self.ROL(self.zero_page_mode())
-        self.ops[0x28] = lambda: self.PLP()
-        self.ops[0x29] = lambda: self.AND(self.immediate_mode())
-        self.ops[0x2A] = lambda: self.ROL()
-        self.ops[0x2C] = lambda: self.BIT(self.absolute_mode())
-        self.ops[0x2D] = lambda: self.AND(self.absolute_mode())
-        self.ops[0x2E] = lambda: self.ROL(self.absolute_mode())
-        self.ops[0x30] = lambda: self.BMI(self.relative_mode())
-        self.ops[0x31] = lambda: self.AND(self.indirect_y_mode())
-        self.ops[0x35] = lambda: self.AND(self.zero_page_x_mode())
-        self.ops[0x36] = lambda: self.ROL(self.zero_page_x_mode())
-        self.ops[0x38] = lambda: self.SEC()
-        self.ops[0x39] = lambda: self.AND(self.absolute_y_mode())
-        self.ops[0x3D] = lambda: self.AND(self.absolute_x_mode())
-        self.ops[0x3E] = lambda: self.ROL(self.absolute_x_mode(rmw=True))
-        self.ops[0x40] = lambda: self.RTI()
-        self.ops[0x41] = lambda: self.EOR(self.indirect_x_mode())
-        self.ops[0x45] = lambda: self.EOR(self.zero_page_mode())
-        self.ops[0x46] = lambda: self.LSR(self.zero_page_mode())
-        self.ops[0x48] = lambda: self.PHA()
-        self.ops[0x49] = lambda: self.EOR(self.immediate_mode())
-        self.ops[0x4A] = lambda: self.LSR()
-        self.ops[0x4C] = lambda: self.JMP(self.absolute_mode())
-        self.ops[0x4D] = lambda: self.EOR(self.absolute_mode())
-        self.ops[0x4E] = lambda: self.LSR(self.absolute_mode())
-        self.ops[0x50] = lambda: self.BVC(self.relative_mode())
-        self.ops[0x51] = lambda: self.EOR(self.indirect_y_mode())
-        self.ops[0x55] = lambda: self.EOR(self.zero_page_x_mode())
-        self.ops[0x56] = lambda: self.LSR(self.zero_page_x_mode())
-        self.ops[0x58] = lambda: self.CLI()
-        self.ops[0x59] = lambda: self.EOR(self.absolute_y_mode())
-        self.ops[0x5D] = lambda: self.EOR(self.absolute_x_mode())
-        self.ops[0x5E] = lambda: self.LSR(self.absolute_x_mode(rmw=True))
-        self.ops[0x60] = lambda: self.RTS()
-        self.ops[0x61] = lambda: self.ADC(self.indirect_x_mode())
-        self.ops[0x65] = lambda: self.ADC(self.zero_page_mode())
-        self.ops[0x66] = lambda: self.ROR(self.zero_page_mode())
-        self.ops[0x68] = lambda: self.PLA()
-        self.ops[0x69] = lambda: self.ADC(self.immediate_mode())
-        self.ops[0x6A] = lambda: self.ROR()
-        self.ops[0x6C] = lambda: self.JMP(self.indirect_mode())
-        self.ops[0x6D] = lambda: self.ADC(self.absolute_mode())
-        self.ops[0x6E] = lambda: self.ROR(self.absolute_mode())
-        self.ops[0x70] = lambda: self.BVS(self.relative_mode())
-        self.ops[0x71] = lambda: self.ADC(self.indirect_y_mode())
-        self.ops[0x75] = lambda: self.ADC(self.zero_page_x_mode())
-        self.ops[0x76] = lambda: self.ROR(self.zero_page_x_mode())
-        self.ops[0x78] = lambda: self.SEI()
-        self.ops[0x79] = lambda: self.ADC(self.absolute_y_mode())
-        self.ops[0x7D] = lambda: self.ADC(self.absolute_x_mode())
-        self.ops[0x7E] = lambda: self.ROR(self.absolute_x_mode(rmw=True))
-        self.ops[0x81] = lambda: self.STA(self.indirect_x_mode())
-        self.ops[0x84] = lambda: self.STY(self.zero_page_mode())
-        self.ops[0x85] = lambda: self.STA(self.zero_page_mode())
-        self.ops[0x86] = lambda: self.STX(self.zero_page_mode())
-        self.ops[0x88] = lambda: self.DEY()
-        self.ops[0x8A] = lambda: self.TXA()
-        self.ops[0x8C] = lambda: self.STY(self.absolute_mode())
-        self.ops[0x8D] = lambda: self.STA(self.absolute_mode())
-        self.ops[0x8E] = lambda: self.STX(self.absolute_mode())
-        self.ops[0x90] = lambda: self.BCC(self.relative_mode())
-        self.ops[0x91] = lambda: self.STA(self.indirect_y_mode(rmw=True))
-        self.ops[0x94] = lambda: self.STY(self.zero_page_x_mode())
-        self.ops[0x95] = lambda: self.STA(self.zero_page_x_mode())
-        self.ops[0x96] = lambda: self.STX(self.zero_page_y_mode())
-        self.ops[0x98] = lambda: self.TYA()
-        self.ops[0x99] = lambda: self.STA(self.absolute_y_mode(rmw=True))
-        self.ops[0x9A] = lambda: self.TXS()
-        self.ops[0x9D] = lambda: self.STA(self.absolute_x_mode(rmw=True))
-        self.ops[0xA0] = lambda: self.LDY(self.immediate_mode())
+        ...
         self.ops[0xA1] = lambda: self.LDA(self.indirect_x_mode())
-        self.ops[0xA2] = lambda: self.LDX(self.immediate_mode())
-        self.ops[0xA4] = lambda: self.LDY(self.zero_page_mode())
         self.ops[0xA5] = lambda: self.LDA(self.zero_page_mode())
-        self.ops[0xA6] = lambda: self.LDX(self.zero_page_mode())
-        self.ops[0xA8] = lambda: self.TAY()
         self.ops[0xA9] = lambda: self.LDA(self.immediate_mode())
-        self.ops[0xAA] = lambda: self.TAX()
-        self.ops[0xAC] = lambda: self.LDY(self.absolute_mode())
         self.ops[0xAD] = lambda: self.LDA(self.absolute_mode())
-        self.ops[0xAE] = lambda: self.LDX(self.absolute_mode())
-        self.ops[0xB0] = lambda: self.BCS(self.relative_mode())
         self.ops[0xB1] = lambda: self.LDA(self.indirect_y_mode())
-        self.ops[0xB4] = lambda: self.LDY(self.zero_page_x_mode())
         self.ops[0xB5] = lambda: self.LDA(self.zero_page_x_mode())
-        self.ops[0xB6] = lambda: self.LDX(self.zero_page_y_mode())
-        self.ops[0xB8] = lambda: self.CLV()
         self.ops[0xB9] = lambda: self.LDA(self.absolute_y_mode())
-        self.ops[0xBA] = lambda: self.TSX()
-        self.ops[0xBC] = lambda: self.LDY(self.absolute_x_mode())
         self.ops[0xBD] = lambda: self.LDA(self.absolute_x_mode())
-        self.ops[0xBE] = lambda: self.LDX(self.absolute_y_mode())
-        self.ops[0xC0] = lambda: self.CPY(self.immediate_mode())
-        self.ops[0xC1] = lambda: self.CMP(self.indirect_x_mode())
-        self.ops[0xC4] = lambda: self.CPY(self.zero_page_mode())
-        self.ops[0xC5] = lambda: self.CMP(self.zero_page_mode())
-        self.ops[0xC6] = lambda: self.DEC(self.zero_page_mode())
-        self.ops[0xC8] = lambda: self.INY()
-        self.ops[0xC9] = lambda: self.CMP(self.immediate_mode())
-        self.ops[0xCA] = lambda: self.DEX()
-        self.ops[0xCC] = lambda: self.CPY(self.absolute_mode())
-        self.ops[0xCD] = lambda: self.CMP(self.absolute_mode())
-        self.ops[0xCE] = lambda: self.DEC(self.absolute_mode())
-        self.ops[0xD0] = lambda: self.BNE(self.relative_mode())
-        self.ops[0xD1] = lambda: self.CMP(self.indirect_y_mode())
-        self.ops[0xD5] = lambda: self.CMP(self.zero_page_x_mode())
-        self.ops[0xD6] = lambda: self.DEC(self.zero_page_x_mode())
-        self.ops[0xD8] = lambda: self.CLD()
-        self.ops[0xD9] = lambda: self.CMP(self.absolute_y_mode())
-        self.ops[0xDD] = lambda: self.CMP(self.absolute_x_mode())
-        self.ops[0xDE] = lambda: self.DEC(self.absolute_x_mode(rmw=True))
-        self.ops[0xE0] = lambda: self.CPX(self.immediate_mode())
-        self.ops[0xE1] = lambda: self.SBC(self.indirect_x_mode())
-        self.ops[0xE4] = lambda: self.CPX(self.zero_page_mode())
-        self.ops[0xE5] = lambda: self.SBC(self.zero_page_mode())
-        self.ops[0xE6] = lambda: self.INC(self.zero_page_mode())
-        self.ops[0xE8] = lambda: self.INX()
-        self.ops[0xE9] = lambda: self.SBC(self.immediate_mode())
-        self.ops[0xEA] = lambda: self.NOP()
-        self.ops[0xEC] = lambda: self.CPX(self.absolute_mode())
-        self.ops[0xED] = lambda: self.SBC(self.absolute_mode())
-        self.ops[0xEE] = lambda: self.INC(self.absolute_mode())
-        self.ops[0xF0] = lambda: self.BEQ(self.relative_mode())
-        self.ops[0xF1] = lambda: self.SBC(self.indirect_y_mode())
-        self.ops[0xF5] = lambda: self.SBC(self.zero_page_x_mode())
-        self.ops[0xF6] = lambda: self.INC(self.zero_page_x_mode())
-        self.ops[0xF8] = lambda: self.SED()
-        self.ops[0xF9] = lambda: self.SBC(self.absolute_y_mode())
-        self.ops[0xFD] = lambda: self.SBC(self.absolute_x_mode())
+        ...
         self.ops[0xFE] = lambda: self.INC(self.absolute_x_mode(rmw=True))
 ```
 
+Here I compared the individual address modes of the LDA command and expanded them with a real command
+
+```bash
+        0xA1: LDA ($1010,X) #   self.LDA(self.indirect_x_mode())
+        0xA5: LDA $10       #   self.LDA(self.zero_page_mode())
+        0xA9: LDA #$10      #   self.LDA(self.immediate_mode())
+        0xAD: LDA #$03      #   self.LDA(self.absolute_mode())
+        0xB1: LDA ($1010),Y #   self.LDA(self.indirect_y_mode())
+        0xB5: LDA $10,X     #   self.LDA(self.zero_page_x_mode())
+        0xB9: LDA $1010,Y   #   self.LDA(self.absolute_y_mode())
+        0xBD: LDA $1010,X   #   self.LDA(self.absolute_x_mode())
+```
+
+The order of processing here is as follows: first the function inside the brackets of LDA() is called and executed. This returns a value that is then written to the accumulator using the LDA method. Here are the methods from James' source code for each addressing mode. How it works should now be clear. The addition "PC" within the methods only means that the program counter of the system is influenced when the corresponding method is called - normally it is increased. If it is a method that reads one byte, the PC is increased by one, if it is a method that reads two bytes (a word, for an address), the PC is increased by two.
+
+```bash
+   def immediate_mode(self):
+        return self.get_PC()
+
+    def absolute_mode(self):
+        self.cycles += 2
+        return self.read_pc_word()
+
+    def absolute_x_mode(self, rmw=False):
+        if rmw:
+            self.cycles += 1
+        return self.absolute_mode() + self.x_index
+
+    def absolute_y_mode(self, rmw=False):
+        if rmw:
+            self.cycles += 1
+        return self.absolute_mode() + self.y_index
+
+    def zero_page_mode(self):
+        self.cycles += 1
+        return self.read_pc_byte()
+
+    def zero_page_x_mode(self):
+        self.cycles += 1
+        return (self.zero_page_mode() + self.x_index) % 0x100
+
+    def zero_page_y_mode(self):
+        self.cycles += 1
+        return (self.zero_page_mode() + self.y_index) % 0x100
+
+    def indirect_mode(self):
+        self.cycles += 2
+        return self.read_word_bug(self.absolute_mode())
+
+    def indirect_x_mode(self):
+        self.cycles += 4
+        return self.read_word_bug((self.read_pc_byte() + self.x_index) % 0x100)
+
+    def indirect_y_mode(self, rmw=False):
+        if rmw:
+            self.cycles += 4
+        else:
+            self.cycles += 3
+        return self.read_word_bug(self.read_pc_byte()) + self.y_index
+
+    def relative_mode(self):
+        pc = self.get_PC()
+        return pc + 1 + self.signed(self.read_byte(pc))
+```
+
+Each executed command also consumes CPU cycles, which are also taken into account in the methods. For a basic emulation of a CPU, the cycles may not be important. If you want or have to take interrupts into account, or if there are functions that should be executed once every thousandth cycle, you have to take the cycles into account. We will see that the cycles are also important for controlling the speaker.
 
 ### Command execution
 The command execution of a single command is handled by the exec_command() method. Here the next byte is read from memory, the associated command is decoded and executed. 
