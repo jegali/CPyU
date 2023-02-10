@@ -30,3 +30,5 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+This is the base emulation that gives the framework for the entire program. In the next versions we will build up this emulation piece by piece.
