@@ -390,6 +390,22 @@ The order of processing here is as follows: first the function inside the bracke
 
 Each executed command also consumes CPU cycles, which are also taken into account in the methods. For a basic emulation of a CPU, the cycles may not be important. If you want or have to take interrupts into account, or if there are functions that should be executed once every thousandth cycle, you have to take the cycles into account. We will see that the cycles are also important for controlling the speaker.
 
+```bash
+    def LDA(self, operand_address):
+        self.accumulator = self.update_nz(self.read_byte(operand_address))
+```
+
+The LDA method should also be specified here for the sake of completeness. The main function is to write the passed value into the CPU's accumulator, as already mentioned.
+What can also happen is that when the LDA command is processed (and of course with every other command as well) the status register of the processor is affected. Therefore the MEthode update_nz is called here, which manipulates the bits N and Z accordingly.
+
+```bash
+    def update_nz(self, value):
+        value = value % 0x100
+        self.zero_flag = [0, 1][(value == 0)]
+        self.sign_flag = [0, 1][((value & 0x80) != 0)]
+        return value
+```  
+
 ### Command execution
 The command execution of a single command is handled by the exec_command() method. Here the next byte is read from memory, the associated command is decoded and executed. 
 
