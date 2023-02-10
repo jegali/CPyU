@@ -68,34 +68,29 @@ must give appropriate credit, provide a link to the license, and indicate if cha
 the material, you must distribute your contributions under the same license as the original. For the complete
 license see http://creativecommons.org/licenses/by-nc-sa/2.0/. Interesting here is chapter 8 "sound generation":
 
-Soundgeneration in assembly language is such a large topic in itself that an
-entire book could be done on that subject alone. However, simple routines are so
-easy that they’re worth at least a brief examination here. ⇢ese routines will not
-only allow you to put the commands you’ve learned to further use, but are also
-just plain fun.
-⇢e Frst element of a sound-generating routine is the speaker itself. Recall
-that the speaker is part of the memory range from $C000 to $C0FF that is devoted
-entirely to hardware items of theApple II. In earlier programs, we looked at the
-keyboard by examining memory location$C000. ⇢e speaker can be similarly
-accessed by looking at location$C030. ⇢e exception here is that the value at
-$C000 (the keyboard) varied according to what key was pressed, whereas with
-$C030 (the speaker) there is no logical value returned.
-Every time location$C030 is accessed, the speaker will click once. ⇢is is
-easy to demonstrate. Simply enter the Monitor with aCALL-151. EnterC030 and
-press<RETURN>. You’ll have to listen carefully, and you may have to try it several
-times. Each time, the speaker will click once. You can imagine that, if we could
-repeatedly access the speaker at a fast enough rate, the series of clicks would
-become a steady tone. In BASIC this can be done, although poorly, by a simple
-loop such as this:
-10 X = PEEK(-16336): GOTO 10
-⇢e pitch of the tone generated depends on the rate at which the speaker is
-accessed. Because Integer BASIC is faster in its execution than Appleso4, the
-tone generated will be noticeably higher in pitch in the Integer version.
-In assembly language, the program would look like this:
-0300- AD 30 C0 LDA $C030
-0303- 4C 00 03 JMP $0300
-In this case I’m showing it as the Apple would directly disassemble it, as
-opposed to the usual assembly-language source listing. ⇢e program is so short
-that the easiest way to enter it is by typing in the hex code directly. To do this,
-enter the Monitor (CALL-151) and type:
-300: AD 30 C0 4C 00 03
+"Sound generation in assembly language is such a large topic in itself that an entire book could be done on that subject alone. However, simple routines are so easy that they’re worth at least a brief examination here. These routines will not only allow you to put the commands you’ve learned to further use, but are also just plain fun.
+The first element of a sound-generating routine is the speaker itself. Recall that the speaker is part of the memory range from $C000 to $C0FF that is devoted entirely to hardware items of the Apple II. In earlier programs, we looked at the keyboard by examining memory location $C000. The speaker can be similarly accessed by looking at location $C030. The exception here is that the value at $C000 (the keyboard) varied according to what key was pressed, whereas with $C030 (the speaker) there is no logical value returned.
+Every time location $C030 is accessed, the speaker will click once. This is easy to demonstrate. Simply enter the Monitor with a 'CALL-151'. Enter 'C030' and
+press <RETURN>. You’ll have to listen carefully, and you may have to try it several times. Each time, the speaker will click once. You can imagine that, if we could repeatedly access the speaker at a fast enough rate, the series of clicks would become a steady tone. In BASIC this can be done, although poorly, by a simple loop such as this:
+
+```bash
+     10 X = PEEK(-16336): GOTO 10
+```
+The pitch of the tone generated depends on the rate at which the speaker is accessed. Because Integer BASIC is faster in its execution than Appleso4, the
+tone generated will be noticeably higher in pitch in the Integer version. In assembly language, the program would look like this:
+     
+```bash     
+     0300- AD 30 C0 LDA $C030
+     0303- 4C 00 03 JMP $0300
+```
+
+In this case I’m showing it as the Apple would directly disassemble it, as opposed to the usual assembly-language source listing. ⇢e program is so short
+that the easiest way to enter it is by typing in the hex code directly. To do this, enter the Monitor (CALL-151) and type:
+
+```bash
+     300: AD 30 C0 4C 00 03
+```
+
+Then run the program by typing '300G'. Disappointed? Thee program is working. Thee problem is that the routine is actually too fast for the speaker to respond. What’s lacking here is some way of controlling the rate of execution of the loop. This is usually accomplished by putting a delay of some kind in the loop. We should also be able to specify the length of the delay, either before the program is run or, even better, during the execution of the program.
+     
+     
