@@ -21,6 +21,6 @@ This version extends the basic classes RAM, ROM and Memory with methods for hand
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v2)
 
 ### V3
-The step-by-step emulation from V2 showed me where there were still bugs in the code, as Python pointed out the errors very elegantly and with extensive stacktrace. After I fixed these bugs and the emulation ran stable over many steps, I wrote a routine to run the emulation "by itself and all the time". There were no more error messages, however this approach is unfortunately too slow for a real emulation. Therefore I wrote V3
+The step-by-step emulation from V2 showed me where there were still bugs in the code, as Python pointed out the errors very elegantly and with extensive stacktrace. After I fixed these bugs and the emulation ran stable over many steps, I wrote a routine to run the emulation "by itself and all the time". There were no more error messages, however this approach is unfortunately too slow for a real emulation. Therefore I wrote V3. 
 
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v3)
