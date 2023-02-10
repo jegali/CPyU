@@ -169,3 +169,58 @@ In musical terms, they are often described as sounding hollow, and are therefore
 This allows us to create a square wave represent like this:
                   
 ![square-wave](/images/square-wave-v1.png)                  
+
+The longer the plateaus of the wave are, the lower the tone will be, the shorter the plateaus of the wave are, the higher the tone will be. Here we can see a direct relationship between pitch and clock cycles consumed. If many clock cycles have passed between toggling the speaker, the tone is lower, if few clock cycles have passed, the tone is higher. We have already learned this from the literature sources cited above. 
+                  
+The class specified below uses pygame and the mixer class contained there to generate a square-wave signal and plays this mono over the speaker.
+                  
+```bash
+import numpy
+import pygame
+
+
+class Speaker:
+    
+    def __init__(self) -> None:
+        # pygame-doc: 
+        # The best way to set custom mixer playback values is to call pygame.mixer.pre_init() before calling the top level pygame.init()
+        # (frequency: int = 44100, size: int = -16, channels: int = 2, buffer: int = 512, devicename: str | None = None, allowedchanges: int = 5) -> None
+        pygame.mixer.pre_init(frequency=44100, size=-16, channels=1, allowedchanges=0)
+        pygame.init()
+        pygame.mixer.init(frequency=44100, size=-16, channels=1, allowedchanges=0)
+        self.reset()
+
+    def reset(self):
+        self.buffer = []
+        self.polarity = False
+
+    def play(self):
+        length = 21
+        for i in range(960):
+            self.buffer.extend([0, 16384] if self.polarity else [0, -16384])
+            self.buffer.extend(length*[16384] if self.polarity else length*[-16384])
+            self.polarity = not self.polarity
+        sample_array = numpy.int16(self.buffer)
+        sound = pygame.sndarray.make_sound(sample_array)
+        pygame.time.wait(int(sound.get_length() *500))
+        print(sound.get_length())
+        sound.play()
+        pygame.time.wait(int(sound.get_length() *1000))
+        self.reset()
+
+
+class Apple:
+    def __init__(self, speaker) -> None:
+        self.speaker = speaker
+
+    def run(self):
+        self.speaker.play()
+        print("Beep")
+
+
+
+if __name__ == "__main__":
+    speaker = Speaker()
+    apple = Apple(speaker)
+    apple.run()
+```
