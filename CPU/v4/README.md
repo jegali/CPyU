@@ -153,7 +153,7 @@ When this is run (300G), the tone will be noticeably higher. The delay time is a
 As we have already learned, the basic idea of speaker toggling is based on a square wave form. So, let's learn how to create a square wave in python and what it actually looks like. 
 
 ### Square Wave
-Let's see what Wikipedia knows about a square wave:
+Let's see what [Wikipedia](https://en.wikipedia.org/wiki/Square_wave) knows about a square wave:
 "A square wave is a non-sinusoidal periodic waveform in which the amplitude alternates at a steady frequency between fixed minimum and maximum values, with the same duration at minimum and maximum. In an ideal square wave, the transitions between minimum and maximum are instantaneous.
 
 The square wave is a special case of a pulse wave which allows arbitrary durations at minimum and maximum amplitudes. The ratio of the high period to the total period of a pulse wave is called the duty cycle. A true square wave has a 50% duty cycle (equal high and low periods).
