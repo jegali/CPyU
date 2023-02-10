@@ -206,8 +206,9 @@ class Speaker:
         print(sound.get_length())
         sound.play()
         pygame.time.wait(int(sound.get_length() *1000))
+        print(sample_array.size)
+        print(self.buffer)
         self.reset()
-
 
 class Apple:
     def __init__(self, speaker) -> None:
@@ -224,3 +225,7 @@ if __name__ == "__main__":
     apple = Apple(speaker)
     apple.run()
 ```
+
+A sample run delivers these results:
+     
+![square-wave](/images/square-wave-output.png)  
