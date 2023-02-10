@@ -7,7 +7,7 @@ The project is completely written in python.
 In order to test the emulation, and also to groove myself for further work on the Apple ][ emulator, I used the Apple ][+ ROM to test the emulation functions. The ROM is available in single pieces here: https://mirrors.apple2.org.za/Apple%20II%20Documentation%20Project/Computers/Apple%20II/Apple%20II%20plus/ROM%20Images/. To assemble the parts, I used Powershell to concatenate the files: 
 
 ```bash
-cmd /c copy /b part1.bin + part2.bin + ... + partn.bin output.bin
+cmd /c copy /b part-D0.bin + part-D8.bin + part-E0.bin + ... + part-F8.bin output.bin
 ```
 
 ## Credits
