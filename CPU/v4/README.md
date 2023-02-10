@@ -251,3 +251,37 @@ plt.show()
 With a sample length of 47 values per complete wave and a sample frequency of 44100 samples per second, we get a frequency of 47 / 44100 = 938 Hz, which is pretty close to the 1kHz sound of the Apple ][. A disadvantage of this waveform generation is that when the plateau size is reduced, a sample is removed from both the upper and lower plateau. Perhaps it makes more sense not to use a real square curve, but only half a curve, so that the pitch and thus the frequency can be controlled more finely. For the moment, however, this class should suffice to output the boot beep of the Apple ][.
 
 ## The speaker in emulation
+Now I was faced with a problem. The speaker is more or less detached from the CPU and can do its job concurrently. A function in the sense of "play a tone of length t with a frequency of f on one or more channels" as in modern environments does not exist on the Apple ][. In fact the Apple operating system is not designed for multitasking at all. The only option is to click the speaker when accessing $C030 and to do it again after any number of clock cycles. Somehow a method has to be developed from this.
+     
+### Access to the "bus"
+The first thing I did was to revise the memory functions. Accesses to the range $C000-$CFFF must be handled separately. For this I introduced two methods, read_bus and write_bus. Within the usual memory access methods read_byte and write_byte I have now introduced the "bus" in addition to the query whether the requested memory area is RAM or ROM.
+     
+```bash
+def read_byte(self, cycle, address):
+if address < 0xC000:
+  return self.ram.read_byte(address)
+# auf dem Bus liegen die Adressen für die I/O
+# auch Keyboard, Tape und Speaker
+# für die korrekte Ausgabe des Speakers müssen die Taktzyklen mitgegeben
+# werden, da sich die Frequenz halt auch über die Anzahl der benötigten
+# cycles definiert
+elif address < 0xD000:
+  value = self.ram.read_byte(address)
+  #value = self.rom.read_byte(address)
+  self.bus_read(cycle, address, value)
+  return value
+else:
+  return self.rom.read_byte(address)
+     
+     
+     
+def write_byte(self, cycle, address, value):
+   #if address < 0xC000:
+   if address < 0xD000:
+       self.ram.write_byte(address, value)
+   if 0x400 <= address < 0x800 or 0x2000 <= address < 0x5FFF:
+       self.bus_write(cycle, address, value)
+   # just for testing! ROM cannot be written
+   if address >= 0xD000:
+       self.rom.write_byte(address, value)
+ ```
