@@ -68,4 +68,7 @@ I am very interested in seeing the last two books (Gayler & Sather) as print on 
 - ~~Step by Step disassembling~~
 - ~~Basic Assembler~~
 - ~~Basic GUI for emulation~~
+- ~~Speaker emulation~~
+- Keyboard Emulation
+- Text Display Emulation
 
