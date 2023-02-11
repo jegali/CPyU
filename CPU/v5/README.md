@@ -23,9 +23,11 @@ Before we can look at how the graphics output looks in the Apple ][, it makes se
 - **$F800-$FFFF**. This is the standard system monitor ROM space (see Chapter 3).
 
 ## The Text Display ($400-$7FF)
-A standard II+ is capable of displaying text in a 40-column-by-24-row mode only. 40 columns? why did Woz kick us in the shins with this number of columns? Had he never heard of powers of two? 32, 64, or 128 columns, that would have been understandable, since computers are based on binary numbers. A little joke on the side...
+The text display is what this version of the emulator is about. We will see that the addressing of the display is not linear - but we don't want to think about why this is so. Only this much: It was the cheapest and most ingenious variant Woz came up with in the 70s. 
 
-In the 70s the components for the Apple II were expensive enough, the chips Woz would have needed didn't come on the market until two years later, and Woz tried to save money where he could. If the screen layout had been convenient for programmers, many (valuable!) bytes would have been wasted. To further reduce the costs for the Apple ][, Woz tried to save on hardware where he could, so he came up with an ingenious circuit for the display RAM. We don't have to describe all the details here, at this point it is basically sufficient to show how the memory addresses are distributed - and that it is possible to very easily calculate the desired addresses via bit manipulations. This will be very helpful for the implementation of the text mode!  
+A standard II+ is capable of displaying text in a 40-column-by-24-row mode only. However, 40 x 24 results in 960, and 1024 bytes are reserved for the display - so there is some wastage here that is not used for the display - but another ingenious solution here is that these RAM bytes not used for the display are used for expansion cards as scratchpad.
+
+For the display the available memory of 1024 Bytes is chunked into 128 bytes. Each of these 128 byte chunks is divided into three 40 byte areas representing one line. The remaining 8 bytes (3 x 40 = 120) serve as scratchpad. However, the three 40-byte blocks are not in consecutive lines. The following table shows the structure of the display and the memory arrangement. As said, Woz had to save transistor gates when creating the Apple II, and the multiplexer circuit he designed just delivered this result.
 
 ## How the display works
 
