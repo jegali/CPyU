@@ -421,3 +421,6 @@ class Speaker:
 ```
 
 At the moment there is nothing else to see when the emulation is started. The Apple beeps, but there is no keyboard interaction and no screen output yet. Therefore I will not put a complete executable code in this directory, but first implement and describe the further I/O.
+
+## To do
+The speaker beeps, that's all we can check at the moment. We can only check how the speaker behaves in games, for example, when we have a working floppy drive emulation.
