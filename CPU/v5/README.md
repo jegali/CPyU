@@ -3,7 +3,7 @@ Last status: The emulation of the Apple rom is running and it beeps at startup. 
 it would be nice to have an output on the screen as well. Spoiler in advance: The display of the video output is anything but simple...
 
 ## The RAM layout
-Before we can look at how the graphics output looks in the Apple ][, it makes sense to look at the RAM layout of the Apple. The following lines are from the book "Inside the Apple IIe" by Gary Little:
+Before we can look at how the graphics output looks in the Apple ][, it makes sense to look at the RAM layout of the Apple. 
 
 - **$0000-$00FF**. This is the 6502 zero page and it is used exten- sively by all parts of the lie's operating system, including the system monitor (see Chapter 3), the Applesoft interpreter (see Chapter 4), and the disk operating system (see Chapter 5). Those locations available for use by your own programs are set out in Table 2-5.
 - **$0100-$01FF**. This is the 6502 stack area and is also used for temporary data storage by the Applesoft interpreter (see Chap- ter 4).
@@ -22,6 +22,10 @@ Before we can look at how the graphics output looks in the Apple ][, it makes se
 - **$D000-$F7FF**. This is the Applesoft ROM space (see Chapter 4).
 - **$F800-$FFFF**. This is the standard system monitor ROM space (see Chapter 3).
 
+## The Text Display
+A standard II+ is capable of displaying text in a 40-column-by-24-row mode only. 40 columns? why did Woz kick us in the shins with this number of columns? Had he never heard of powers of two? 32, 64, or 128 columns, that would have been understandable, since computers are based on binary numbers. A little joke on the side...
+
+In the 70s the components for the Apple II were expensive enough, the chips Woz would have needed didn't come on the market until two years later, and Woz tried to save money where he could. If the screen layout had been convenient for programmers, many (valuable!) bytes would have been wasted. To further reduce the costs for the Apple ][, Woz tried to save on hardware where he could, so he came up with an ingenious circuit for the display RAM. We don't have to describe all the details here, at this point it is basically sufficient to show how the memory addresses are distributed - and that it is possible to easily calculate the desired addresses shr via bit manipulations. This will be very helpful for the implementation of the text mode!  
 
 ## How the display works
 
