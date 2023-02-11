@@ -77,5 +77,9 @@ The original Signetics 2513 character generator chip has 64 glyphs for upper cas
 
 ![Apple-Font](/images/Apple_II_character_set.gif)
 
+A search for signetics and in particular the 2513 produced a data sheet on the Internet at this address http://www.bitsavers.org/components/signetics/_dataBooks/1972_Signetics_MOS.pdf, in which the 2513 was also described, which is used as a character generator in Apple is used. Ideally, the data sheet also included a drawing showing the bit pattern used for the characters.
+
+![Apple-Font](/images/font-bitpattern.png)
+
 ## How the display works
 
