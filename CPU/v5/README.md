@@ -27,7 +27,7 @@ The text display is what this version of the emulator is about. We will see that
 
 A standard II+ is capable of displaying text in a 40-column-by-24-row mode only. However, 40 x 24 results in 960, and 1024 bytes are reserved for the display - so there is some wastage here that is not used for the display - but another ingenious solution here is that these RAM bytes not used for the display are used for expansion cards as scratchpad.
 
-For the display the available memory of 1024 Bytes is chunked into 128 bytes. Each of these 128 byte chunks is divided into three 40 byte areas representing one line. The remaining 8 bytes (3 x 40 = 120) serve as scratchpad. However, the three 40-byte blocks are not in consecutive lines. The following table shows the structure of the display and the memory arrangement. As said, Woz had to save transistor gates when creating the Apple II, and the multiplexer circuit he designed just delivered this result.
+For the display the available memory of 1024 Bytes is chunked into 128 bytes. Each of these 128 byte chunks is divided into three 40 byte areas representing three lines with each line using 40 bytes. The remaining 8 bytes (3 x 40 = 120) serve as scratchpad. However, the three 40-byte blocks are not in consecutive lines. The following table shows the structure of the display and the memory arrangement. As said, Woz had to save transistor gates when creating the Apple II, and the multiplexer circuit he designed just delivered this result.
 
 ![display-memory](/images/display-memory-layout.png)
 
