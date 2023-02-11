@@ -71,4 +71,6 @@ I am very interested in seeing the last two books (Gayler & Sather) as print on 
 - ~~Speaker emulation~~
 - Keyboard Emulation
 - Text Display Emulation
-
+- LoRes Display Emulation
+- HiRes Display Emulation
+- Extension Slot Emulation
