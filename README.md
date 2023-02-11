@@ -69,6 +69,7 @@ I am very interested in seeing the last two books (Gayler & Sather) as print on 
 - ~~Basic Assembler~~
 - ~~Basic GUI for emulation~~
 - ~~6502 emulation~~
+- ~~Woz' ROM Emulation~~
 - ~~Speaker emulation~~
 - Keyboard Emulation
 - Text Display Emulation
