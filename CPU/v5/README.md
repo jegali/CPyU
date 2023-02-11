@@ -33,5 +33,41 @@ For the display the available memory of 1024 Bytes is chunked into 128 bytes. Ea
 
 Here you can see very well that the screen is divided into three areas of 8 lines each: the top area, the middle area and the bottom area. Each 128 byte block starts in its own line from 0-7. The 128 byte blocks are divided into three areas for three lines, each of which is displayed on the screen at an offset of 8 lines.
 
+Now we just need a formula to map any memory location to the corresponding screen location. From the books of Winston Gyler and Jim Sather you can learn a lot about the multiplexer Woz designed and used. In the end, this process and the bit manipulation carried out with it only have to be undone. For this purpose I wrote a small Jupyter notebook and developed the following formula: 
+
+```bash
+start_text = 0x400
+address = 0x488
+
+# Sicherstellen, dass die Adresse auch auf der Textseite liegt
+if start_text <= address <= start_text + 0x3FF:
+    # base beinhaltet das Offset, bzw. die Position auf der Textseite
+    base = address - start_text
+    # hi beinhaltet die Nummer des 128-Byte-Blocks, in dem sich die Adresse befindet (0-7)
+    # lo ist das Offset innerhalb des 128-Byte-Blocks
+    hi, lo = divmod(base, 0x80)
+    # es gibt drei Bereiche in dem 128 Byte Block: Zeile 1, 2, 3, und der Overscanbereich
+    # column geht von 0-39 und ist die Spalte in der jeweiligen Zeile
+    # row_group 0, 1, 2 ist OK. 3 ist der Overscanbereich
+    row_group, column = divmod(lo, 0x28)
+    row = hi + 8 * row_group
+    
+print("address:", hex(address))
+print ("base:", base)
+print("hi:", hi)
+print("lo:", lo)
+print("row_group:", row_group)
+print("column:", column)
+print("row:", row)
+
+address: 0x488
+base: 136
+hi: 1
+lo: 8
+row_group: 0
+column: 8
+row: 1
+```
+
 ## How the display works
 
