@@ -32,6 +32,7 @@ Of course I thought about the structure of the project and the functions to be i
 ## Used sources
 Most of the sources are books about the Apple ][ from the 80s. Some of them I own in print, which I am very proud of, the other sources are either https://mirrors.apple2.org.za/ftp.apple.asimov.net/documentation/ or the massive archive of archive.org, where Ij found for example this Apple ][e as PDF: https://archive.org/details/Inside_the_Apple_IIe. Anyway - the most important books in the creation of the CPU and later also the Apple ][ emulator are:
 - Programming the 6502, Rodnay Zaks, https://archive.org/details/Programming_the_6502_OCR
+- Inside the Apple IIe, Gary Little, https://archive.org/details/Inside_the_Apple_IIe/mode/2up
 - What's where in the Apple, Vol I, found at [amazon](https://www.amazon.de/Whats-Where-APPLE-Enhanced-Guide/dp/1716405270/ref=sr_1_2?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=B45NUY2GW1NW&keywords=what%27s+where+in+the+apple&qid=1676018598&sprefix=what%27s+where+in+the+apple%2Caps%2C77&sr=8-2)
 - What's where in the Apple, Vol II, found at [amazon](https://www.amazon.de/Whats-Where-APPLE-Enhanced-Gazetteer/dp/1716405211/ref=sr_1_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=B45NUY2GW1NW&keywords=what%27s+where+in+the+apple&qid=1676018598&sprefix=what%27s+where+in+the+apple%2Caps%2C77&sr=8-1)
 - The Apple II circuit description, Winston Gayler, https://archive.org/details/apple-ii-circuit-description
