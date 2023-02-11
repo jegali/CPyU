@@ -65,4 +65,7 @@ I am very interested in seeing the last two books (Gayler & Sather) as print on 
 
 ## which functions should the emulation possess
 - ~~Basic Disassembler~~
+- ~~Step by Step disassembling~~
+- ~~Basic Assembler~~
+- ~~Basic GUI for emulation~~
 
