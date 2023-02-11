@@ -29,5 +29,7 @@ A standard II+ is capable of displaying text in a 40-column-by-24-row mode only.
 
 For the display the available memory of 1024 Bytes is chunked into 128 bytes. Each of these 128 byte chunks is divided into three 40 byte areas representing one line. The remaining 8 bytes (3 x 40 = 120) serve as scratchpad. However, the three 40-byte blocks are not in consecutive lines. The following table shows the structure of the display and the memory arrangement. As said, Woz had to save transistor gates when creating the Apple II, and the multiplexer circuit he designed just delivered this result.
 
+![display-memory](/images/display-memory-layout.png)
+
 ## How the display works
 
