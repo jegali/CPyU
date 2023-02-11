@@ -73,6 +73,8 @@ I am very interested in seeing the last two books (Gayler & Sather) as print on 
 - ~~Speaker emulation~~
 - Testing speaker functionality in games
 - Keyboard Emulation
+- Cassette Emulation
+- Disk Emulation
 - Text Display Emulation
 - LoRes Display Emulation
 - HiRes Display Emulation
