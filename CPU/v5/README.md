@@ -5,7 +5,6 @@ it would be nice to have an output on the screen as well. Spoiler in advance: Th
 ## The RAM layout
 Before we can look at how the graphics output looks in the Apple ][, it makes sense to look at the RAM layout of the Apple. The following lines are from the book "Inside the Apple IIe" by Gary Little:
 
-"The area of RAM memory that is most often used on the //e extends from locations $0000 to $BFFF and is contained in eight memory chips built in to the system motherboard. As indicated in Figure 2-3, some regions within this range are dedicated for special uses. Here is a summary of the usage of the internal (or 'main') RAM memory locations:
 - **$0000-$00FF**. This is the 6502 zero page and it is used exten- sively by all parts of the lie's operating system, including the system monitor (see Chapter 3), the Applesoft interpreter (see Chapter 4), and the disk operating system (see Chapter 5). Those locations available for use by your own programs are set out in Table 2-5.
 - **$0100-$01FF**. This is the 6502 stack area and is also used for temporary data storage by the Applesoft interpreter (see Chap- ter 4).
 - **$0200-$02FF**. This area of memory is normally used as an input buffer whenever character information is entered from the key- board or from diskette (see Chapter 6).
