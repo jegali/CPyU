@@ -71,6 +71,7 @@ I am very interested in seeing the last two books (Gayler & Sather) as print on 
 - ~~6502 emulation~~
 - ~~Woz' ROM Emulation~~
 - ~~Speaker emulation~~
+- Testing speaker functionality in games
 - Keyboard Emulation
 - Text Display Emulation
 - LoRes Display Emulation
