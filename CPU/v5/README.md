@@ -31,5 +31,7 @@ For the display the available memory of 1024 Bytes is chunked into 128 bytes. Ea
 
 ![display-memory](/images/display-memory-layout.png)
 
+Here you can see very well that the screen is divided into three areas of 8 lines each: the top area, the middle area and the bottom area. Each 128 byte block starts in its own line from 0-7. The 128 byte blocks are divided into three areas for three lines, each of which is displayed on the screen at an offset of 8 lines.
+
 ## How the display works
 
