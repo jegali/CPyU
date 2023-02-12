@@ -35,3 +35,7 @@ The display is also a tough nut to crack. Or ingeniously solved. In any case, it
 
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v5)
 
+### V6
+Although the keayboard was the first thing I dealt with, I mention it only at this point. For didactic reasons it would not have made sense further ahead - without the possibility to see something. .
+
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v6)
