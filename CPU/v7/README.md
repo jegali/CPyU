@@ -167,4 +167,7 @@ Of course, the Flash must also be called. This is done in the main loop in the b
 
 ```
 
-This concludes the flash-rooutine
+This concludes the flash-routine
+
+## Low resolution graphics
+In this mode, the apple is able to display graphics with a resolution of 40x40 pixels. In X-direction there is no change to our current routine, only in Y-direction the pixel has to be divided into two parts, because only 20 lines of the text display are used for the graphic. The other 3 lines are still available for input.
