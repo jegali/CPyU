@@ -478,4 +478,7 @@ def update_new():
             if event.type == pygame.QUIT:
                 quit = True
                 print("quit")
+
+if __name__ == "__main__":
+    main()
 ```
