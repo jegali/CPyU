@@ -372,3 +372,5 @@ class SoftSwitches:
 Also, when testing the display class, I could see that the Apple was booting and also beeping, but no prompt appeared. I could not find any error in the display class. After a bit of walking up and down I had an idea: What if the "bus" waits for or accesses the keyboard but gets no response because the keyboard is not yet implemented?
 
 Exactly this was the solution, therefore the softswitches for 0xC000 and 0xC010 are already implemented. Now the Apple boots to the prompt. A keyboard input is not possible yet, we will take care of that in the next version.
+
+![Apple-Boot](/images/apple-boot.png)
