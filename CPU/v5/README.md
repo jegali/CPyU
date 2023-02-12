@@ -374,3 +374,108 @@ Also, when testing the display class, I could see that the Apple was booting and
 Exactly this was the solution, therefore the softswitches for 0xC000 and 0xC010 are already implemented. Now the Apple boots to the prompt. A keyboard input is not possible yet, we will take care of that in the next version.
 
 ![Apple-Boot](/images/apple-boot.png)
+
+The friendly blinking cursor is also still missing. These are points that I will take care of in the meantime. Next on the agenda is the keyboard. Then I will improve and expand the display.
+
+## Main class
+The main emulation class, beloved-apple.py, has also undergone some changes. I go into more detail in this section.
+
+```bash
+import pygame
+import numpy
+import time
+
+from pygame.locals import *
+
+from apple2 import Apple2
+from speaker import Speaker
+from display import Display
+from softswitches import SoftSwitches
+```
+
+New is the import of the newly created classes, in this case import display... must be added
+
+```bash
+import pygame
+import numpy
+import time
+
+from pygame.locals import *
+
+
+myApple = Apple2(None)
+display = Display()
+speaker = Speaker()
+softswitches = SoftSwitches(speaker, display, myApple)
+update_cycle = 0
+update_cycle_bus = 0
+quit = False
+```
+
+Here the individual I/O blocks are initialized. New is that softswitches gets a reference to the class myApple in addition to the references to the speaker and the display. This is unfortunately necessary, because for the keyboard emulation not only reading is done, but also writing to the bus is required. In the Apple, this is handled by the hardware through the control of gates; in the emulation, this must be done by the software.
+
+```bash
+def main():
+    global update_cycle
+    global quit
+    pygame.display.set_caption("CPyU - Jens' Apple Window")
+    
+    quit = False
+    update_cycle = 0
+    update_cycle_bus = 0
+    while not quit:
+        update_new()
+```
+
+In order to be able to test different variants of a main loop, I have outsourced the main loops to individual methods. The current one is update_new() - this is also the only one in this source code.
+
+```bash
+def update_new():
+    global update_cycle
+    global update_cycle_bus
+    global quit
+
+    # 75% CPU Zeit
+    update_cycle_bus += 1
+    if update_cycle_bus < 4:
+        myApple.cpu.exec_command()
+    # 25% I/O Zeit
+    else:    
+        update_cycle_bus = 0
+        # I/O Kanäle laufen über den Speicherbereich 0xc000-0xcfff
+        # die Methode write_byte / read_byte überprüft die Adresse und erzeugt ein
+        # Datenpaket mit Adresse, Wert und aktuellem Taktzyklus und speichert das
+        # in einer queue
+        # Hier wird die queue abgearbeitet
+        if myApple.memory.bus_queue.qsize() > 0:
+            bus_packet = myApple.memory.bus_queue.get()
+            bus_cycle = bus_packet.cycle
+            bus_address = bus_packet.address
+            bus_value = bus_packet.value
+            bus_rw = bus_packet.rw
+
+            # wurde vom bus gelesen?
+            if bus_rw == 0:
+                softswitches.read_byte(bus_cycle, bus_address)
+            # oder geschrieben
+            elif bus_rw == 1:
+                # später kommt hier das display
+                display.update(bus_address, bus_value)
+                pass
+
+            # alle 1024 Zyklen wird das Display
+            # upgedatet und der Lautsprecher abgefragt
+            update_cycle += 1
+            if update_cycle >= 1024:
+                #display.flash()
+                pygame.display.flip()
+                if speaker:
+                    speaker.update(bus_cycle)
+                update_cycle = 0
+
+        # Tastatur und Fenster-Funktionen
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit = True
+                print("quit")
+```
