@@ -173,3 +173,131 @@ This concludes the flash-routine
 In this mode, the apple is able to display graphics with a resolution of 40x40 pixels. In X-direction there is no change to our current routine, only in Y-direction the pixel has to be divided into two parts, because only 20 lines of the text display are used for the graphic. The other 3 lines are still available for input.
 
 I've read a lot about the way the Apple works in graphics mode and how it displays colors. Interestingly, the Apple doesn't actually have any color representation at all, only via a trick the NTSC system common in America is fooled into thinking there is color information in the video signal. This results in such strange combinations as color pixels that cannot be displayed next to each other because they belong to different "color palettes".
+
+Again, I was convinced I had to recreate all the hardware, but that's actually all done. I only have to calculate the half pixels, query the softswitches and set the pixel blocks. Oh yes, the Apple colors still have to be defined. Let's start directly with the definition of colors:
+
+```bash
+class Display:
+
+    # Dies ist das Characterset, wie es vom signetics 2513 erzeugt wird.
+    # http://www.bitsavers.org/components/signetics/_dataBooks/1972_Signetics_MOS.pdf
+
+    characters = [
+        [0b00000, 0b01110, 0b10001, 0b10101, 0b10111, 0b10110, 0b10000, 0b01111],
+        ...
+    ]
+
+    lores_colours = [
+        (0, 0, 0),  # black
+        (208, 0, 48),  # magenta / dark red
+        (0, 0, 128),  # dark blue
+        (255, 0, 255),  # purple / violet
+        (0, 128, 0),  # dark green
+        (128, 128, 128),  # gray 1
+        (0, 0, 255),  # medium blue / blue
+        (96, 160, 255),  # light blue
+        (128, 80, 0),  # brown / dark orange
+        (255, 128, 0),  # orange
+        (192, 192, 192),  # gray 2
+        (255, 144, 128),  # pink / light red
+        (0, 255, 0),  # light green / green
+        (255, 255, 0),  # yellow / light orange
+        (64, 255, 144),  # aquamarine / light green
+        (255, 255, 255),  # white
+    ]
+
+    def __init__(self):
+        ...
+
+    def update(self, address, value):
+        if self.page == 1:
+            start_text = 0x400
+        elif self.page == 2:
+            start_text = 0x800
+        else:
+            return
+        
+        # Sicherstellen, dass die Adresse auch auf der Textseite liegt
+        if start_text <= address <= start_text + 0x3FF:
+            # base beinhaltet das Offset, bzw. die Position auf der Textseite
+            base = address - start_text
+            # update the offscreen buffer
+            self.flash_chars[self.page - 1][base] = value
+            # hi beinhaltet die Nummer des 128-Byte-Blocks, in dem sich die Adresse befindet (0-7)
+            # lo ist das Offset innerhalb des 128-Byte-Blocks
+            hi, lo = divmod(base, 0x80)
+            # es gibt drei Bereiche in dem 128 Byte Block: Zeile 1, 2, 3, und der Overscanbereich
+            # column geht von 0-39 und ist die Spalte in der jeweiligen Zeile
+            # row_group 0, 1, 2 ist OK. 3 ist der Overscanbereich
+            row_group, column = divmod(lo, 0x28)
+            row = hi + 8 * row_group
+
+            # Overscanbereich. Hier gibt es nichts darzustellen
+            if row_group == 3:
+                return
+
+            # Wir sind im Text (only) Modus
+            if self.text or not self.mix or not row < 20:
+                # Aus dem übergebenen Wert den Charactr auslesen
+                # Über 0x40 wird ermittelt, ob es sich um einen normalen, 
+                # inversen oder flashenden Character handelt
+                mode, ch = divmod(value, 0x40)
+                
+                if mode == 0:
+                    inv = True
+                elif mode == 1:
+                    inv = self.flash_on
+                else:
+                    inv = False
+
+                self.screen.blit(self.chargen[ch][self.colour][inv], (2 * (column * 7), 2 * (row * 8)))
+ # NEW ->
+            else:
+                pixels = pygame.PixelArray(self.screen)
+                if not self.high_res:
+                    lower, upper = divmod(value, 0x10)
+                    # double the width, same as with chars
+                    for dx in range(14):
+                        for dy in range(8):
+                            x = column * 14 + dx
+                            y = row * 16 + dy
+                            pixels[x][y] = self.lores_colours[upper]
+                        for dy in range(8, 16):
+                            x = column * 14 + dx
+                            y = row * 16 + dy
+                            pixels[x][y] = self.lores_colours[lower]
+                del pixels
+
+
+    def flash(self):
+        ...
+
+
+    def txtclr(self):
+        self.text = False
+
+    def txtset(self):
+        self.text = True
+        self.colour = False
+
+    def mixclr(self):
+        self.mix = False
+
+    def mixset(self):
+        self.mix = True
+        self.colour = True
+
+    def lowscr(self):
+        self.page = 1
+
+    def hiscr(self):
+        self.page = 2
+
+    def lores(self):
+        self.high_res = False
+
+    def hires(self):
+        self.high_res = True
+```
+
+
