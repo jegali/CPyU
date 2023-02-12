@@ -64,6 +64,8 @@ I am very interested in seeing the last two books (Gayler & Sather) as print on 
 2023-02-08: Implemented the bus struct and updated the memory class [CPU v4](https://github.com/jegali/CPyU/blob/main/CPU/v4)<br/>
 2023-02-09: Implemented the softswitches and changed the main emulation loop [CPU v4](https://github.com/jegali/CPyU/blob/main/CPU/v4)<br/>
 2023-02-10: Implemented the Display and the font [CPU v5](https://github.com/jegali/CPyU/blob/main/CPU/v5)<br/>
+2023-02-11: Implemented the keyboard emulation [CPU v6](https://github.com/jegali/CPyU/blob/main/CPU/v6)<br/>
+
 
 ## Which functions should the emulation possess
 - ~~Basic Disassembler~~
