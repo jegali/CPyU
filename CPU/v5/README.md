@@ -324,3 +324,51 @@ class Display:
                 self.screen.blit(self.chargen[ch][self.colour][inv], (2 * (column * 7), 2 * (row * 8)))
  
 ```
+
+To be able to switch between the individual modes Text 1, Lores, Text 2, Hires 1 and Hires 2, softswitches are again necessary. I have provided these in the class softswitches according to the documentation of Woz' Reference Manual, but not yet implemented. 
+
+```bash
+class SoftSwitches:
+
+    def __init__(self, speaker, display, myApple):
+        self.kbd = 0x00
+        self.myApple = myApple
+        self.speaker = speaker
+        self.display = display
+
+    def read_byte(self, cycle, address):
+        assert 0xC000 <= address <= 0xCFFF
+        if address == 0xC000:
+            self.myApple.memory.write_byte(cycle, address, self.kbd)
+            return self.kbd
+        elif address == 0xC010:
+            self.kbd = self.kbd & 0x7F
+            self.myApple.memory.write_byte(cycle, 0xc000, self.kbd)
+        elif address == 0xC030:
+            if self.speaker:
+                self.speaker.toggle(cycle)
+        # elif address == 0xC050:
+        #     self.display.txtclr()
+        # elif address == 0xC051:
+        #     self.display.txtset()
+        # elif address == 0xC052:
+        #     self.display.mixclr()
+        # elif address == 0xC053:
+        #     self.display.mixset()
+        # elif address == 0xC054:
+        #     self.display.lowscr()
+        # elif address == 0xC055:
+        #     self.display.hiscr()
+        # elif address == 0xC056:
+        #     self.display.lores()
+        # elif address == 0xC057:
+        #     self.display.hires()
+
+        else:
+            pass
+        return 0x00
+```
+
+Also, when testing the display class, I could see that the Apple was booting and also beeping, but no prompt appeared. I could not find any error in the display class. After a bit of walking up and down I had an idea: What if the "bus" waits for or accesses the keyboard but gets no response because the keyboard is not yet implemented?
+
+Exactly this was the solution, therefore the softswitches for 0xC000 and 0xC010 are already implemented. Now the Apple boots to the prompt. A keyboard input is not possible yet, we will take care of that in the next version.
