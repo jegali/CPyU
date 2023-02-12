@@ -158,4 +158,9 @@ class Display:
 ...
 ```
 ## How the display works
+Rather, it should read: How the emulation of the display works. But that's a quibble. Several points should be considered here: 
 
+- First, the Apple does not build the entire screen at once, or even 50-60 times a second. When a character in the screen RAM changes, a softswitch is triggered, which in turn causes that memory location to be drawn on our virtual screen.
+- Secondly, we need an algorithm that calculates the corresponding location. We have already described this above and will use it now.
+- Third: The corresponding character from the signetics charset must be drawn on the virtual screen.
+- Fourth: Within the game loop of pygame the screen must be updated. 
