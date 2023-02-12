@@ -29,3 +29,9 @@ The step-by-step emulation from V2 showed me where there were still bugs in the 
 Let's talk about the speaker here
 
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v4)
+
+### V5
+The display is also a tough nut to crack. Or ingeniously solved. In any case, it is worth a look. Here is the basic emulation of the display, at the moment for text mode.
+
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v5)
+
