@@ -85,6 +85,9 @@ With the help of this graphic I was able to develop a character set for the disp
 
 ```bash
 class Display:
+   
+    # Dies ist das Characterset, wie es vom signetics 2513 erzeugt wird.
+    # http://www.bitsavers.org/components/signetics/_dataBooks/1972_Signetics_MOS.pdf
 
     characters = [
         [0b00000, 0b01110, 0b10001, 0b10101, 0b10111, 0b10110, 0b10000, 0b01111],
