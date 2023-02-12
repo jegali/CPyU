@@ -34,3 +34,7 @@ value = 0x02
 mode: 0
 ch: 2
 ```
+
+The emulation of the graphics output of the Apple works in such a way that whenever a point in the screen memory changes, a soft switch is triggered. So only one character is changed at a time. We would now only have to examine the entire memory area from 0x400-0x7FF, where a "flashing" character is located, and update this location in our graphics emulation. However, this would mean that many bus accesses would be thrown. I want to avoid that. So I create a buffer area where I keep a current copy of the screen memory. this is queried in every update or let's say every 0.5 seconds and all chars with flashbit are rewritten into the screen memory.
+
+There is a change from normal character to inverse character and back again. Since we have already generated the inverse chars during character generation, we only have to choose the appropriate index from the two-dimensional char array and blitte the corresponding character.
