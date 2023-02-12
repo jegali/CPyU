@@ -60,13 +60,15 @@ class Display:
         self.page = 1
         self.text = True
         self.colour = False
-        **
+        
+        # N E W
+        
         # timer for the flash interval
         self.flash_time = time.time()
         self.flash_on = False
         # offscreen buffer for two text pages
         self.flash_chars = [[0] * 0x400] * 2
-        **
+        
         self.chargen = []
         for c in self.characters:
             chars = [[pygame.Surface((14, 16)), pygame.Surface((14, 16))],
@@ -100,6 +102,9 @@ class Display:
         if start_text <= address <= start_text + 0x3FF:
             # base beinhaltet das Offset, bzw. die Position auf der Textseite
             base = address - start_text
+            
+            # N E W
+            
             # update the offscreen buffer
             self.flash_chars[self.page - 1][base] = value
             # hi beinhaltet die Nummer des 128-Byte-Blocks, in dem sich die Adresse befindet (0-7)
@@ -122,6 +127,8 @@ class Display:
                 # inversen oder flashenden Character handelt
                 mode, ch = divmod(value, 0x40)
                 
+                # N E W
+                
                 if mode == 0:
                     inv = True
                 elif mode == 1:
@@ -131,7 +138,8 @@ class Display:
 
                 self.screen.blit(self.chargen[ch][self.colour][inv], (2 * (column * 7), 2 * (row * 8)))
 
-
+    # N E W
+    
     def flash(self):
         # geblinkt wird alle 0,5 sekunden
         if time.time() - self.flash_time >= 0.5:
