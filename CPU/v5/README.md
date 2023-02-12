@@ -164,3 +164,13 @@ Rather, it should read: How the emulation of the display works. But that's a qui
 - Secondly, we need an algorithm that calculates the corresponding location. We have already described this above and will use it now.
 - Third: The corresponding character from the signetics charset must be drawn on the virtual screen.
 - Fourth: Within the game loop of pygame the screen must be updated. 
+
+I decided to draw the single characters on small pygame surfaces, and when a memory cell is changed, to flash them to a pygame surface, which then represents the virtual monitor.
+
+The whole thing is done in the monochrome charm of the 70s 80s - I didn't have money for a color monitor. Most monitors back then were green, mine was amber. A search on the Internet brought this page to light: https://retrocomputing.stackexchange.com/questions/12835/exactly-what-color-was-the-text-on-monochrome-terminals-with-green-on-black-and
+
+I record the values suggested there for green (#33FF33) and amber (#FFB000) and use them as a rough guide. If the colors are too intense, I will adjust the color value. So at this point the emulation is more my personal feeling than a correct color choice. 
+
+I also have to take into account the monitor size or video resolutions of today. A display of 40x24, where each character to be displayed has a resolution of 7x8, resulting in a total resolution of 280x192 pixels, is hardly bigger than a medium button on a web page. Therefore I doubled the display size to 560x384. 
+
+The characters were adjusted as known from the "good old" times: in X-direction I doubled the pixels, in Y-direction I shot in one empty line each to create that well known raster line look.
