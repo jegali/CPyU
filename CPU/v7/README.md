@@ -370,6 +370,8 @@ And that's actually it. I have tested the Lores mode with two small programs:
  200 GOTO 130
 ```
 
+![lores-2](/images/lores-2.png)
+
 With the BASIC dialects Integer- and Applesoft-Basic it has to be considered how for example the RND function for the calculation of random functions works. While in Integer-Basic RND(40) returns a number between 0 and 39, the same command in Applesoft returns a number between 0 and 1. Therefore for Applesoft the determined random number must still be multiplied by 40 to get a number between 0 ud 39.
 
 Besides, there was a "stumble" when running the first program. After adjusting the queue in the main-loop in belioved-apple.py this changed though, the program now runs smoothly:
