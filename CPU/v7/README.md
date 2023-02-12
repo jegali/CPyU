@@ -31,6 +31,6 @@ mode: 1
 ch: 2
 
 value = 0x02
-mode: 2
+mode: 0
 ch: 2
 ```
