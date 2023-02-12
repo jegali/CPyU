@@ -347,4 +347,16 @@ class SoftSwitches:
 And that's actually it. I have tested the Lores mode with two small programs:
 
 ```bash
+ 10  GR
+ 20  FOR C = 0 TO 14
+ 30  COLOR= C + 1
+ 40  FOR Y = C * 2 TO C * 2 + 10
+ 50  FOR X = C * 2 TO C * 2 + 10
+ 60  PLOT X,Y
+ 70  NEXT X
+ 80  NEXT Y
+ 90  NEXT C
 ```
+
+![lores-1](/images/lores-1.png)
+
