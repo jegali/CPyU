@@ -153,3 +153,16 @@ class Display:
             self.flash_time = time.time()
 
 ```
+
+Of course, the Flash must also be called. This is done in the main loop in the beloved_apple.py class. Please note the line display.flash()
+
+```bash
+            update_cycle += 1
+            if update_cycle >= 1024:
+                display.flash()
+                pygame.display.flip()
+                if speaker:
+                    speaker.update(bus_cycle)
+                update_cycle = 0
+
+```
