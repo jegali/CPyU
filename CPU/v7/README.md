@@ -171,3 +171,5 @@ This concludes the flash-routine
 
 ## Low resolution graphics
 In this mode, the apple is able to display graphics with a resolution of 40x40 pixels. In X-direction there is no change to our current routine, only in Y-direction the pixel has to be divided into two parts, because only 20 lines of the text display are used for the graphic. The other 3 lines are still available for input.
+
+I've read a lot about the way the Apple works in graphics mode and how it displays colors. Interestingly, the Apple doesn't actually have any color representation at all, only via a trick the NTSC system common in America is fooled into thinking there is color information in the video signal. This results in such strange combinations as color pixels that cannot be displayed next to each other because they belong to different "color palettes".
