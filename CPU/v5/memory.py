@@ -9,6 +9,7 @@ from dataclasses import dataclass
 #
 # This class consists of RAM and ROM
 
+
 @dataclass
 class Bus_IO:
     cycle: int
@@ -24,7 +25,6 @@ class Memory:
         # Das ROM initialiseren
         self.rom = ROM(0xD000, 0x3000)
         # Das Apple-Rom laden 
-        #self.rom.load_file(0xD000, "apple2.rom")
         self.rom.load_file(0xD000, "apple2p.rom")
         
         self.is_bus_read = 0
@@ -51,15 +51,6 @@ class Memory:
         self.rom.dump_mem()
         self.ram.dump_mem()
 
-        # self.rom = ROM(0xC000, 0x4000)
-        # for i in range(0x1000):
-        #     self.ram.write_byte(0xc000 + i, rom[i])
-        # for i in range(0x3000):
-        #     self.rom.write_byte(0xd000 + i, rom[i+0x1000])
-        # print("Done")
-
-        self.rom.dump_mem()
-        self.ram.dump_mem()
 
 
     def read_byte(self, cycle, address):
@@ -109,39 +100,16 @@ class Memory:
 
 
 
-
-    # def bus_read(self, cycle, address):
-    #     if not self.use_bus:
-    #         return 0
-    #     op = struct.pack("<IBHB", cycle, 0, address, 0)
-    #     try:
-    #         bus.send(op)
-    #         b = bus.recv(1)
-    #         if len(b) == 0:
-    #             sys.exit(0)
-    #         return ord(b)
-    #     except socket.error:
-    #         sys.exit(0)
-
     def bus_read(self, cycle, address, value):
         buspacket = Bus_IO(cycle, 0, address, value)
         self.bus_queue.put(buspacket)
-          
+
+
 
     def bus_write(self, cycle, address, value):
         buspacket = Bus_IO(cycle, 1, address, value)  
         self.bus_queue.put(buspacket)
 
-
-
-    # def bus_write(self, cycle, address, value):
-    #     if not self.use_bus:
-    #         return
-    #     op = struct.pack("<IBHB", cycle, 1, address, value)
-    #     try:
-    #         bus.send(op)
-    #     except IOError:
-    #         sys.exit(0)
 
 
 

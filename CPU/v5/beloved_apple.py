@@ -89,6 +89,19 @@ def update_new():
                 quit = True
                 print("quit")
 
+            if event.type == pygame.KEYDOWN:
+                key = ord(event.unicode) if event.unicode else 0
+                if event.key == pygame.K_LEFT:
+                    key = 0x08
+                if event.key == pygame.K_RIGHT:
+                    key = 0x15
+                if key:
+                    if key == 0x7F:
+                        key = 0x08
+                    softswitches.kbd = 0x80 + (key & 0x7F)
+
+
+
 
 if __name__ == "__main__":
     main()
