@@ -36,6 +36,16 @@ The display is also a tough nut to crack. Or ingeniously solved. In any case, it
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v5)
 
 ### V6
-Although the keayboard was the first thing I dealt with, I mention it only at this point. For didactic reasons it would not have made sense further ahead - without the possibility to see something. .
+Although the keayboard was the first thing I dealt with, I mention it only at this point. For didactic reasons it would not have made sense further ahead - without the possibility to see something.
 
 [Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v6)
+
+### V7
+Having the keybiard at our command, we are able to type in Applesoft BASIC programs and test the functionality of the emulator. This was the reason to go ahead and implement some simple LoRes graphics.
+
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v7)
+
+### V8
+Typing in the same program over and over again is quite exhausting. Especially if you do no have a possibility of saving your sources at hand - without cassette or Floppy Disk. So I decided to implement a copy/paste functionality to be able to copy source code from a Windows/Max/Linux editor to the Applesoft BASIC prompt
+
+[Go to the directory here](https://github.com/jegali/CPyU/tree/main/CPU/v8)
