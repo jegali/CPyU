@@ -114,3 +114,10 @@ def paste_it():
         pyperclip.copy('')
         paste = False
 ```
+
+## Usage
+Start the emulation by typing in:
+
+```bash
+python beloved_apple.py
+```
