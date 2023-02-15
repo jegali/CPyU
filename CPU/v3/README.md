@@ -35,3 +35,10 @@ This is the base emulation that gives the framework for the entire program. In t
 
 Attention: 
 There is only one file in this directory. However, this is not the complete emulator, just the pygame class that starts the emulator. All other files from V2 are still required!
+
+## Usage
+Start the emulation by typing in:
+
+```bash
+python beloved_apple.py
+```
