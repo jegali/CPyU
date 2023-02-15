@@ -1,5 +1,5 @@
 # More Graphics enhancements
-This version is all about some polishing and enhancements, mainly on the graphics / display module
+This version is all about some polishing and enhancements, mainly on the graphics / display module. Please do not mind the sources for disk-controller and floppy. They will be discussed soon.
 
 ## Flash
 Ah-ah<br/>
