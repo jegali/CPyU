@@ -347,27 +347,27 @@ class SoftSwitches:
 And that's actually it. I have tested the Lores mode with two small programs:
 
 ```bash
- 10  GR
- 20  FOR C = 0 TO 14
- 30  COLOR= C + 1
- 40  FOR Y = C * 2 TO C * 2 + 10
- 50  FOR X = C * 2 TO C * 2 + 10
- 60  PLOT X,Y
- 70  NEXT X
- 80  NEXT Y
- 90  NEXT C
+10  GR
+20  FOR C = 0 TO 14
+30  COLOR= C + 1
+40  FOR Y = C * 2 TO C * 2 + 10
+50  FOR X = C * 2 TO C * 2 + 10
+60  PLOT X,Y
+70  NEXT X
+80  NEXT Y
+90  NEXT C
 ```
 
 ![lores-1](/images/lores-1.png)
 
 ```bash
- 100 GR
- 130 COLOR = RND(16)     # for Integer Basic
- 130 COLOR = RAND(1)*16  # for Applesoft Basic
- 150 X = RND(40)         # see above
- 160 Y = RND(40)         # see above
- 180 PLOT X,Y
- 200 GOTO 130
+100 GR
+130 COLOR = RND(16)     # for Integer Basic
+130 COLOR = RAND(1)*16  # for Applesoft Basic
+150 X = RND(40)         # see above
+160 Y = RND(40)         # see above
+180 PLOT X,Y
+200 GOTO 130
 ```
 
 ![lores-2](/images/lores-2.png)
