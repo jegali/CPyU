@@ -424,3 +424,10 @@ At the moment there is nothing else to see when the emulation is started. The Ap
 
 ## To do
 The speaker beeps, that's all we can check at the moment. We can only check how the speaker behaves in games, for example, when we have a working floppy drive emulation.
+
+## Usage
+Start the emulation by typing in:
+
+```bash
+python beloved_apple.py
+```
