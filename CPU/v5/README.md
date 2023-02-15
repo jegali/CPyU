@@ -482,3 +482,10 @@ def update_new():
 if __name__ == "__main__":
     main()
 ```
+
+## Usage
+Start the emulation by typing in:
+
+```bash
+python beloved_apple.py
+```
