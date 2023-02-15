@@ -90,13 +90,18 @@ Of course, it must be taken into account that not all the text can be pasted at 
             # alle 1024 Zyklen wird das Display
             # upgedatet und der Lautsprecher abgefragt
             update_cycle += 1
-            if update_cycle >= 1024:
+            if update_cycle >= 16:
+                display.flash()
+                pygame.display.flip()
+                if speaker:
+                    speaker.update(bus_cycle)
+                update_cycle = 0
 
-                # Der Benutzer hat etwas üner Copy+Paste
-                # in den Emulator gegeben
+            update_cycle_clipboard += 1
+            if update_cycle_clipboard > 100:
                 if paste:
                     paste_it()
-
+                update_cycle_clipboard = 0
 ```
 
 The last part is the paste_it() method, which is called periodically from the I/O part of the main loop. The method still works with global variables in the test environment, this will be adjusted. Here the next character is read from the input buffer, placed on the keyboard line and then removed from the buffer. If the complete buffer is processed, the boolean variable paste is set to False again and the paste process is finished.
