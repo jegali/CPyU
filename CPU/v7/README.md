@@ -390,3 +390,9 @@ Besides, there was a "stumble" when running the first program. After adjusting t
 
 ```
 
+## Usage
+Start the emulation by typing in:
+
+```bash
+python beloved_apple.py
+```
