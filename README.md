@@ -77,10 +77,11 @@ I am very interested in seeing the last two books (Gayler & Sather) as print on 
 - ~~Woz' ROM Emulation~~
 - ~~Speaker emulation~~
 - Testing speaker functionality in games
-- Keyboard Emulation
+- ~~Keyboard Emulation~~
+- ~~Clipboard functionality~~
 - Cassette Emulation
 - Disk Emulation
 - ~~Text Display Emulation~~
-- LoRes Display Emulation
-- HiRes Display Emulation
+- ~~LoRes Display Emulation~~
+- ~~HiRes Display Emulation~~
 - Extension Slot Emulation
